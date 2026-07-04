@@ -21,7 +21,7 @@ export const projects = [
     challenges:
       'Fine-tuning the prompt parameters for Gemini AI to return structured, step-by-step roadmap JSON packages that can be parsed and rendered on the client.',
     techStack: ['React', 'Node.js', 'MongoDB', 'Tailwind CSS', 'Clerk API', 'Gemini SDK'],
-    github: 'https://github.com/kartikvarma-dev/careerly',
+    github: 'https://github.com/varmakartik/Careerly',
     live: 'https://careerly-04.vercel.app',
     featured: true,
     size: 'large',
@@ -52,7 +52,7 @@ export const projects = [
     challenges:
       'Handling real-time offline transactions and automatically sync-merging them to the central database when connection status becomes active.',
     techStack: ['React.js', 'Node.js', 'Express.js', 'PostgreSQL', 'Tailwind CSS', 'Recharts'],
-    github: 'https://github.com/kartikvarma-dev/fintrack',
+    github: 'https://github.com/varmakartik/Expense-Tracker',
     live: 'https://expense-tracker-fintrack.vercel.app',
     featured: true,
     size: 'medium',
@@ -83,7 +83,7 @@ export const projects = [
     challenges:
       'Structuring access control logic to prevent unauthorized API requests to payroll endpoints while keeping dashboard metrics responsive.',
     techStack: ['React.js', 'Node.js', 'Express.js', 'MongoDB', 'Tailwind CSS', 'JWT'],
-    github: 'https://github.com/kartikvarma-dev/nexus-hr',
+    github: 'https://github.com/varmakartik/Nexus',
     live: 'https://nexus-frontend-zm73.vercel.app',
     featured: true,
     size: 'medium',
@@ -110,7 +110,7 @@ export const projects = [
       'Responsive light and dark modes',
     ],
     techStack: ['React.js', 'Supabase', 'Tailwind CSS', 'Realtime DB'],
-    github: 'https://github.com/kartikvarma-dev/connect',
+    github: 'https://github.com/varmakartik/Connect',
     live: 'https://crosser.vercel.app',
     featured: false,
     size: 'small',

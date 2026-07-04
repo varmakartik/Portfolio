@@ -19,9 +19,9 @@ export const personalInfo = {
   resumeUrl: '/resume_3.0.pdf',
   avatar: null,
   socials: {
-    github: 'https://github.com/kartikvarma-dev',
+    github: 'https://github.com/varmakartik',
     linkedin: 'https://linkedin.com/in/kartikvarma200430',
-    twitter: 'https://twitter.com/kartikvarma_dev',
+    twitter: '/',
   },
   stats: [
     { label: 'Internship Experience', value: 3, suffix: ' Mos' },
