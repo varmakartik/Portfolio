@@ -101,6 +101,3 @@ The layout conforms to a premium, accessible off-white theme specified by the fo
 
 ---
 
-## 📄 License
-
-Designed & Developed by **Kartik Ramesh Varma**. Open-source under the [MIT License](LICENSE).
