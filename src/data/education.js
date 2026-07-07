@@ -18,7 +18,7 @@ export const certifications = [
     issuer: 'Apna College',
     date: '2025',
     skills: 'MERN Stack (React, Node, Express, MongoDB), SQL Databases, API design, and deployment pipelines.',
-    color: '#E50914',
+    color: '#2563EB',
   }
 ]
 

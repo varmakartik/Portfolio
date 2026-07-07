@@ -19,6 +19,14 @@ export default function Footer() {
     instagram: FaInstagram,
   }
 
+  const handleLinkClick = (e, href) => {
+    e.preventDefault()
+    const el = document.querySelector(href)
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth' })
+    }
+  }
+
   return (
     <footer className="relative border-t border-slate-200/50 bg-[#F8FAFC] py-12 md:py-16 overflow-hidden">
       {/* Glow highlight */}
@@ -47,12 +55,12 @@ export default function Footer() {
 
         {/* Links */}
         <div className="flex flex-wrap justify-center gap-6 text-sm font-grotesk text-slate-600">
-          <a href="#hero" className="hover:text-[#2563EB] transition-colors">Home</a>
-          <a href="#skills" className="hover:text-[#2563EB] transition-colors">Skills</a>
-          <a href="#experience" className="hover:text-[#2563EB] transition-colors">Experience</a>
-          <a href="#projects" className="hover:text-[#2563EB] transition-colors">Projects</a>
-          <a href="#research" className="hover:text-[#2563EB] transition-colors">Research</a>
-          <a href="#contact" className="hover:text-[#2563EB] transition-colors">Contact</a>
+          <a href="#hero" onClick={(e) => handleLinkClick(e, '#hero')} className="hover:text-[#2563EB] transition-colors">Home</a>
+          <a href="#skills" onClick={(e) => handleLinkClick(e, '#skills')} className="hover:text-[#2563EB] transition-colors">Skills</a>
+          <a href="#experience" onClick={(e) => handleLinkClick(e, '#experience')} className="hover:text-[#2563EB] transition-colors">Experience</a>
+          <a href="#projects" onClick={(e) => handleLinkClick(e, '#projects')} className="hover:text-[#2563EB] transition-colors">Projects</a>
+          <a href="#research" onClick={(e) => handleLinkClick(e, '#research')} className="hover:text-[#2563EB] transition-colors">Research</a>
+          <a href="#contact" onClick={(e) => handleLinkClick(e, '#contact')} className="hover:text-[#2563EB] transition-colors">Contact</a>
         </div>
 
         {/* Socials & Back To Top */}

@@ -7,7 +7,6 @@ import { personalInfo } from './data/personalInfo'
 // Components
 import BackgroundEffects from './components/ui/BackgroundEffects'
 import CustomCursor from './components/cursor/CustomCursor'
-import Loader from './components/loader/Loader'
 import Navbar from './components/layout/Navbar'
 import Footer from './components/layout/Footer'
 
@@ -28,26 +27,25 @@ function AnimatedCounter({ value, duration = 2 }) {
     const end = parseFloat(value)
     const hasDecimal = value.toString().includes('.')
     const decimals = hasDecimal ? value.toString().split('.')[1].length : 0
-    
+
     const step = (timestamp) => {
       if (!startTimestamp) startTimestamp = timestamp
       const progress = Math.min((timestamp - startTimestamp) / (duration * 1000), 1)
       const current = progress * end
-      
+
       setCount(hasDecimal ? current.toFixed(decimals) : Math.floor(current).toString())
-      
+
       if (progress < 1) {
         window.requestAnimationFrame(step)
       }
     }
-    
+
     window.requestAnimationFrame(step)
   }, [value, duration])
 
   return <span>{count}</span>
 }
 
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import TechMessages from './sections/TechMessages'
 
 // Stats Counter Section component
@@ -58,11 +56,11 @@ function StatsCounter() {
   })
 
   return (
-    <section ref={ref} className="relative py-12 bg-transparent overflow-hidden z-10">
-      <div className="container-custom grid grid-cols-2 md:grid-cols-4 gap-8">
+    <section ref={ref} className="relative py-8 sm:py-12 bg-transparent overflow-hidden z-10">
+      <div className="container-custom grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8">
         {personalInfo.stats.map((stat, index) => (
-          <div key={index} className="flex flex-col items-center text-center">
-            <h3 className="text-4xl sm:text-5xl font-black font-sora tracking-tight text-[#1E293B] mb-2">
+          <div key={index} className="flex flex-col items-center text-center px-1">
+            <h3 className="text-2xl xs:text-3xl sm:text-4xl md:text-5xl font-black font-sora tracking-tight text-[#1E293B] mb-1 leading-tight whitespace-nowrap">
               {inView ? (
                 <AnimatedCounter value={stat.value} duration={2} />
               ) : (
@@ -70,7 +68,7 @@ function StatsCounter() {
               )}
               <span className="text-[#2563EB]">{stat.suffix}</span>
             </h3>
-            <p className="text-xs sm:text-sm font-grotesk text-slate-600 tracking-wide uppercase">
+            <p className="text-[10px] sm:text-xs md:text-sm font-grotesk text-slate-600 tracking-wide uppercase">
               {stat.label}
             </p>
           </div>
@@ -120,37 +118,55 @@ function PortfolioHome() {
 }
 
 export default function App() {
-  const [loading, setLoading] = useState(true)
+  const [view, setView] = useState(() => {
+    // If we visit any path other than '/', treat it as a 404 fallback to 'tech-messages'
+    return window.location.pathname === '/' ? 'portfolio' : 'tech-messages'
+  })
 
   // Initialize Lenis scroll engine
   useLenis()
 
+  useEffect(() => {
+    const handleNavigation = (e) => {
+      if (e.detail) {
+        setView(e.detail)
+        // Dynamically update the browser URL to match the view state
+        if (e.detail === 'portfolio') {
+          window.history.pushState({}, '', '/')
+        } else if (e.detail === 'tech-messages') {
+          window.history.pushState({}, '', '/telemetry')
+        }
+        window.scrollTo({ top: 0, behavior: 'instant' })
+      }
+    }
+    window.addEventListener('navigate', handleNavigation)
+    return () => window.removeEventListener('navigate', handleNavigation)
+  }, [])
+
   return (
-    <BrowserRouter>
+    <>
       {/* Premium custom cursor */}
       <CustomCursor />
 
-      {/* Loading sequence screen */}
-      {loading && <Loader onComplete={() => setLoading(false)} />}
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={view}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.5, ease: 'easeOut' }}
+          className="relative min-h-screen bg-transparent selection:bg-[#2563EB]/20 selection:text-[#2563EB]"
+        >
+          {/* Background spotlight textures & particles */}
+          <BackgroundEffects />
 
-      <AnimatePresence>
-        {!loading && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.8, ease: 'easeOut' }}
-            className="relative min-h-screen bg-transparent selection:bg-[#2563EB]/20 selection:text-[#2563EB]"
-          >
-            {/* Background spotlight textures & particles */}
-            <BackgroundEffects />
-
-            <Routes>
-              <Route path="/" element={<PortfolioHome />} />
-              <Route path="*" element={<TechMessages />} />
-            </Routes>
-          </motion.div>
-        )}
+          {view === 'portfolio' ? (
+            <PortfolioHome />
+          ) : (
+            <TechMessages />
+          )}
+        </motion.div>
       </AnimatePresence>
-    </BrowserRouter>
+    </>
   )
 }

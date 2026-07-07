@@ -47,7 +47,7 @@ export default function Contact() {
     }
     if (!formData.subject.trim()) tempErrors.subject = 'Subject is required'
     if (!formData.message.trim()) tempErrors.message = 'Message is required'
-    
+
     setErrors(tempErrors)
     return Object.keys(tempErrors).length === 0
   }
@@ -114,7 +114,7 @@ export default function Contact() {
   return (
     <section id="contact" className="relative section-padding overflow-hidden">
       <Toaster position="bottom-right" />
-      
+
       {/* Background aurora glow */}
       <div className="absolute bottom-[-10%] right-[-10%] w-[500px] h-[500px] rounded-full opacity-[0.06] blur-[120px] pointer-events-none"
         style={{ background: 'radial-gradient(circle, #38BDF8 0%, transparent 70%)' }}
@@ -123,7 +123,7 @@ export default function Contact() {
       <div className="container-custom relative z-10">
         {/* Title */}
         <div className="flex flex-col items-center text-center mb-16">
-          <motion.h2 
+          <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -132,7 +132,7 @@ export default function Contact() {
           >
             Get In <span className="gradient-text">Touch</span>
           </motion.h2>
-          <motion.p 
+          <motion.p
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -153,7 +153,7 @@ export default function Contact() {
             transition={{ duration: 0.6 }}
             className="lg:col-span-5 flex flex-col justify-between"
           >
-            <GlowCard 
+            <GlowCard
               glowColor="#2563EB"
               className="p-6 md:p-8 flex flex-col justify-between h-full bg-white/90 border border-slate-200/80 shadow-md"
               tilt={false}
@@ -167,23 +167,23 @@ export default function Contact() {
                 </p>
 
                 {/* Details list */}
-                <div className="flex flex-col gap-6 mb-8">
+                <div className="flex flex-col gap-4 sm:gap-6 mb-8">
                   {/* Email row */}
-                  <div className="flex items-center gap-4 group">
-                    <div className="w-11 h-11 rounded-xl flex items-center justify-center border border-slate-200/50 bg-slate-100/70 text-[#2563EB] group-hover:bg-[#2563EB]/10 transition-colors">
-                      <Mail size={18} />
+                  <div className="flex items-center gap-3 sm:gap-4 group">
+                    <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-xl flex items-center justify-center border border-slate-200/50 bg-slate-100/70 text-[#2563EB] group-hover:bg-[#2563EB]/10 transition-colors shrink-0">
+                      <Mail size={16} className="sm:w-[18px] sm:h-[18px]" />
                     </div>
-                    <div className="flex-1 overflow-hidden">
-                      <span className="text-[10px] uppercase font-grotesk tracking-widest text-slate-500 block">
+                    <div className="flex-1 min-w-0">
+                      <span className="text-[9px] sm:text-[10px] uppercase font-grotesk tracking-widest text-slate-500 block">
                         Email Me
                       </span>
-                      <span className="font-grotesk text-sm text-slate-800 truncate block">
+                      <span className="font-grotesk text-xs sm:text-sm text-slate-800 block truncate">
                         {personalInfo.email}
                       </span>
                     </div>
                     <button
                       onClick={copyEmail}
-                      className="p-2 rounded-lg border border-slate-200/50 bg-slate-100/70 text-slate-600 hover:text-slate-900 transition-colors"
+                      className="p-2 rounded-lg border border-slate-200/50 bg-slate-100/70 text-slate-600 hover:text-slate-900 transition-colors shrink-0"
                       title="Copy Email"
                     >
                       {copied ? <Check size={14} className="text-emerald-400" /> : <Copy size={14} />}
@@ -191,15 +191,15 @@ export default function Contact() {
                   </div>
 
                   {/* Location row */}
-                  <div className="flex items-center gap-4 group">
-                    <div className="w-11 h-11 rounded-xl flex items-center justify-center border border-slate-200/50 bg-slate-100/70 text-[#10B981] group-hover:bg-[#10B981]/10 transition-colors">
-                      <MapPin size={18} />
+                  <div className="flex items-center gap-3 sm:gap-4 group">
+                    <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-xl flex items-center justify-center border border-slate-200/50 bg-slate-100/70 text-[#10B981] group-hover:bg-[#10B981]/10 transition-colors shrink-0">
+                      <MapPin size={16} className="sm:w-[18px] sm:h-[18px]" />
                     </div>
-                    <div>
-                      <span className="text-[10px] uppercase font-grotesk tracking-widest text-slate-500 block">
+                    <div className="flex-1 min-w-0">
+                      <span className="text-[9px] sm:text-[10px] uppercase font-grotesk tracking-widest text-slate-500 block">
                         Location
                       </span>
-                      <span className="font-grotesk text-sm text-slate-800 block">
+                      <span className="font-grotesk text-xs sm:text-sm text-slate-800 block">
                         {personalInfo.location}
                       </span>
                     </div>
@@ -228,8 +228,8 @@ export default function Contact() {
             transition={{ duration: 0.6 }}
             className="lg:col-span-7"
           >
-            <GlowCard 
-              glowColor="#38BDF8" 
+            <GlowCard
+              glowColor="#38BDF8"
               className="p-8 h-full"
               tilt={false}
             >
@@ -245,9 +245,8 @@ export default function Contact() {
                     name="name"
                     value={formData.name}
                     onChange={handleChange}
-                    className={`w-full px-4 py-3 rounded-xl border ${
-                      errors.name ? 'border-red-500/50 focus:border-red-500' : 'border-slate-200/50 focus:border-[#2563EB]'
-                    } bg-white/[0.02] text-black font-grotesk text-sm focus:outline-none transition-colors duration-300`}
+                    className={`w-full px-4 py-3 rounded-xl border ${errors.name ? 'border-red-500/50 focus:border-red-500' : 'border-slate-200/50 focus:border-[#2563EB]'
+                      } bg-white/[0.02] text-black font-grotesk text-sm focus:outline-none transition-colors duration-300`}
                     placeholder="John Doe"
                   />
                   {errors.name && (
@@ -266,9 +265,8 @@ export default function Contact() {
                     name="email"
                     value={formData.email}
                     onChange={handleChange}
-                    className={`w-full px-4 py-3 rounded-xl border ${
-                      errors.email ? 'border-red-500/50 focus:border-red-500' : 'border-slate-200/50 focus:border-[#2563EB]'
-                    } bg-white/[0.02] text-black font-grotesk text-sm focus:outline-none transition-colors duration-300`}
+                    className={`w-full px-4 py-3 rounded-xl border ${errors.email ? 'border-red-500/50 focus:border-red-500' : 'border-slate-200/50 focus:border-[#2563EB]'
+                      } bg-white/[0.02] text-black font-grotesk text-sm focus:outline-none transition-colors duration-300`}
                     placeholder="john@example.com"
                   />
                   {errors.email && (
@@ -287,9 +285,8 @@ export default function Contact() {
                     name="subject"
                     value={formData.subject}
                     onChange={handleChange}
-                    className={`w-full px-4 py-3 rounded-xl border ${
-                      errors.subject ? 'border-red-500/50 focus:border-red-500' : 'border-slate-200/50 focus:border-[#2563EB]'
-                    } bg-white/[0.02] text-black font-grotesk text-sm focus:outline-none transition-colors duration-300`}
+                    className={`w-full px-4 py-3 rounded-xl border ${errors.subject ? 'border-red-500/50 focus:border-red-500' : 'border-slate-200/50 focus:border-[#2563EB]'
+                      } bg-white/[0.02] text-black font-grotesk text-sm focus:outline-none transition-colors duration-300`}
                     placeholder="Project Inquiry"
                   />
                   {errors.subject && (
@@ -308,9 +305,8 @@ export default function Contact() {
                     value={formData.message}
                     onChange={handleChange}
                     rows="5"
-                    className={`w-full px-4 py-3 rounded-xl border ${
-                      errors.message ? 'border-red-500/50 focus:border-red-500' : 'border-slate-200/50 focus:border-[#2563EB]'
-                    } bg-white/[0.02] text-black font-grotesk text-sm focus:outline-none transition-colors duration-300 resize-none`}
+                    className={`w-full px-4 py-3 rounded-xl border ${errors.message ? 'border-red-500/50 focus:border-red-500' : 'border-slate-200/50 focus:border-[#2563EB]'
+                      } bg-white/[0.02] text-black font-grotesk text-sm focus:outline-none transition-colors duration-300 resize-none`}
                     placeholder="Tell me about your project..."
                   />
                   {errors.message && (

@@ -53,7 +53,7 @@ export default function Research() {
               >
                 <div>
                   <div className="flex justify-between items-start gap-4 mb-4">
-                    <span className="px-3 py-1 rounded-full text-[10px] font-grotesk font-bold border border-[#2563EB]/30 bg-[#2563EB]/5 text-[#2563EB] uppercase tracking-wider">
+                    <span className="px-3 py-1 rounded-full text-[10px] font-grotesk font-bold border border-[#2563EB]/30 bg-[#2563EB]/5 text-[#2563EB] uppercase tracking-wider whitespace-nowrap">
                       GPA: {edu.gpa}
                     </span>
                     <span className="text-xs font-grotesk text-slate-400">

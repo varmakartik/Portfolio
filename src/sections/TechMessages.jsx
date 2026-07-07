@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Link } from 'react-router-dom'
 import { Terminal, RefreshCw, ArrowLeft, Cpu } from 'lucide-react'
 
 // Array of 50 tech-related quotes and developer wisdom
@@ -100,13 +99,13 @@ export default function TechMessages() {
 
       {/* Header */}
       <header className="w-full max-w-6xl mx-auto flex items-center justify-between z-10 pt-4">
-        <Link
-          to="/"
-          className="flex items-center gap-2 text-xs font-bold text-slate-400 hover:text-white transition-colors group cursor-none"
+        <button
+          onClick={() => window.dispatchEvent(new CustomEvent('navigate', { detail: 'portfolio' }))}
+          className="flex items-center gap-2 text-xs font-bold text-slate-400 hover:text-white transition-colors group cursor-none bg-transparent border-none"
         >
           <ArrowLeft size={14} className="group-hover:-translate-x-1 transition-transform" />
           BACK TO HUB
-        </Link>
+        </button>
         <div className="flex items-center gap-1.5 text-slate-500 font-mono text-[10px]">
           <Cpu size={12} className="text-[#2563EB] animate-pulse" />
           STATUS: ONLINE_0x9F
@@ -155,18 +154,17 @@ export default function TechMessages() {
               Next Broadcast
             </motion.button>
 
-            <Link to="/">
-              <motion.button
-                whileHover={{ scale: 1.04 }}
-                whileTap={{ scale: 0.96 }}
-                className="flex items-center gap-1.5 px-5 py-2.5 rounded-xl font-bold text-xs text-[#090D16] cursor-none"
-                style={{
-                  background: 'linear-gradient(135deg, #2563EB 0%, #38BDF8 100%)',
-                }}
-              >
-                Go Home
-              </motion.button>
-            </Link>
+            <motion.button
+              whileHover={{ scale: 1.04 }}
+              whileTap={{ scale: 0.96 }}
+              onClick={() => window.dispatchEvent(new CustomEvent('navigate', { detail: 'portfolio' }))}
+              className="flex items-center gap-1.5 px-5 py-2.5 rounded-xl font-bold text-xs text-[#090D16] cursor-none"
+              style={{
+                background: 'linear-gradient(135deg, #2563EB 0%, #38BDF8 100%)',
+              }}
+            >
+              Go Home
+            </motion.button>
           </div>
         </motion.div>
 

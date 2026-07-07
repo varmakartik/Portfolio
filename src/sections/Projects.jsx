@@ -14,30 +14,28 @@ import {
 import { FaUserShield, FaServer } from 'react-icons/fa'
 import { Cpu } from 'lucide-react'
 
-// Map tech names â†’ icon + brand color
 const techMeta = {
-  'React':       { icon: SiReact,       color: '#61DAFB' },
-  'React.js':    { icon: SiReact,       color: '#61DAFB' },
-  'Next.js':     { icon: SiNextdotjs,   color: '#0F172A' },
-  'TypeScript':  { icon: SiTypescript,  color: '#3178C6' },
-  'JavaScript':  { icon: SiJavascript,  color: '#F7DF1E' },
-  'Tailwind CSS':{ icon: SiTailwindcss, color: '#06B6D4' },
-  'Node.js':     { icon: SiNodedotjs,   color: '#339933' },
-  'Express.js':  { icon: SiExpress,     color: '#475569' },
-  'MongoDB':     { icon: SiMongodb,     color: '#47A248' },
-  'PostgreSQL':  { icon: SiPostgresql,  color: '#336791' },
-  'MySQL':       { icon: SiMysql,       color: '#4479A1' },
-  'SQLite':      { icon: SiSqlite,      color: '#003B57' },
-  'Supabase':    { icon: SiSupabase,    color: '#3ECF8E' },
-  'Clerk API':   { icon: FaUserShield,  color: '#6C47FF' },
-  'Clerk Auth':  { icon: FaUserShield,  color: '#6C47FF' },
-  'Gemini SDK':  { icon: Cpu,           color: '#2563EB' },
-  'Gemini AI':   { icon: Cpu,           color: '#2563EB' },
-  'JWT':         { icon: FaUserShield,  color: '#D97706' },
-  'Recharts':    { icon: Cpu,           color: '#E11D48' },
-  'Realtime DB': { icon: SiSupabase,    color: '#3ECF8E' },
-  'Realtime Sync':{ icon: SiSupabase,   color: '#3ECF8E' },
-  'Render':      { icon: FaServer,      color: '#46E3B7' },
+  'React': { icon: SiReact, color: '#61DAFB' },
+  'Next.js': { icon: SiNextdotjs, color: '#0F172A' },
+  'TypeScript': { icon: SiTypescript, color: '#3178C6' },
+  'JavaScript': { icon: SiJavascript, color: '#F7DF1E' },
+  'Tailwind CSS': { icon: SiTailwindcss, color: '#06B6D4' },
+  'Node.js': { icon: SiNodedotjs, color: '#339933' },
+  'Express.js': { icon: SiExpress, color: '#475569' },
+  'MongoDB': { icon: SiMongodb, color: '#47A248' },
+  'PostgreSQL': { icon: SiPostgresql, color: '#336791' },
+  'MySQL': { icon: SiMysql, color: '#4479A1' },
+  'SQLite': { icon: SiSqlite, color: '#003B57' },
+  'Supabase': { icon: SiSupabase, color: '#3ECF8E' },
+  'Clerk API': { icon: FaUserShield, color: '#6C47FF' },
+  'Clerk Auth': { icon: FaUserShield, color: '#6C47FF' },
+  'Gemini SDK': { icon: Cpu, color: '#2563EB' },
+  'Gemini AI': { icon: Cpu, color: '#2563EB' },
+  'JWT': { icon: FaUserShield, color: '#D97706' },
+  'Recharts': { icon: Cpu, color: '#E11D48' },
+  'Realtime DB': { icon: SiSupabase, color: '#3ECF8E' },
+  'Realtime Sync': { icon: SiSupabase, color: '#3ECF8E' },
+  'Render': { icon: FaServer, color: '#46E3B7' },
 }
 
 // Build filter groups from project techStacks
@@ -56,7 +54,7 @@ const filterGroups = [
     label: 'Frontend',
     icon: SiReact,
     color: '#2563EB',
-    techs: ['React', 'React.js', 'Next.js', 'TypeScript', 'JavaScript', 'Tailwind CSS'],
+    techs: ['React', 'Next.js', 'TypeScript', 'JavaScript', 'Tailwind CSS'],
   },
   {
     id: 'backend',
@@ -290,15 +288,15 @@ export default function Projects() {
                           style={
                             isActive
                               ? {
-                                  backgroundColor: `${meta?.color || '#2563EB'}0f`,
-                                  borderColor: `${meta?.color || '#2563EB'}40`,
-                                  color: meta?.color || '#2563EB',
-                                }
+                                backgroundColor: `${meta?.color || '#2563EB'}0f`,
+                                borderColor: `${meta?.color || '#2563EB'}40`,
+                                color: meta?.color || '#2563EB',
+                              }
                               : {
-                                  backgroundColor: 'rgba(255,255,255,0.7)',
-                                  borderColor: '#E2E8F0',
-                                  color: '#64748B',
-                                }
+                                backgroundColor: 'rgba(255,255,255,0.7)',
+                                borderColor: '#E2E8F0',
+                                color: '#64748B',
+                              }
                           }
                         >
                           {TechIcon && (
@@ -470,9 +468,8 @@ export default function Projects() {
                   whileHover={!isPopped ? { y: -6 } : {}}
                   transition={{ type: 'spring', stiffness: 340, damping: 26 }}
                   style={{ position: 'relative', zIndex: isPopped ? 20 : 1 }}
-                  className={`flex flex-col ${
-                    isLarge ? 'md:col-span-2 lg:col-span-2' : isMedium ? 'md:col-span-1 lg:col-span-1' : 'col-span-1'
-                  }`}
+                  className={`flex flex-col ${isLarge ? 'md:col-span-2 lg:col-span-2' : isMedium ? 'md:col-span-1 lg:col-span-1' : 'col-span-1'
+                    }`}
                   onClick={(e) => {
                     e.stopPropagation()
                     setPoppedCardId(prev => prev === project.id ? null : project.id)
@@ -480,11 +477,10 @@ export default function Projects() {
                 >
                   <GlowCard
                     glowColor={project.accentColor}
-                    className={`p-6 md:p-8 flex flex-col justify-between h-full min-h-[380px] transition-all duration-300 cursor-pointer ${
-                      isPopped
+                    className={`p-6 md:p-8 flex flex-col justify-between h-full min-h-[380px] transition-all duration-300 cursor-pointer ${isPopped
                         ? 'border-[#2563EB]/50 shadow-[0_24px_60px_rgba(37,99,235,0.22),0_8px_24px_rgba(0,0,0,0.12)]'
                         : 'hover:border-[#2563EB]/40 hover:shadow-lg'
-                    }`}
+                      }`}
                     tilt={!isPopped}
                   >
                     <div>
@@ -550,7 +546,7 @@ export default function Projects() {
                           style={{ background: 'linear-gradient(135deg, #2563EB 0%, #38BDF8 100%)' }}
                         >
                           View Details
-                          <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5h6M6 3l2 2-2 2" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                          <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5h6M6 3l2 2-2 2" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg>
                         </motion.button>
                       )}
                     </AnimatePresence>
@@ -592,20 +588,15 @@ export default function Projects() {
             transition={{ duration: 0.2 }}
             onClick={() => setSelectedProject(null)}
             className="fixed inset-0 z-[150] flex items-center justify-center p-4"
-            style={{ background: 'rgba(9,13,22,0.88)', backdropFilter: 'blur(16px)' }}
+            style={{ background: 'rgba(15, 23, 42, 0.25)', backdropFilter: 'blur(8px)' }}
           >
             <motion.div
-              initial={{ opacity: 0, scale: 0.93, y: 24 }}
+              initial={{ opacity: 0, scale: 0.95, y: 16 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.93, y: 16 }}
-              transition={{ type: 'spring', stiffness: 320, damping: 28 }}
+              exit={{ opacity: 0, scale: 0.95, y: 12 }}
+              transition={{ type: 'spring', stiffness: 350, damping: 28 }}
               onClick={(e) => e.stopPropagation()}
-              className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-2xl"
-              style={{
-                background: 'linear-gradient(160deg, #0F172A 0%, #111827 100%)',
-                border: '1px solid rgba(255,255,255,0.07)',
-                boxShadow: `0 0 0 1px rgba(37,99,235,0.18), 0 32px 80px rgba(0,0,0,0.7)`,
-              }}
+              className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-2xl bg-white border border-slate-200/80 shadow-[0_24px_60px_-15px_rgba(30,41,59,0.18)]"
             >
               {/* Accent top bar */}
               <div className="h-1 w-full rounded-t-2xl"
@@ -613,30 +604,30 @@ export default function Projects() {
               />
 
               {/* Header block */}
-              <div className="px-7 pt-7 pb-5 relative"
+              <div className="px-6 sm:px-7 pt-7 pb-5 relative"
                 style={{
-                  background: `radial-gradient(ellipse 80% 60% at 10% 0%, ${selectedProject.accentColor || '#2563EB'}18 0%, transparent 70%)`,
+                  background: `radial-gradient(ellipse 80% 60% at 10% 0%, ${selectedProject.accentColor || '#2563EB'}0a 0%, transparent 70%)`,
                 }}
               >
                 {/* Close button */}
                 <button
                   onClick={() => setSelectedProject(null)}
-                  className="absolute top-5 right-5 p-2 rounded-lg text-slate-400 hover:text-white hover:bg-white/10 transition-all cursor-none"
+                  className="absolute top-5 right-5 p-2 rounded-xl text-slate-400 hover:text-slate-700 hover:bg-slate-50 transition-all cursor-none"
                 >
                   <X size={16} />
                 </button>
 
                 <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[10px] font-grotesk font-bold tracking-widest uppercase mb-3"
-                  style={{ background: `${selectedProject.accentColor || '#2563EB'}20`, color: selectedProject.accentColor || '#38BDF8', border: `1px solid ${selectedProject.accentColor || '#2563EB'}30` }}
+                  style={{ background: `${selectedProject.accentColor || '#2563EB'}12`, color: selectedProject.accentColor || '#2563EB', border: `1px solid ${selectedProject.accentColor || '#2563EB'}20` }}
                 >
                   {selectedProject.year} &bull; {selectedProject.status}
                 </span>
 
-                <h2 className="text-3xl font-black font-sora text-white leading-tight mb-1">
+                <h2 className="text-2xl sm:text-3xl font-black font-sora text-[#1E293B] leading-tight mb-1">
                   {selectedProject.title}
                 </h2>
                 <p className="text-sm font-grotesk font-medium mb-5"
-                  style={{ color: selectedProject.accentColor || '#38BDF8' }}
+                  style={{ color: selectedProject.accentColor || '#2563EB' }}
                 >
                   {selectedProject.subtitle}
                 </p>
@@ -645,7 +636,7 @@ export default function Projects() {
                 <div className="flex gap-3">
                   {selectedProject.github && (
                     <a href={selectedProject.github} target="_blank" rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-grotesk font-bold text-white bg-white/10 hover:bg-white/20 border border-white/10 transition-all cursor-none"
+                      className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-grotesk font-bold text-[#1E293B] bg-slate-100 hover:bg-slate-200/80 border border-slate-200 transition-all cursor-none"
                     >
                       <FaGithub size={13} /> Repository
                     </a>
@@ -662,15 +653,15 @@ export default function Projects() {
               </div>
 
               {/* Divider */}
-              <div className="h-px mx-7" style={{ background: 'rgba(255,255,255,0.06)' }} />
+              <div className="h-px mx-6 sm:mx-7 bg-slate-200/60" />
 
               {/* Body sections */}
-              <div className="px-7 py-6 space-y-6">
+              <div className="px-6 sm:px-7 py-6 space-y-6">
 
                 {/* Overview */}
                 <div>
-                  <p className="text-[11px] font-grotesk font-bold tracking-widest uppercase text-slate-500 mb-2">Overview</p>
-                  <p className="text-sm font-grotesk text-slate-300 leading-relaxed">
+                  <p className="text-[10px] font-grotesk font-bold tracking-widest uppercase text-slate-400 mb-2">Overview</p>
+                  <p className="text-sm font-grotesk text-[#475569] leading-relaxed">
                     {selectedProject.longDescription || selectedProject.description}
                   </p>
                 </div>
@@ -679,13 +670,13 @@ export default function Projects() {
                 {(selectedProject.features || selectedProject.architecture) && (
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                     {selectedProject.features && (
-                      <div className="rounded-xl p-4" style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)' }}>
-                        <p className="text-[10px] font-grotesk font-bold tracking-widest uppercase text-slate-500 mb-3 flex items-center gap-1.5">
+                      <div className="rounded-xl p-4 bg-slate-50/50 border border-slate-200/60">
+                        <p className="text-[10px] font-grotesk font-bold tracking-widest uppercase text-[#475569] mb-3 flex items-center gap-1.5">
                           <Check size={11} className="text-[#2563EB]" /> Key Features
                         </p>
                         <ul className="space-y-2">
                           {selectedProject.features.map((feat, fIdx) => (
-                            <li key={fIdx} className="flex items-start gap-2 text-[12px] font-grotesk text-slate-400">
+                            <li key={fIdx} className="flex items-start gap-2 text-[12px] font-grotesk text-[#475569]">
                               <span className="w-1.5 h-1.5 rounded-full mt-1.5 shrink-0"
                                 style={{ background: selectedProject.accentColor || '#2563EB' }}
                               />
@@ -696,11 +687,11 @@ export default function Projects() {
                       </div>
                     )}
                     {selectedProject.architecture && (
-                      <div className="rounded-xl p-4" style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)' }}>
-                        <p className="text-[10px] font-grotesk font-bold tracking-widest uppercase text-slate-500 mb-3 flex items-center gap-1.5">
+                      <div className="rounded-xl p-4 bg-slate-50/50 border border-slate-200/60">
+                        <p className="text-[10px] font-grotesk font-bold tracking-widest uppercase text-[#475569] mb-3 flex items-center gap-1.5">
                           <Server size={11} className="text-[#38BDF8]" /> System Architecture
                         </p>
-                        <p className="text-[12px] font-grotesk text-slate-400 leading-relaxed">{selectedProject.architecture}</p>
+                        <p className="text-[12px] font-grotesk text-[#475569] leading-relaxed">{selectedProject.architecture}</p>
                       </div>
                     )}
                   </div>
@@ -708,17 +699,17 @@ export default function Projects() {
 
                 {/* Engineering Challenges */}
                 {selectedProject.challenges && (
-                  <div className="rounded-xl p-4" style={{ background: 'rgba(239,68,68,0.04)', border: '1px solid rgba(239,68,68,0.12)' }}>
-                    <p className="text-[10px] font-grotesk font-bold tracking-widest uppercase text-red-400/80 mb-2 flex items-center gap-1.5">
+                  <div className="rounded-xl p-4 bg-red-50/30 border border-red-200/50">
+                    <p className="text-[10px] font-grotesk font-bold tracking-widest uppercase text-red-500 mb-2 flex items-center gap-1.5">
                       <Shield size={11} /> Engineering Challenges
                     </p>
-                    <p className="text-[12px] font-grotesk text-slate-400 leading-relaxed">{selectedProject.challenges}</p>
+                    <p className="text-[12px] font-grotesk text-[#475569] leading-relaxed">{selectedProject.challenges}</p>
                   </div>
                 )}
 
                 {/* Tech Stack */}
                 <div>
-                  <p className="text-[11px] font-grotesk font-bold tracking-widest uppercase text-slate-500 mb-3">Technologies Used</p>
+                  <p className="text-[10px] font-grotesk font-bold tracking-widest uppercase text-slate-400 mb-3">Technologies Used</p>
                   <div className="flex flex-wrap gap-2">
                     {(selectedProject.techStack || selectedProject.tags).map((tech, tIdx) => {
                       const meta = techMeta[tech]
@@ -726,9 +717,9 @@ export default function Projects() {
                         <span key={tIdx}
                           className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-grotesk text-[11px] font-semibold"
                           style={{
-                            background: meta ? `${meta.color}15` : 'rgba(255,255,255,0.05)',
-                            border: `1px solid ${meta ? `${meta.color}30` : 'rgba(255,255,255,0.08)'}`,
-                            color: meta ? meta.color : '#94A3B8',
+                            background: meta ? `${meta.color}0f` : 'rgba(30,41,59,0.04)',
+                            border: `1px solid ${meta ? `${meta.color}25` : 'rgba(30,41,59,0.08)'}`,
+                            color: meta ? meta.color : '#475569',
                           }}
                         >
                           {meta && <meta.icon size={11} />}

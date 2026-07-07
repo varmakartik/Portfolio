@@ -6,7 +6,7 @@ import { Briefcase, Calendar, MapPin } from 'lucide-react'
 
 export default function Experience() {
   const containerRef = useRef(null)
-  
+
   // Track scroll progress of the timeline section
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -29,11 +29,11 @@ export default function Experience() {
       <div className="absolute top-[20%] right-[-10%] w-[500px] h-[500px] rounded-full opacity-[0.04] blur-[120px] pointer-events-none"
         style={{ background: 'radial-gradient(circle, #2563EB 0%, transparent 70%)' }}
       />
-      
+
       <div className="container-custom relative z-10">
         {/* Title */}
         <div className="flex flex-col items-center text-center mb-20">
-          <motion.h2 
+          <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -42,7 +42,7 @@ export default function Experience() {
           >
             My <span className="gradient-text-purple">Journey</span>
           </motion.h2>
-          <motion.p 
+          <motion.p
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -57,7 +57,7 @@ export default function Experience() {
         <div className="relative max-w-4xl mx-auto">
           {/* Vertical Line */}
           <div className="absolute left-[21px] md:left-1/2 top-0 bottom-0 w-[2px] bg-slate-200/50 -translate-x-1/2" />
-          <motion.div 
+          <motion.div
             style={{ height: lineHeight }}
             className="absolute left-[21px] md:left-1/2 top-0 w-[2px] bg-gradient-to-b from-[#2563EB] via-[#38BDF8] to-[#10B981] shadow-[0_0_15px_#2563EB] -translate-x-1/2 origin-top"
           />
@@ -70,10 +70,10 @@ export default function Experience() {
                 <div key={exp.id} className={`flex flex-col md:flex-row items-stretch gap-8 relative ${isEven ? '' : 'md:flex-row-reverse'}`}>
                   {/* Indicator Icon */}
                   <div className="absolute left-0 md:left-1/2 w-11 h-11 rounded-full border-4 border-[#F8FAFC] bg-[#FFFFFF] flex items-center justify-center -translate-x-[2px] md:-translate-x-1/2 z-10"
-                      style={{ borderColor: exp.color || '#2563EB' }}
+                    style={{ borderColor: exp.color || '#2563EB' }}
                   >
                     <div className="w-3.5 h-3.5 rounded-full"
-                        style={{ backgroundColor: exp.color || '#2563EB', boxShadow: `0 0 10px ${exp.color || '#2563EB'}` }}
+                      style={{ backgroundColor: exp.color || '#2563EB', boxShadow: `0 0 10px ${exp.color || '#2563EB'}` }}
                     />
                   </div>
 
@@ -81,14 +81,14 @@ export default function Experience() {
                   <div className="w-full md:w-1/2 hidden md:block" />
 
                   {/* Card Container */}
-                  <motion.div 
+                  <motion.div
                     initial={{ opacity: 0, x: isEven ? 50 : -50 }}
                     whileInView={{ opacity: 1, x: 0 }}
                     viewport={{ once: true, margin: '-50px' }}
                     transition={{ duration: 0.6, type: 'spring', stiffness: 100 }}
                     className="w-full md:w-1/2"
                   >
-                    <GlowCard 
+                    <GlowCard
                       glowColor={exp.color}
                       className="p-6 md:p-8 flex flex-col h-full border border-slate-200/50 bg-[#FFFFFF]/40 backdrop-blur-xl relative"
                       tilt={true}
@@ -107,10 +107,10 @@ export default function Experience() {
 
                       {/* Header */}
                       <div className="flex items-center gap-4 mb-5">
-                        <div 
+                        <div
                           className="w-12 h-12 rounded-xl flex items-center justify-center text-lg font-bold border border-slate-200"
-                          style={{ 
-                            color: exp.color || '#2563EB', 
+                          style={{
+                            color: exp.color || '#2563EB',
                             backgroundColor: `${exp.color || '#2563EB'}08`
                           }}
                         >
@@ -118,10 +118,10 @@ export default function Experience() {
                         </div>
                         <div>
                           <h3 className="text-xl font-bold font-sora text-slate-800">{exp.role}</h3>
-                          <a 
-                            href={exp.companyUrl || '#'} 
-                            target="_blank" 
-                            rel="noopener noreferrer" 
+                          <a
+                            href={exp.companyUrl || '#'}
+                            target="_blank"
+                            rel="noopener noreferrer"
                             className="text-sm font-grotesk font-semibold hover:text-[#2563EB] transition-colors"
                             style={{ color: exp.companyUrl ? (exp.color || '#2563EB') : '#9CA3AF' }}
                           >
@@ -149,8 +149,8 @@ export default function Experience() {
                       {/* Skills tags */}
                       <div className="flex flex-wrap gap-2 mt-auto">
                         {exp.skills.map((skill, sIdx) => (
-                          <span 
-                            key={sIdx} 
+                          <span
+                            key={sIdx}
                             className="px-2.5 py-1 rounded-lg border border-slate-200/50 bg-white/[0.02] font-grotesk text-[10px] font-medium text-slate-600"
                           >
                             {skill}

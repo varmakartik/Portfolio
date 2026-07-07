@@ -10,13 +10,13 @@ export const experiences = [
     location: 'Remote, Mumbai',
     type: 'Internship',
     description:
-      'Developed full-stack web application features using React.js, Node.js, Express.js, and MongoDB. Focused on secure authentication, API validation, and performance optimization.',
+      'Developed full-stack web application features using React, Node.js, Express.js, and MongoDB. Focused on secure authentication, API validation, and performance optimization.',
     highlights: [
       'Developed 10+ responsive web pages and integrated backend API functionalities',
       'Designed, implemented, and tested 15+ RESTful API endpoints, improving application reliability',
       'Collaborated effectively with team members for debugging, increasing team productivity by 25%',
     ],
-    skills: ['React.js', 'Node.js', 'Express.js', 'MongoDB', 'RESTful APIs', 'JWT'],
+    skills: ['React', 'Node.js', 'Express.js', 'MongoDB', 'RESTful APIs', 'JWT'],
     logo: '⚡',
     color: '#2563EB',
   },
@@ -52,13 +52,13 @@ export const experiences = [
     location: 'Remote, Mumbai',
     type: 'Internship',
     description:
-      'Developed responsive user interfaces using React.js, JavaScript (ES6+), HTML5, CSS3, and Tailwind CSS.',
+      'Developed responsive user interfaces using React, JavaScript (ES6+), HTML5, CSS3, and Tailwind CSS.',
     highlights: [
       'Built 10+ responsive and interactive web pages, translating UI/UX designs into high-quality code',
       'Created reusable React components and integrated RESTful APIs to create data-driven applications',
       'Optimized application performance by improving component rendering cycles and layout speeds',
     ],
-    skills: ['React.js', 'JavaScript', 'HTML5', 'Tailwind CSS', 'Git', 'GitHub'],
+    skills: ['React', 'JavaScript', 'HTML5', 'Tailwind CSS', 'Git', 'GitHub'],
     logo: '▲',
     color: '#38BDF8',
   },

@@ -35,7 +35,7 @@ export const skillCategories = [
     title: "Frontend",
     color: "#2563EB",
     skills: [
-      { name: "React.js", icon: SiReact, color: "#61DAFB" },
+      { name: "React", icon: SiReact, color: "#61DAFB" },
       { name: "Next.js", icon: SiNextdotjs, color: "#FFFFFF" },
       { name: "TypeScript", icon: SiTypescript, color: "#3178C6" },
       { name: "JavaScript", icon: SiJavascript, color: "#F7DF1E" },

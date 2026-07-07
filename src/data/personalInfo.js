@@ -6,7 +6,7 @@ export const personalInfo = {
   role: 'Full-Stack Web Developer',
   roles: [
     'Full-Stack Web Developer',
-    'React.js & Next.js Expert',
+    'React & Next.js Expert',
     'Node.js & API Engineer',
     'AI & Automation Enthusiast',
   ],

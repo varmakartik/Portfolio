@@ -256,8 +256,8 @@ export default function TechStack() {
                     {activeCategory.id === 'frontend' || activeCategory.id === 'languages' || activeCategory.id === 'all'
                       ? 'Advanced'
                       : activeCategory.id === 'tools'
-                      ? 'Proficient'
-                      : 'Intermediate'}
+                        ? 'Proficient'
+                        : 'Intermediate'}
                   </span>
                 </div>
               </div>
@@ -371,8 +371,8 @@ export default function TechStack() {
                               {category.id === 'frontend' || category.id === 'languages' || category.id === 'all'
                                 ? 'Advanced'
                                 : category.id === 'tools'
-                                ? 'Proficient'
-                                : 'Intermediate'}
+                                  ? 'Proficient'
+                                  : 'Intermediate'}
                             </span>
                           </div>
                         </div>

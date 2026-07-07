@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef } from 'react'
+﻿import { useState, useEffect, useCallback, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Menu, X, Download, ArrowUpRight } from 'lucide-react'
 import { personalInfo } from '../../data/personalInfo'
@@ -126,7 +126,7 @@ export default function Navbar() {
                 <circle cx="12" cy="12" r="8" stroke="#2563EB" strokeWidth="1" strokeDasharray="3 3" className="animate-spin-slow" />
               </svg>
             </div>
-            <span className="font-syne font-extrabold text-sm text-[#0F172A] tracking-wide lg:hidden">
+            <span className=" font-extrabold text-sm text-[#0F172A] tracking-wide lg:hidden">
               {personalInfo.name}
             </span>
           </motion.a>

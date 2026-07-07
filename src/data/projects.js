@@ -39,7 +39,7 @@ export const projects = [
     longDescription:
       'FinTrack is a comprehensive finance management platform built with PostgreSQL and JWT authentication. Users can manage budgets, track savings goals, join shared expense groups, and visualize analytics using interactive charts.',
     image: 'project2',
-    tags: ['React.js', 'Node.js', 'Express.js', 'PostgreSQL', 'JWT'],
+    tags: ['React', 'Node.js', 'Express.js', 'PostgreSQL', 'JWT'],
     features: [
       'Secure JWT authentication with refresh tokens',
       'Interactive dashboard analytics with Recharts',
@@ -47,11 +47,12 @@ export const projects = [
       'Savings goals progress tracking',
       'Progressive Web App (PWA) offline sync support',
     ],
+    sidebar: 'Database',
     architecture:
       'Client-server architecture. Express backend API connected to PostgreSQL, using Knex for migrations and queries. Recharts visual layer on the React client.',
     challenges:
       'Handling real-time offline transactions and automatically sync-merging them to the central database when connection status becomes active.',
-    techStack: ['React.js', 'Node.js', 'Express.js', 'PostgreSQL', 'Tailwind CSS', 'Recharts'],
+    techStack: ['React', 'Node.js', 'Express.js', 'PostgreSQL', 'Tailwind CSS', 'Recharts'],
     github: 'https://github.com/varmakartik/Expense-Tracker',
     live: 'https://expense-tracker-fintrack.vercel.app',
     featured: true,
@@ -70,7 +71,7 @@ export const projects = [
     longDescription:
       'NEXUS-HR simplifies operations by consolidating employee logs, leaves, attendance, and project allocations. It employs role-based dashboards to restrict permissions dynamically.',
     image: 'project3',
-    tags: ['React.js', 'Node.js', 'Express.js', 'MongoDB', 'JWT'],
+    tags: ['React', 'Node.js', 'Express.js', 'MongoDB', 'JWT'],
     features: [
       'Role-based dashboard permissions (Admin/Employee)',
       'Attendance tracker & leave approval workflows',
@@ -82,7 +83,7 @@ export const projects = [
       'MongoDB schemas for corporate directory models. Node/Express router handling authentication, timesheets, and payroll endpoints.',
     challenges:
       'Structuring access control logic to prevent unauthorized API requests to payroll endpoints while keeping dashboard metrics responsive.',
-    techStack: ['React.js', 'Node.js', 'Express.js', 'MongoDB', 'Tailwind CSS', 'JWT'],
+    techStack: ['React', 'Node.js', 'Express.js', 'MongoDB', 'Tailwind CSS', 'JWT'],
     github: 'https://github.com/varmakartik/Nexus',
     live: 'https://nexus-frontend-zm73.onrender.com',
     featured: true,
@@ -101,7 +102,7 @@ export const projects = [
     longDescription:
       'Connect is a workspace platform built on top of Supabase real-time databases. It enables fluid collaborative editing, rich-text customization, and document organizing inside workspaces.',
     image: 'project4',
-    tags: ['React.js', 'Supabase', 'Tailwind CSS', 'Realtime Sync'],
+    tags: ['React', 'Supabase', 'Tailwind CSS', 'Realtime Sync'],
     features: [
       'Real-time workspace synchronization via WebSockets',
       'Nested document structure with folder hierarchies',
@@ -109,7 +110,7 @@ export const projects = [
       'Rich text editing formatting options',
       'Responsive light and dark modes',
     ],
-    techStack: ['React.js', 'Supabase', 'Tailwind CSS', 'Realtime DB'],
+    techStack: ['React', 'Supabase', 'Tailwind CSS', 'Realtime DB'],
     github: 'https://github.com/varmakartik/Connect',
     live: 'https://crosser.vercel.app',
     featured: false,
