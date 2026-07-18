@@ -327,7 +327,7 @@ export default function Hero() {
                     Passionate <span className="text-white font-bold">Full-Stack Developer</span> from Mumbai, building scalable web products. Specializing in React, Node.js &amp; AI-integrated systems.
                   </p>
                   <div className="flex flex-wrap gap-x-4 gap-y-1 mt-1">
-                    <span className="text-[10px] font-grotesk text-slate-400">🎓 B.Tech CSE • GPA 8.35</span>
+                    <span className="text-[10px] font-grotesk text-slate-400">🎓 B.Sc CS • GPA 8.35</span>
                     <span className="text-[10px] font-grotesk text-slate-400">🚀 4+ Projects Shipped</span>
                   </div>
                 </div>
