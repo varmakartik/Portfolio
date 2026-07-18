@@ -9,6 +9,7 @@ import BackgroundEffects from './components/ui/BackgroundEffects'
 import CustomCursor from './components/cursor/CustomCursor'
 import Navbar from './components/layout/Navbar'
 import Footer from './components/layout/Footer'
+import MusicPlayer from './components/ui/MusicPlayer'
 
 // Sections
 import Hero from './sections/Hero'
@@ -147,6 +148,9 @@ export default function App() {
     <>
       {/* Premium custom cursor */}
       <CustomCursor />
+
+      {/* Floating background music player */}
+      <MusicPlayer />
 
       <AnimatePresence mode="wait">
         <motion.div
