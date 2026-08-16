@@ -6,6 +6,10 @@ import {
   SiJavascript,
   SiNodedotjs,
   SiExpress,
+  SiNestjs,
+  SiFastify,
+  SiFlask,
+  SiFastapi,
   SiPostgresql,
   SiMongodb,
   SiMysql,
@@ -52,6 +56,10 @@ export const skillCategories = [
     skills: [
       { name: "Node.js", icon: SiNodedotjs, color: "#339933" },
       { name: "Express.js", icon: SiExpress, color: "#FFFFFF" },
+      { name: "NestJS", icon: SiNestjs, color: "#E0234E" },
+      { name: "Fastify", icon: SiFastify, color: "#000000" },
+      { name: "Flask", icon: SiFlask, color: "#000000" },
+      {name: "Fast API", icon: SiFastapi, color: "#00000"}
     ],
   },
 
