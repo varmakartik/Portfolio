@@ -6,7 +6,6 @@ import { personalInfo } from './data/personalInfo'
 
 // Components
 import BackgroundEffects from './components/ui/BackgroundEffects'
-import CustomCursor from './components/cursor/CustomCursor'
 import Navbar from './components/layout/Navbar'
 import Footer from './components/layout/Footer'
 import MusicPlayer from './components/ui/MusicPlayer'
@@ -146,9 +145,6 @@ export default function App() {
 
   return (
     <>
-      {/* Premium custom cursor */}
-      <CustomCursor />
-
       {/* Floating background music player */}
       <MusicPlayer />
 

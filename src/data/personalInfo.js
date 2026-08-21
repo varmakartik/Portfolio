@@ -22,6 +22,8 @@ export const personalInfo = {
     github: 'https://github.com/varmakartik',
     linkedin: 'https://linkedin.com/in/kartikvarma200430',
     twitter: '/',
+    youtube: 'https://youtube.com/@kartikverse30',
+    instagram: 'https://instagram.com/ig_crosser',
   },
   stats: [
     { label: 'Internship Experience', value: 3, suffix: ' Mos' },

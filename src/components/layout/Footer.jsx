@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion'
 import { ArrowUp } from 'lucide-react'
-import { FaGithub, FaLinkedin, FaTwitter, FaDribbble, FaInstagram } from 'react-icons/fa'
+import { FaGithub, FaLinkedin, FaTwitter, FaDribbble, FaInstagram, FaYoutube } from 'react-icons/fa'
 import { personalInfo } from '../../data/personalInfo'
 
 export default function Footer() {
@@ -17,6 +17,7 @@ export default function Footer() {
     twitter: FaTwitter,
     dribbble: FaDribbble,
     instagram: FaInstagram,
+    youtube: FaYoutube,
   }
 
   const handleLinkClick = (e, href) => {
@@ -67,7 +68,7 @@ export default function Footer() {
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-3">
             {Object.entries(personalInfo.socials).map(([platform, url]) => {
-              const Icon = socialIcons[platform] || Github
+              const Icon = socialIcons[platform] || FaGithub
               return (
                 <a
                   key={platform}

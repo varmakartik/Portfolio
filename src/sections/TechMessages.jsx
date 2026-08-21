@@ -101,7 +101,7 @@ export default function TechMessages() {
       <header className="w-full max-w-6xl mx-auto flex items-center justify-between z-10 pt-4">
         <button
           onClick={() => window.dispatchEvent(new CustomEvent('navigate', { detail: 'portfolio' }))}
-          className="flex items-center gap-2 text-xs font-bold text-slate-400 hover:text-white transition-colors group cursor-none bg-transparent border-none"
+          className="flex items-center gap-2 text-xs font-bold text-slate-400 hover:text-white transition-colors group cursor-pointer bg-transparent border-none"
         >
           <ArrowLeft size={14} className="group-hover:-translate-x-1 transition-transform" />
           BACK TO HUB
@@ -148,7 +148,7 @@ export default function TechMessages() {
               whileHover={{ scale: 1.04 }}
               whileTap={{ scale: 0.96 }}
               onClick={handleRandomize}
-              className="flex items-center gap-2 px-5 py-2.5 rounded-xl border border-slate-700 bg-slate-800/50 hover:bg-slate-800 font-bold text-xs text-white transition-colors cursor-none"
+              className="flex items-center gap-2 px-5 py-2.5 rounded-xl border border-slate-700 bg-slate-800/50 hover:bg-slate-800 font-bold text-xs text-white transition-colors cursor-pointer"
             >
               <RefreshCw size={12} className="text-[#38BDF8]" />
               Next Broadcast
@@ -158,7 +158,7 @@ export default function TechMessages() {
               whileHover={{ scale: 1.04 }}
               whileTap={{ scale: 0.96 }}
               onClick={() => window.dispatchEvent(new CustomEvent('navigate', { detail: 'portfolio' }))}
-              className="flex items-center gap-1.5 px-5 py-2.5 rounded-xl font-bold text-xs text-[#090D16] cursor-none"
+              className="flex items-center gap-1.5 px-5 py-2.5 rounded-xl font-bold text-xs text-[#090D16] cursor-pointer"
               style={{
                 background: 'linear-gradient(135deg, #2563EB 0%, #38BDF8 100%)',
               }}

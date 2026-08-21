@@ -5,17 +5,22 @@ import path from 'path'
 
 export default defineConfig({
   plugins: [react(), tailwindcss()],
+  test: {
+    environment: 'jsdom',
+    setupFiles: './src/test/setup.js',
+    pool: 'threads',
+  },
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, './src'),
-      '@components': path.resolve(__dirname, './src/components'),
-      '@sections': path.resolve(__dirname, './src/sections'),
-      '@hooks': path.resolve(__dirname, './src/hooks'),
-      '@data': path.resolve(__dirname, './src/data'),
-      '@animations': path.resolve(__dirname, './src/animations'),
-      '@utils': path.resolve(__dirname, './src/utils'),
-      '@assets': path.resolve(__dirname, './src/assets'),
-      '@constants': path.resolve(__dirname, './src/constants'),
+      '@': path.resolve(import.meta.dirname, './src'),
+      '@components': path.resolve(import.meta.dirname, './src/components'),
+      '@sections': path.resolve(import.meta.dirname, './src/sections'),
+      '@hooks': path.resolve(import.meta.dirname, './src/hooks'),
+      '@data': path.resolve(import.meta.dirname, './src/data'),
+      '@animations': path.resolve(import.meta.dirname, './src/animations'),
+      '@utils': path.resolve(import.meta.dirname, './src/utils'),
+      '@assets': path.resolve(import.meta.dirname, './src/assets'),
+      '@constants': path.resolve(import.meta.dirname, './src/constants'),
     },
   },
 })

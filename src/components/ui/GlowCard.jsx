@@ -1,7 +1,7 @@
 import { useRef, useState } from 'react'
 import { motion } from 'framer-motion'
 
-export default function GlowCard({ children, className = '', glowColor = '#2563EB', activePress = true }) {
+export default function GlowCard({ children, className = '', glowColor = '#2563EB', activePress = true, style }) {
   const cardRef = useRef(null)
   const [coords, setCoords] = useState({ x: 0, y: 0 })
   const [isHovered, setIsHovered] = useState(false)
@@ -26,6 +26,7 @@ export default function GlowCard({ children, className = '', glowColor = '#2563E
       whileTap={activePress ? { scale: 0.98, y: 1 } : undefined}
       transition={{ type: 'spring', stiffness: 500, damping: 30 }}
       className={`relative rounded-2xl border border-slate-200/90 bg-white/80 shadow-[0_4px_20px_rgba(0,0,0,0.03)] overflow-hidden group transition-all duration-300 ${className}`}
+      style={style}
     >
       {/* Background Spotlight Radial Glow */}
       <div

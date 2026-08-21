@@ -2,12 +2,12 @@ import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { TypeAnimation } from 'react-type-animation'
 import { FileText, ArrowRight, Terminal, Cpu, ShieldAlert, Sparkles, Send } from 'lucide-react'
-import { FaGithub, FaLinkedin, FaTwitter } from 'react-icons/fa'
+import { FaGithub, FaInstagram, FaLinkedin, FaTwitter, FaYoutube } from 'react-icons/fa'
 import { personalInfo } from '../data/personalInfo'
 import MagneticButton from '../components/ui/MagneticButton'
 
 export default function Hero() {
-  const [activeTab, setActiveTab] = useState('console') // 'console' | 'system' | 'ai'
+  const [activeTab, setActiveTab] = useState('ai') // 'ai' | 'console' | 'system'
   const [isFlipped, setIsFlipped] = useState(false)
   const [terminalHistory, setTerminalHistory] = useState([
     { type: 'input', text: 'systemctl start dev-server' },
@@ -18,7 +18,7 @@ export default function Hero() {
   ])
   const [inputValue, setInputValue] = useState('')
   const [isMobile, setIsMobile] = useState(false)
-  const terminalEndRef = useRef(null)
+  const terminalScrollRef = useRef(null)
 
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth < 768)
@@ -28,7 +28,8 @@ export default function Hero() {
   }, [])
 
   useEffect(() => {
-    terminalEndRef.current?.scrollIntoView({ behavior: 'smooth' })
+    const terminal = terminalScrollRef.current
+    if (terminal) terminal.scrollTop = terminal.scrollHeight
   }, [terminalHistory])
 
   const handleCommandSubmit = (e) => {
@@ -71,6 +72,8 @@ export default function Hero() {
     github: FaGithub,
     linkedin: FaLinkedin,
     twitter: FaTwitter,
+    youtube: FaYoutube,
+    instagram: FaInstagram,
   }
 
   return (
@@ -166,7 +169,7 @@ export default function Hero() {
               onClick={() => {
                 document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })
               }}
-              className="px-6 py-3.5 rounded-xl font-grotesk font-bold text-sm border border-[#2563EB]/30 bg-[#2563EB]/10 text-[#2563EB] hover:bg-[#2563EB]/20 transition-all flex items-center justify-center gap-2 cursor-none"
+              className="px-6 py-3.5 rounded-xl font-grotesk font-bold text-sm border border-[#2563EB]/30 bg-[#2563EB]/10 text-[#2563EB] hover:bg-[#2563EB]/20 transition-all flex items-center justify-center gap-2 cursor-pointer"
             >
               Contact Me
               <ArrowRight size={16} />
@@ -176,7 +179,7 @@ export default function Hero() {
             <a
               href={personalInfo.resumeUrl}
               download="Kartik_Varma_Resume.pdf"
-              className="px-6 py-3.5 rounded-xl font-grotesk font-bold text-sm border border-slate-200 bg-slate-100/70 text-[#1E293B] hover:bg-slate-100/90 transition-all flex items-center justify-center gap-2 cursor-none text-center"
+              className="px-6 py-3.5 rounded-xl font-grotesk font-bold text-sm border border-slate-200 bg-slate-100/70 text-[#1E293B] hover:bg-slate-100/90 transition-all flex items-center justify-center gap-2 cursor-pointer text-center"
             >
               <FileText size={16} />
               Download Resume
@@ -360,13 +363,15 @@ export default function Hero() {
               {/* Tab Selector */}
               <div className="flex items-center gap-1">
                 {[
-                  { id: 'console',  labelFull: 'Console',     labelShort: 'Console' },
-                  { id: 'system',   labelFull: 'Diagnostics', labelShort: 'Diag.' },
                   { id: 'ai',       labelFull: 'AI Shell',    labelShort: 'AI' },
+                  { id: 'console',  labelFull: 'Console Diagnostics', labelShort: 'Console' },
+                  { id: 'system',   labelFull: 'System',      labelShort: 'System' },
                 ].map(({ id, labelFull, labelShort }) => (
                   <button
                     key={id}
                     onClick={() => setActiveTab(id)}
+                    aria-label={labelFull}
+                    aria-pressed={activeTab === id}
                     className={`px-2 sm:px-3 py-1 rounded-md font-grotesk font-bold tracking-wide uppercase transition-all duration-150 ${
                       activeTab === id
                         ? 'bg-[#2563EB]/10 text-[#2563EB] border border-[#2563EB]/30 text-[9px] sm:text-[10px]'
@@ -519,6 +524,7 @@ export default function Hero() {
                     className="flex flex-col gap-3 flex-1"
                   >
                     <div
+                      ref={terminalScrollRef}
                       className="flex-1 overflow-y-auto flex flex-col gap-1.5 font-mono text-[11px] leading-relaxed text-left"
                       style={{ maxHeight: '180px' }}
                     >
@@ -533,12 +539,12 @@ export default function Hero() {
                           <span>{item.text}</span>
                         </div>
                       ))}
-                      <div ref={terminalEndRef} />
                     </div>
 
                     <form onSubmit={handleCommandSubmit} className="flex gap-2 border-t border-slate-100 pt-3 items-center">
                       <span className="font-mono text-[11px] text-[#2563EB] font-bold shrink-0">guest$</span>
                       <input
+                        aria-label="AI Shell command"
                         type="text"
                         value={inputValue}
                         onChange={(e) => setInputValue(e.target.value)}
@@ -547,6 +553,7 @@ export default function Hero() {
                       />
                       <button
                         type="submit"
+                        aria-label="Run AI Shell command"
                         className="flex-shrink-0 p-1.5 rounded-lg bg-[#2563EB]/10 border border-[#2563EB]/20 text-[#2563EB] hover:bg-[#2563EB]/20 transition-colors"
                       >
                         <Send size={11} />

@@ -318,7 +318,7 @@ export default function Contact() {
                 <MagneticButton
                   type="submit"
                   disabled={isSending}
-                  className="px-8 py-4 mt-2 rounded-xl font-grotesk font-semibold text-sm border border-[#38BDF8]/30 bg-[#38BDF8]/10 text-[#A855F7] shadow-[0_0_20px_rgba(56, 189, 248,0.1)] hover:bg-[#38BDF8]/20 hover:shadow-[0_0_30px_rgba(56, 189, 248,0.2)] transition-all flex items-center justify-center gap-2 cursor-none disabled:opacity-50"
+                  className="px-8 py-4 mt-2 rounded-xl font-grotesk font-semibold text-sm border border-[#38BDF8]/30 bg-[#38BDF8]/10 text-[#A855F7] shadow-[0_0_20px_rgba(56, 189, 248,0.1)] hover:bg-[#38BDF8]/20 hover:shadow-[0_0_30px_rgba(56, 189, 248,0.2)] transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
                 >
                   {isSending ? (
                     'Sending...'

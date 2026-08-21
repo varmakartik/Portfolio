@@ -1,8 +1,13 @@
-import { useState } from 'react'
+import { useLayoutEffect, useRef, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { gsap } from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { skillCategories } from '../data/skills'
-import { Sparkles, Terminal, Activity, Server, Cpu, Database, Cloud, Hammer, Globe, Layers, ChevronDown } from 'lucide-react'
+import { Terminal, Activity, Server, Cpu, Database, Cloud, Hammer, Globe, Layers, ChevronDown } from 'lucide-react'
 import GlowCard from '../components/ui/GlowCard'
+import { getLenis } from '../hooks/useLenis'
+
+gsap.registerPlugin(ScrollTrigger)
 
 const categoryIcons = {
   all: Layers,
@@ -15,15 +20,49 @@ const categoryIcons = {
   aiml: Activity,
 }
 
-const categoryColors = {
-  all: '#2563EB',
-  frontend: '#2563EB',
-  backend: '#38BDF8',
-  database: '#10B981',
-  languages: '#38BDF8',
-  cloud: '#0284C7',
-  tools: '#F59E0B',
-  aiml: '#2563EB',
+const categoryThemes = {
+  all: {
+    color: '#2563EB',
+    soft: 'rgba(239, 246, 255, 0.96)',
+    panel: 'rgba(255, 255, 255, 0.90)',
+    background: 'rgba(248, 250, 252, 0)',
+  },
+  frontend: {
+    color: '#0891B2',
+    soft: 'rgba(236, 254, 255, 0.96)',
+    panel: 'linear-gradient(145deg, rgba(236,254,255,0.96), rgba(255,255,255,0.94))',
+    background: 'rgba(207, 250, 254, 0.38)',
+  },
+  backend: {
+    color: '#FB7185',
+    soft: 'rgba(255, 247, 248, 0.97)',
+    panel: 'linear-gradient(145deg, rgba(255,247,248,0.98), rgba(255,255,255,0.95))',
+    background: 'rgba(255, 228, 230, 0.30)',
+  },
+  database: {
+    color: '#059669',
+    soft: 'rgba(236, 253, 245, 0.96)',
+    panel: 'linear-gradient(145deg, rgba(236,253,245,0.96), rgba(255,255,255,0.94))',
+    background: 'rgba(209, 250, 229, 0.34)',
+  },
+  languages: {
+    color: '#D97706',
+    soft: 'rgba(255, 251, 235, 0.96)',
+    panel: 'linear-gradient(145deg, rgba(255,251,235,0.97), rgba(255,255,255,0.94))',
+    background: 'rgba(254, 243, 199, 0.34)',
+  },
+  cloud: {
+    color: '#2563EB',
+    soft: 'rgba(239, 246, 255, 0.96)',
+    panel: 'linear-gradient(145deg, rgba(239,246,255,0.97), rgba(255,255,255,0.94))',
+    background: 'rgba(219, 234, 254, 0.38)',
+  },
+  tools: {
+    color: '#EA580C',
+    soft: 'rgba(255, 247, 237, 0.96)',
+    panel: 'linear-gradient(145deg, rgba(255,247,237,0.97), rgba(255,255,255,0.94))',
+    background: 'rgba(255, 237, 213, 0.36)',
+  },
 }
 
 // Extract all unique skills across all categories
@@ -47,7 +86,7 @@ const allCategory = {
 const rawCategoriesList = [allCategory, ...skillCategories]
 const categoriesList = rawCategoriesList.map(cat => ({
   ...cat,
-  color: categoryColors[cat.id] || '#2563EB',
+  ...(categoryThemes[cat.id] || categoryThemes.all),
 }))
 
 // Reusable skill card
@@ -93,19 +132,90 @@ export default function TechStack() {
   const [activeCategoryId, setActiveCategoryId] = useState('all')
   const [hoveredCategoryId, setHoveredCategoryId] = useState(null)
   const [mobileOpenId, setMobileOpenId] = useState('all')
+  const desktopTrackRef = useRef(null)
+  const sidebarRef = useRef(null)
+  const panelRefs = useRef(new Map())
+  const activeTheme = categoryThemes[activeCategoryId] || categoryThemes.all
+  const sceneTheme = activeCategoryId === 'tools' ? categoryThemes.all : activeTheme
+  const hasSceneTheme = activeCategoryId !== 'all' && activeCategoryId !== 'tools'
 
-  const activeCategory = categoriesList.find(c => c.id === activeCategoryId) || allCategory
-  const CategoryIcon = categoryIcons[activeCategory.id] || Cpu
+  useLayoutEffect(() => {
+    const media = gsap.matchMedia()
+
+    media.add('(min-width: 1024px)', () => {
+      const track = desktopTrackRef.current
+      const sidebar = sidebarRef.current
+      if (!track || !sidebar) return undefined
+
+      const pinTrigger = ScrollTrigger.create({
+        trigger: track,
+        start: 'top 96px',
+        end: 'bottom bottom',
+        pin: sidebar,
+        pinSpacing: false,
+        anticipatePin: 1,
+      })
+
+      const boundaryTrigger = ScrollTrigger.create({
+        trigger: track,
+        start: 'top 48%',
+        end: 'bottom 48%',
+        onLeave: () => setActiveCategoryId('all'),
+        onLeaveBack: () => setActiveCategoryId('all'),
+      })
+
+      const panelTriggers = categoriesList.map((category) => {
+        const panel = panelRefs.current.get(category.id)
+        if (!panel) return null
+
+        return ScrollTrigger.create({
+          trigger: panel,
+          start: 'top 48%',
+          end: 'bottom 48%',
+          onEnter: () => setActiveCategoryId(category.id),
+          onEnterBack: () => setActiveCategoryId(category.id),
+        })
+      }).filter(Boolean)
+
+      ScrollTrigger.refresh()
+
+      return () => {
+        pinTrigger.kill()
+        boundaryTrigger.kill()
+        panelTriggers.forEach(trigger => trigger.kill())
+      }
+    })
+
+    return () => media.revert()
+  }, [])
+
+  const scrollToCategory = (categoryId) => {
+    const panel = panelRefs.current.get(categoryId)
+    if (!panel) return
+
+    const lenis = getLenis()
+    if (lenis) {
+      lenis.scrollTo(panel, { offset: -112, duration: 1.1 })
+      return
+    }
+
+    const top = panel.getBoundingClientRect().top + window.scrollY - 112
+    window.scrollTo({ top, behavior: 'smooth' })
+  }
 
   return (
-    <section id="skills" className="relative section-padding bg-transparent overflow-visible">
+    <section
+      id="skills"
+      className="relative section-padding overflow-visible transition-colors duration-700 ease-out"
+      style={{ backgroundColor: sceneTheme.background }}
+    >
       <div
         className="absolute top-[20%] left-[-10%] w-[500px] h-[500px] rounded-full opacity-[0.04] blur-[130px] pointer-events-none"
-        style={{ background: 'radial-gradient(circle, #2563EB 0%, transparent 70%)' }}
+        style={{ background: `radial-gradient(circle, ${sceneTheme.color} 0%, transparent 70%)` }}
       />
       <div
         className="absolute bottom-[20%] right-[-10%] w-[500px] h-[500px] rounded-full opacity-[0.03] blur-[130px] pointer-events-none"
-        style={{ background: 'radial-gradient(circle, #38BDF8 0%, transparent 70%)' }}
+        style={{ background: `radial-gradient(circle, ${sceneTheme.color} 0%, transparent 70%)` }}
       />
 
       <div className="container-custom relative z-10 w-full">
@@ -118,29 +228,39 @@ export default function TechStack() {
             transition={{ duration: 0.6 }}
             className="text-4xl sm:text-5xl font-extrabold font-sora tracking-tight text-[#0F172A] mb-4"
           >
-            Software <span className="gradient-text">Telemetry Hub</span>
+            Software{' '}
+            <span
+              className={!hasSceneTheme ? 'gradient-text' : 'transition-colors duration-500'}
+              style={!hasSceneTheme ? undefined : { color: sceneTheme.color }}
+            >
+              Telemetry Hub
+            </span>
           </motion.h2>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.1 }}
-            className="text-[#475569] font-grotesk text-base sm:text-lg max-w-xl"
+            className="font-grotesk text-base sm:text-lg max-w-xl transition-colors duration-500"
+            style={{ color: !hasSceneTheme ? '#475569' : sceneTheme.color }}
           >
             Select a pipeline node to explore technologies by category.
           </motion.p>
         </div>
 
         {/* â”€â”€ DESKTOP: Sticky left sidebar + natural-height right grid â”€â”€ */}
-        <div className="hidden lg:grid lg:grid-cols-12 gap-8 items-start max-w-6xl mx-auto">
+        <div ref={desktopTrackRef} className="hidden lg:grid lg:grid-cols-12 gap-8 items-start max-w-6xl mx-auto">
 
           {/* LEFT sticky sidebar */}
           <div
+            ref={sidebarRef}
             className="lg:col-span-4 flex flex-col gap-3"
-            style={{ position: 'sticky', top: '96px', alignSelf: 'flex-start' }}
           >
-            <div className="text-[10px] font-bold font-grotesk tracking-widest text-[#475569] uppercase mb-2 flex items-center gap-2 px-1">
-              <Terminal size={12} className="text-[#2563EB]" /> PIPELINE NODES
+            <div
+              className="text-[10px] font-bold font-grotesk tracking-widest uppercase mb-2 flex items-center gap-2 px-1 transition-colors duration-500"
+              style={{ color: !hasSceneTheme ? '#475569' : sceneTheme.color }}
+            >
+              <Terminal size={12} /> PIPELINE NODES
             </div>
 
             {categoriesList.map((category) => {
@@ -151,14 +271,16 @@ export default function TechStack() {
               return (
                 <button
                   key={category.id}
-                  onClick={() => setActiveCategoryId(category.id)}
+                  onClick={() => scrollToCategory(category.id)}
                   onMouseEnter={() => setHoveredCategoryId(category.id)}
                   onMouseLeave={() => setHoveredCategoryId(null)}
                   className="w-full text-left p-3.5 rounded-xl border transition-all duration-250 flex items-center justify-between group relative overflow-hidden shadow-sm"
                   style={{
                     background: isActive
-                      ? `linear-gradient(90deg, ${category.color}0f 0%, rgba(255,255,255,0.97) 100%)`
-                      : 'rgba(255,255,255,0.75)',
+                      ? `linear-gradient(90deg, ${category.soft} 0%, rgba(255,255,255,0.98) 100%)`
+                      : category.id === 'all'
+                        ? 'rgba(255,255,255,0.75)'
+                        : `linear-gradient(90deg, ${category.soft} 0%, rgba(255,255,255,0.88) 100%)`,
                     borderColor: isActive
                       ? `${category.color}50`
                       : isHovered
@@ -182,7 +304,10 @@ export default function TechStack() {
                       <Icon size={14} />
                     </div>
                     <div>
-                      <span className="font-sora text-xs sm:text-sm font-bold text-[#0F172A] block">
+                      <span
+                        className="font-sora text-xs sm:text-sm font-bold block transition-colors duration-200"
+                        style={{ color: category.id === 'all' || !isActive ? '#0F172A' : category.color }}
+                      >
                         {category.title}
                       </span>
                       <span className="font-grotesk text-[9px] text-[#475569]">
@@ -204,64 +329,85 @@ export default function TechStack() {
             })}
           </div>
 
-          {/* RIGHT: natural-height skill output panel */}
-          <div className="lg:col-span-8">
-            <GlowCard
-              glowColor={activeCategory.color}
-              className="p-6 sm:p-8 flex flex-col bg-white/90 border border-slate-200/80 shadow-md relative"
-              tilt={false}
-            >
-              <div className="flex justify-between items-center pb-4 border-b border-slate-200/80 mb-6">
-                <div className="flex items-center gap-2">
-                  <CategoryIcon size={18} style={{ color: activeCategory.color }} />
-                  <span className="font-sora text-base sm:text-lg font-extrabold text-[#0F172A]">
-                    {activeCategory.title} Diagnostic
-                  </span>
-                </div>
-                <span className="font-mono text-[9px] tracking-widest text-[#475569] uppercase">
-                  Telemetry Code: {activeCategory.id}_0x9A
-                </span>
-              </div>
+          {/* RIGHT: every diagnostic panel participates in the scroll sequence */}
+          <div className="lg:col-span-8 flex flex-col gap-10 pb-[18vh]">
+            {categoriesList.map((category) => {
+              const CategoryIcon = categoryIcons[category.id] || Cpu
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-8">
-                <AnimatePresence mode="popLayout">
-                  {activeCategory.skills.map((skill, index) => (
-                    <SkillCard
-                      key={skill.name}
-                      skill={skill}
-                      index={index}
-                      color={categoryColors[activeCategoryId] || skill.color || '#2563EB'}
-                    />
-                  ))}
-                </AnimatePresence>
-              </div>
-
-              <div className="grid grid-cols-3 gap-4 pt-5 border-t border-slate-200/80 text-left">
-                <div className="flex flex-col gap-0.5">
-                  <span className="text-[9px] font-bold font-grotesk text-[#475569] uppercase tracking-wider">Skills</span>
-                  <span className="text-lg font-extrabold text-[#0F172A] font-sora">{activeCategory.skills.length}</span>
-                  <span className="text-[9px] font-grotesk text-slate-400">in this category</span>
-                </div>
-                <div className="flex flex-col gap-0.5">
-                  <span className="text-[9px] font-bold font-grotesk text-[#475569] uppercase tracking-wider">Categories</span>
-                  <span className="text-lg font-extrabold text-[#0F172A] font-sora">{categoriesList.length}</span>
-                  <span className="text-[9px] font-grotesk text-slate-400">tech groups</span>
-                </div>
-                <div className="flex flex-col gap-0.5">
-                  <span className="text-[9px] font-bold font-grotesk text-[#475569] uppercase tracking-wider">Proficiency</span>
-                  <span
-                    className="text-xs font-extrabold font-sora mt-0.5 inline-block px-2.5 py-1 rounded-lg text-center"
-                    style={{ backgroundColor: activeCategory.color, color: '#fff' }}
+              return (
+                <div
+                  key={category.id}
+                  ref={(node) => {
+                    if (node) panelRefs.current.set(category.id, node)
+                    else panelRefs.current.delete(category.id)
+                  }}
+                  data-tech-panel={category.id}
+                  className="scroll-mt-28"
+                >
+                  <GlowCard
+                    glowColor={category.color}
+                    className="p-6 sm:p-8 flex flex-col bg-white/90 border border-slate-200/80 shadow-md relative"
+                    tilt={false}
+                    style={{
+                      background: category.panel,
+                      borderColor: category.id === 'all' ? 'rgba(226,232,240,0.8)' : `${category.color}28`,
+                    }}
                   >
-                    {activeCategory.id === 'frontend' || activeCategory.id === 'languages' || activeCategory.id === 'all'
-                      ? 'Advanced'
-                      : activeCategory.id === 'tools'
-                        ? 'Proficient'
-                        : 'Intermediate'}
-                  </span>
+                    <div className="flex justify-between items-center gap-4 pb-4 border-b border-slate-200/80 mb-6">
+                      <div className="flex items-center gap-2">
+                        <CategoryIcon size={18} style={{ color: category.color }} />
+                        <span
+                          className="font-sora text-base sm:text-lg font-extrabold"
+                          style={{ color: category.id === 'all' ? '#0F172A' : category.color }}
+                        >
+                          {category.title} Diagnostic
+                        </span>
+                      </div>
+                      <span className="font-mono text-[9px] tracking-widest text-[#475569] uppercase text-right">
+                        Telemetry Code: {category.id}_0x9A
+                      </span>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-8">
+                      {category.skills.map((skill, index) => (
+                        <SkillCard
+                          key={skill.name}
+                          skill={skill}
+                          index={index}
+                          color={category.color || skill.color || '#2563EB'}
+                        />
+                      ))}
+                    </div>
+
+                    <div className="grid grid-cols-3 gap-4 pt-5 border-t border-slate-200/80 text-left">
+                      <div className="flex flex-col gap-0.5">
+                        <span className="text-[9px] font-bold font-grotesk text-[#475569] uppercase tracking-wider">Skills</span>
+                        <span className="text-lg font-extrabold text-[#0F172A] font-sora">{category.skills.length}</span>
+                        <span className="text-[9px] font-grotesk text-slate-400">in this category</span>
+                      </div>
+                      <div className="flex flex-col gap-0.5">
+                        <span className="text-[9px] font-bold font-grotesk text-[#475569] uppercase tracking-wider">Categories</span>
+                        <span className="text-lg font-extrabold text-[#0F172A] font-sora">{categoriesList.length}</span>
+                        <span className="text-[9px] font-grotesk text-slate-400">tech groups</span>
+                      </div>
+                      <div className="flex flex-col gap-0.5">
+                        <span className="text-[9px] font-bold font-grotesk text-[#475569] uppercase tracking-wider">Proficiency</span>
+                        <span
+                          className="text-xs font-extrabold font-sora mt-0.5 inline-block px-2.5 py-1 rounded-lg text-center"
+                          style={{ backgroundColor: category.color, color: '#fff' }}
+                        >
+                          {category.id === 'frontend' || category.id === 'languages' || category.id === 'all'
+                            ? 'Advanced'
+                            : category.id === 'tools'
+                              ? 'Proficient'
+                              : 'Intermediate'}
+                        </span>
+                      </div>
+                    </div>
+                  </GlowCard>
                 </div>
-              </div>
-            </GlowCard>
+              )
+            })}
           </div>
         </div>
 
@@ -283,12 +429,18 @@ export default function TechStack() {
               >
                 {/* Toggle button */}
                 <button
-                  onClick={() => setMobileOpenId(isOpen ? null : category.id)}
+                  onClick={() => {
+                    const nextId = isOpen ? null : category.id
+                    setMobileOpenId(nextId)
+                    setActiveCategoryId(nextId || 'all')
+                  }}
                   className="w-full text-left p-3.5 flex items-center justify-between transition-colors duration-200 relative"
                   style={{
                     background: isOpen
-                      ? `linear-gradient(90deg, ${category.color}0c 0%, rgba(255,255,255,1) 100%)`
-                      : 'white',
+                      ? `linear-gradient(90deg, ${category.soft} 0%, rgba(255,255,255,1) 100%)`
+                      : category.id === 'all'
+                        ? 'white'
+                        : `linear-gradient(90deg, ${category.soft} 0%, rgba(255,255,255,0.94) 100%)`,
                   }}
                 >
                   <div
@@ -307,7 +459,12 @@ export default function TechStack() {
                       <Icon size={14} />
                     </div>
                     <div>
-                      <span className="font-sora text-sm font-bold text-[#0F172A] block">{category.title}</span>
+                      <span
+                        className="font-sora text-sm font-bold block"
+                        style={{ color: isOpen && category.id !== 'all' ? category.color : '#0F172A' }}
+                      >
+                        {category.title}
+                      </span>
                       <span className="font-grotesk text-[9px] text-[#475569]">
                         {category.skills.length} libraries verified
                       </span>

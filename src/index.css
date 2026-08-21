@@ -206,8 +206,6 @@
       #050508;
   }
 
-  /* Hidden cursor utility */
-  .cursor-none { cursor: none; }
 }
 
 /* Lenis smooth scroll */
@@ -309,14 +307,6 @@ html.lenis, html.lenis body {
 
 .animation-delay-6000 {
   animation-delay: 6s;
-}
-
-/* Custom cursor global hide */
-@media (pointer: fine) {
-  .has-custom-cursor,
-  .has-custom-cursor * {
-    cursor: none !important;
-  }
 }
 
 /* Custom scrollbar for modal overlay to prevent rounded corner clipping */

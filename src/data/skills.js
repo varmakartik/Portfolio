@@ -59,7 +59,7 @@ export const skillCategories = [
       { name: "NestJS", icon: SiNestjs, color: "#E0234E" },
       { name: "Fastify", icon: SiFastify, color: "#000000" },
       { name: "Flask", icon: SiFlask, color: "#000000" },
-      {name: "Fast API", icon: SiFastapi, color: "#00000"}
+      { name: "FastAPI", icon: SiFastapi, color: "#009688" }
     ],
   },
 

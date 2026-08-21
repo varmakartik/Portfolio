@@ -95,6 +95,9 @@ export default function Projects() {
   const [desktopFilterOpen, setDesktopFilterOpen] = useState(false)
   const [expandedProjects, setExpandedProjects] = useState({})
   const gridRef = useRef(null)
+  const modalRef = useRef(null)
+  const closeButtonRef = useRef(null)
+  const modalTriggerRef = useRef(null)
 
   // Collapse popped card when clicking outside the grid
   useEffect(() => {
@@ -106,6 +109,47 @@ export default function Projects() {
     document.addEventListener('mousedown', handleOutsideClick)
     return () => document.removeEventListener('mousedown', handleOutsideClick)
   }, [])
+
+  useEffect(() => {
+    if (!selectedProject) return undefined
+
+    const previousOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    closeButtonRef.current?.focus()
+
+    const handleModalKeyDown = (event) => {
+      if (event.key === 'Escape') {
+        setSelectedProject(null)
+        return
+      }
+
+      if (event.key !== 'Tab' || !modalRef.current) return
+
+      const focusableElements = modalRef.current.querySelectorAll(
+        'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+      )
+      if (!focusableElements.length) return
+
+      const firstElement = focusableElements[0]
+      const lastElement = focusableElements[focusableElements.length - 1]
+
+      if (event.shiftKey && document.activeElement === firstElement) {
+        event.preventDefault()
+        lastElement.focus()
+      } else if (!event.shiftKey && document.activeElement === lastElement) {
+        event.preventDefault()
+        firstElement.focus()
+      }
+    }
+
+    document.addEventListener('keydown', handleModalKeyDown)
+
+    return () => {
+      document.body.style.overflow = previousOverflow
+      document.removeEventListener('keydown', handleModalKeyDown)
+      modalTriggerRef.current?.focus()
+    }
+  }, [selectedProject])
 
   const activeGroup = filterGroups.find(g => g.id === activeGroupId)
 
@@ -473,10 +517,20 @@ export default function Projects() {
                   whileHover={!isPopped ? { y: -6 } : {}}
                   transition={{ type: 'spring', stiffness: 340, damping: 26 }}
                   style={{ position: 'relative', zIndex: isPopped ? 20 : 1 }}
+                  data-project-card
+                  role="button"
+                  tabIndex={0}
+                  aria-label={`Open ${project.title} project card`}
+                  aria-expanded={isPopped}
                   className={`flex flex-col ${isLarge ? 'md:col-span-2 lg:col-span-2' : isMedium ? 'md:col-span-1 lg:col-span-1' : 'col-span-1'
                     }`}
                   onClick={(e) => {
                     e.stopPropagation()
+                    setPoppedCardId(prev => prev === project.id ? null : project.id)
+                  }}
+                  onKeyDown={(e) => {
+                    if (e.key !== 'Enter' && e.key !== ' ') return
+                    e.preventDefault()
                     setPoppedCardId(prev => prev === project.id ? null : project.id)
                   }}
                 >
@@ -566,7 +620,7 @@ export default function Projects() {
                                 [project.id]: !prev[project.id]
                               }))
                             }}
-                            className="px-2.5 py-1 rounded-lg border border-slate-200/50 bg-white/[0.02] hover:bg-slate-100 hover:border-slate-300 transition-colors duration-200 font-grotesk text-[10px] font-semibold text-slate-600 cursor-none"
+                            className="px-2.5 py-1 rounded-lg border border-slate-200/50 bg-white/[0.02] hover:bg-slate-100 hover:border-slate-300 transition-colors duration-200 font-grotesk text-[10px] font-semibold text-slate-600 cursor-pointer"
                             data-cursor-color="rgba(37, 99, 235, 0.4)"
                           >
                             {expandedProjects[project.id] ? 'Show less' : `+${project.tags.length - 4} more`}
@@ -585,10 +639,11 @@ export default function Projects() {
                           transition={{ duration: 0.2 }}
                           onClick={(e) => {
                             e.stopPropagation()
+                            modalTriggerRef.current = e.currentTarget.closest('[data-project-card]')
                             setSelectedProject(project)
                             setPoppedCardId(null)
                           }}
-                          className="mt-4 self-start inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg font-sora font-bold text-[11px] text-white tracking-wide cursor-none"
+                          className="mt-4 self-start inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg font-sora font-bold text-[11px] text-white tracking-wide cursor-pointer"
                           style={{ background: 'linear-gradient(135deg, #2563EB 0%, #38BDF8 100%)' }}
                         >
                           View Details
@@ -637,6 +692,11 @@ export default function Projects() {
             style={{ background: 'rgba(15, 23, 42, 0.25)', backdropFilter: 'blur(8px)' }}
           >
             <motion.div
+              ref={modalRef}
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="project-modal-title"
+              tabIndex={-1}
               initial={{ opacity: 0, scale: 0.95, y: 16 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 12 }}
@@ -649,7 +709,7 @@ export default function Projects() {
                 style={{ background: `linear-gradient(90deg, ${selectedProject.accentColor || '#2563EB'}, #38BDF8)` }}
               />
 
-              <div className="overflow-y-auto flex-1 modal-scroll-container" style={{ maxHeight: 'calc(90vh - 4px)' }}>
+              <div data-lenis-prevent className="overflow-y-auto flex-1 modal-scroll-container" style={{ maxHeight: 'calc(90vh - 4px)' }}>
 
               {/* Header block */}
               <div className="px-6 sm:px-7 pt-7 pb-5 relative"
@@ -659,8 +719,10 @@ export default function Projects() {
               >
                 {/* Close button */}
                 <button
+                  ref={closeButtonRef}
                   onClick={() => setSelectedProject(null)}
-                  className="absolute top-5 right-5 p-2 rounded-xl text-slate-400 hover:text-slate-700 hover:bg-slate-50 transition-all cursor-none"
+                  aria-label="Close project details"
+                  className="absolute top-5 right-5 p-2 rounded-xl text-slate-400 hover:text-slate-700 hover:bg-slate-50 transition-all cursor-pointer"
                 >
                   <X size={16} />
                 </button>
@@ -671,7 +733,7 @@ export default function Projects() {
                   {selectedProject.year} &bull; {selectedProject.status}
                 </span>
 
-                <h2 className="text-2xl sm:text-3xl font-black font-sora text-[#1E293B] leading-tight mb-1">
+                <h2 id="project-modal-title" className="text-2xl sm:text-3xl font-black font-sora text-[#1E293B] leading-tight mb-1">
                   {selectedProject.title}
                 </h2>
                 <p className="text-sm font-grotesk font-medium mb-5"
@@ -684,14 +746,14 @@ export default function Projects() {
                 <div className="flex gap-3">
                   {selectedProject.github && (
                     <a href={selectedProject.github} target="_blank" rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-grotesk font-bold text-[#1E293B] bg-slate-100 hover:bg-slate-200/80 border border-slate-200 transition-all cursor-none"
+                      className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-grotesk font-bold text-[#1E293B] bg-slate-100 hover:bg-slate-200/80 border border-slate-200 transition-all cursor-pointer"
                     >
                       <FaGithub size={13} /> Repository
                     </a>
                   )}
                   {selectedProject.live && (
                     <a href={selectedProject.live} target="_blank" rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-grotesk font-bold text-white transition-all cursor-none"
+                      className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-grotesk font-bold text-white transition-all cursor-pointer"
                       style={{ background: `linear-gradient(135deg, ${selectedProject.accentColor || '#2563EB'}, #38BDF8)` }}
                     >
                       <ExternalLink size={13} /> Live Demo

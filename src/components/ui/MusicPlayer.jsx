@@ -131,7 +131,7 @@ export default function MusicPlayer() {
         {/* Glassmorphic Play/Pause Trigger */}
         <motion.button
           onClick={togglePlayback}
-          className="w-12 h-12 rounded-full flex items-center justify-center bg-white/70 dark:bg-slate-900/70 border border-slate-200/50 dark:border-slate-800/50 backdrop-blur-md shadow-lg shadow-slate-900/5 hover:border-[#2563EB]/40 hover:shadow-[#2563EB]/10 transition-all duration-300 relative group cursor-none"
+          className="w-12 h-12 rounded-full flex items-center justify-center bg-white/70 dark:bg-slate-900/70 border border-slate-200/50 dark:border-slate-800/50 backdrop-blur-md shadow-lg shadow-slate-900/5 hover:border-[#2563EB]/40 hover:shadow-[#2563EB]/10 transition-all duration-300 relative group cursor-pointer"
           whileHover={{ scale: 1.08 }}
           whileTap={{ scale: 0.92 }}
           data-cursor-color="rgba(37, 99, 235, 0.75)"
