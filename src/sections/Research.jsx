@@ -5,7 +5,7 @@ import { GraduationCap, Award, BookOpen, Globe } from 'lucide-react'
 
 export default function Research() {
   return (
-    <section id="research" className="relative section-padding overflow-hidden bg-transparent">
+    <section id="education" className="relative section-padding overflow-hidden bg-transparent">
       {/* Background radial spotlight */}
       <div className="absolute top-[20%] right-[-5%] w-[400px] h-[400px] rounded-full opacity-[0.04] blur-[110px] pointer-events-none"
         style={{ background: 'radial-gradient(circle, #38BDF8 0%, transparent 70%)' }}

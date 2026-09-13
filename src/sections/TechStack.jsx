@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { skillCategories } from '../data/skills'
-import { Terminal, Activity, Server, Cpu, Database, Cloud, Hammer, Globe, Layers, ChevronDown } from 'lucide-react'
+import { Terminal, Server, Cpu, Database, Cloud, Hammer, Globe, Layers, ChevronDown, Sparkles } from 'lucide-react'
 import GlowCard from '../components/ui/GlowCard'
 import { getLenis } from '../hooks/useLenis'
 
@@ -16,8 +16,8 @@ const categoryIcons = {
   database: Database,
   languages: Cpu,
   cloud: Cloud,
+  aiml: Sparkles,
   tools: Hammer,
-  aiml: Activity,
 }
 
 const categoryThemes = {
@@ -56,6 +56,12 @@ const categoryThemes = {
     soft: 'rgba(239, 246, 255, 0.96)',
     panel: 'linear-gradient(145deg, rgba(239,246,255,0.97), rgba(255,255,255,0.94))',
     background: 'rgba(219, 234, 254, 0.38)',
+  },
+  aiml: {
+    color: '#7C3AED',
+    soft: 'rgba(245, 243, 255, 0.96)',
+    panel: 'linear-gradient(145deg, rgba(245,243,255,0.97), rgba(255,255,255,0.94))',
+    background: 'rgba(237, 233, 254, 0.36)',
   },
   tools: {
     color: '#EA580C',
@@ -136,8 +142,8 @@ export default function TechStack() {
   const sidebarRef = useRef(null)
   const panelRefs = useRef(new Map())
   const activeTheme = categoryThemes[activeCategoryId] || categoryThemes.all
-  const sceneTheme = activeCategoryId === 'tools' ? categoryThemes.all : activeTheme
-  const hasSceneTheme = activeCategoryId !== 'all' && activeCategoryId !== 'tools'
+  const sceneTheme = activeTheme
+  const hasSceneTheme = activeCategoryId !== 'all'
 
   useLayoutEffect(() => {
     const media = gsap.matchMedia()
@@ -158,8 +164,8 @@ export default function TechStack() {
 
       const boundaryTrigger = ScrollTrigger.create({
         trigger: track,
-        start: 'top 48%',
-        end: 'bottom 48%',
+        start: 'top 60%',
+        end: 'bottom 10%',
         onLeave: () => setActiveCategoryId('all'),
         onLeaveBack: () => setActiveCategoryId('all'),
       })
@@ -170,16 +176,20 @@ export default function TechStack() {
 
         return ScrollTrigger.create({
           trigger: panel,
-          start: 'top 48%',
-          end: 'bottom 48%',
+          start: 'top 50%',
+          end: 'bottom 50%',
           onEnter: () => setActiveCategoryId(category.id),
           onEnterBack: () => setActiveCategoryId(category.id),
         })
       }).filter(Boolean)
 
-      ScrollTrigger.refresh()
+      // Refresh ScrollTrigger calculations after initial render
+      const refreshTimer = setTimeout(() => {
+        ScrollTrigger.refresh()
+      }, 100)
 
       return () => {
+        clearTimeout(refreshTimer)
         pinTrigger.kill()
         boundaryTrigger.kill()
         panelTriggers.forEach(trigger => trigger.kill())
@@ -248,7 +258,7 @@ export default function TechStack() {
           </motion.p>
         </div>
 
-        {/* â”€â”€ DESKTOP: Sticky left sidebar + natural-height right grid â”€â”€ */}
+        {/* --- DESKTOP: Sticky left sidebar + natural-height right grid --- */}
         <div ref={desktopTrackRef} className="hidden lg:grid lg:grid-cols-12 gap-8 items-start max-w-6xl mx-auto">
 
           {/* LEFT sticky sidebar */}
@@ -330,7 +340,7 @@ export default function TechStack() {
           </div>
 
           {/* RIGHT: every diagnostic panel participates in the scroll sequence */}
-          <div className="lg:col-span-8 flex flex-col gap-10 pb-[18vh]">
+          <div className="lg:col-span-8 flex flex-col gap-10 pb-[35vh]">
             {categoriesList.map((category) => {
               const CategoryIcon = categoryIcons[category.id] || Cpu
 
@@ -398,7 +408,7 @@ export default function TechStack() {
                         >
                           {category.id === 'frontend' || category.id === 'languages' || category.id === 'all'
                             ? 'Advanced'
-                            : category.id === 'tools'
+                            : category.id === 'aiml' || category.id === 'tools'
                               ? 'Proficient'
                               : 'Intermediate'}
                         </span>
@@ -411,7 +421,7 @@ export default function TechStack() {
           </div>
         </div>
 
-        {/* â”€â”€ MOBILE: Smooth accordion per category â”€â”€ */}
+        {/* --- MOBILE: Smooth accordion per category --- */}
         <div className="lg:hidden flex flex-col gap-2.5">
           <div className="text-[10px] font-bold font-grotesk tracking-widest text-[#475569] uppercase mb-1 flex items-center gap-2 px-1">
             <Terminal size={12} className="text-[#2563EB]" /> PIPELINE NODES
@@ -527,7 +537,7 @@ export default function TechStack() {
                             >
                               {category.id === 'frontend' || category.id === 'languages' || category.id === 'all'
                                 ? 'Advanced'
-                                : category.id === 'tools'
+                                : category.id === 'aiml' || category.id === 'tools'
                                   ? 'Proficient'
                                   : 'Intermediate'}
                             </span>

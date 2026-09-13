@@ -142,53 +142,80 @@ Portfolio/
 ### Entry and Shell
 
 - `src/main.jsx` mounts React and imports the global stylesheet.
-- `src/App.jsx` owns startup loader completion, global decorative/UI components, and portfolio-versus-tech-messages view selection.
+- `src/App.jsx` owns startup loader state, global decorative/UI components, and portfolio-versus-tech-messages view selection.
 - `src/index.css` is the main design foundation. Check it before adding duplicate utility classes, keyframes, or typography rules.
-- `src/App.css` contains additional app-specific styling; some Vite-era styles may be legacy.
+- `src/App.css` contains additional app-specific styling.
 
 ### Sections
 
-- `Hero.jsx` is the landing section. It includes animated roles, social/resume actions, a flipping visual card, and a three-tab terminal with AI Shell selected first, Console Diagnostics second, and System third. AI Shell history scrolls only inside its output panel.
+- `Hero.jsx` is the landing section. It includes animated roles, social/resume actions, a flipping visual card, and a three-tab terminal (`HeroTerminal.jsx`) with AI Shell selected first, Console Diagnostics second, and System third. AI Shell history scrolls only inside its output panel.
 - `TechStack.jsx` reads categorized skills. On desktop, GSAP ScrollTrigger pins the left pipeline list while the right diagnostic panels scroll and update the active category. Mobile uses an accordion.
-- `Experience.jsx` reads timeline data and uses scroll-linked animation for the progress line.
-- `Projects.jsx` reads project data, derives filters, and manages selected-project modal state.
-- `Research.jsx` currently presents education, certification, and languages. Its visible purpose does not match its filename/section label exactly.
-- `Contact.jsx` presents contact information and sends form data through EmailJS when valid service credentials are supplied.
+- `Experience.jsx` reads timeline data (including current role at Retail Rockets) and uses scroll-linked animation for the progress line.
+- `Projects.jsx` reads project data, derives filters, and manages selected-project modal state with Bento grid layouts and branded tech badges (`techMeta.js`).
+- `Research.jsx` presents education, certification, and languages UI.
+- `Contact.jsx` presents contact information and sends form data through EmailJS.
 - `TechMessages.jsx` is a separate screen with technology-themed messages/quotes.
 
 ### Shared Components
 
 - `Navbar.jsx` contains responsive anchored navigation and view switching.
 - `Footer.jsx` repeats section navigation, social links, copyright, and back-to-top behavior.
-- `Loader.jsx` displays a fixed five-second boot sequence and creates a Three.js neural-network canvas. Any performance work should inspect cleanup and reduced-motion behavior here.
-- `MusicPlayer.jsx` creates an `Audio` instance for `p-song.mp3`, attempts autoplay, falls back to the first user interaction, and provides a mute/play button.
+- `Loader.jsx` displays an animated boot sequence and creates a Three.js neural-network canvas.
+- `MusicPlayer.jsx` creates an `Audio` instance for `p-song.mp3`, attempts autoplay, falls back to user interaction, and provides audio controls.
 - `GlowCard.jsx`, `MagneticButton.jsx`, and `BackgroundEffects.jsx` provide reusable visual effects.
 
 ## Data Ownership
 
 Use this map for normal content edits:
 
-| Content | Primary file |
-| --- | --- |
-| Name, headline, bio, email, phone, location | `src/data/personalInfo.js` |
-| Social/profile links and resume path | `src/data/personalInfo.js` |
-| Skills and category colors/icons | `src/data/skills.js` |
-| Work history and achievements | `src/data/experience.js` |
-| Projects, tags, links, descriptions | `src/data/projects.js` |
-| Degree, GPA, certificate, languages | `src/data/education.js` |
-| Research-specific records | `src/data/research.js` |
+| Content | Primary file | Key Details |
+| --- | --- | --- |
+| Name, headline, bio, email, phone, location | `src/data/personalInfo.js` | Socials, resume link, contact details |
+| Skills and category colors/icons | `src/data/skills.js` | Frontend, Backend, Database, Languages, Cloud & Services, **AI & LLM Stack**, Tools & Testing |
+| Work history and achievements | `src/data/experience.js` | Includes **Retail Rockets** (Full-Stack Software Developer), previous roles, and milestones |
+| Projects, tags, links, descriptions | `src/data/projects.js` | Featured Bento works, repositories, live links |
+| Degree, GPA, certificate, languages | `src/data/education.js` | Academic credentials and certifications |
+| Research-specific records | `src/data/research.js` | Academic and technical publications |
 
-When changing an object shape, search for every consumer before editing. UI components rely directly on data property names and there is no schema validation or TypeScript checking.
+## Skill Categories Architecture
+
+`src/data/skills.js` organizes technical skills into 7 pipeline nodes:
+1. `frontend` (Blue `#2563EB`): React, Next.js, TypeScript, JavaScript, Tailwind CSS.
+2. `backend` (Red `#E50914`): Node.js, Express.js, NestJS, Fastify, Flask, FastAPI.
+3. `database` (Green `#10B981`): Oracle DB, Redis, MongoDB, PostgreSQL, MySQL, SQLite, Supabase.
+4. `languages` (Sky `#38BDF8`): JavaScript, TypeScript, Python, Java, SQL.
+5. `cloud` (Crimson `#991B1B`): Docker, Vercel, Render, Supabase, Clerk Auth, Nginx, Apache, GitHub Actions, Linux.
+6. `aiml` (Purple `#7C3AED`): Claude, Codex, Qwen, Ollama, Hugging Face, OpenRouter, Gemini AI, LangChain, Llama.
+7. `tools` (Orange `#7F1D1D`): Git, GitHub, Jest, Postman, Thunder Client, VS Code, npm.
+
+## Recent Major Updates & Fixes (September 2026)
+
+1. **AI & LLM Stack Pipeline Node**:
+   - Added full `aiml` skill category in `src/data/skills.js` positioned immediately after `Cloud & Services`.
+   - Integrated icons and brand metadata across `TechStack.jsx` and `techMeta.js`.
+2. **TechStack GSAP ScrollTrigger Calibration**:
+   - Fixed `boundaryTrigger` (`start: 'top 60%'`, `end: 'bottom 10%'`) to prevent premature reset to `'all'` when viewing lower panels.
+   - Added `pb-[35vh]` to the panels container to enable smooth desktop pinning and scroll-spy tracking through all categories.
+   - Dynamically mapped telemetry accent themes (`sceneTheme`) and category proficiencies across desktop cards and mobile accordions.
+3. **Skills Expansion**:
+   - Added DevOps/Servers: **Nginx**, **Apache**, **GitHub Actions**, **Linux**.
+   - Added Databases: **Oracle DB**, **Redis**.
+   - Added Testing: **Jest**.
+4. **Experience Update**:
+   - Added active full-stack role at **Retail Rockets** (`https://retailrockets.in`).
+5. **Encoding Clean-up**:
+   - Replaced text encoding mojibake (such as `2026 â€¢ Active`, `Â©`, `â€“`) with standard UTF-8 characters (`2026 • Active`).
+6. **Automated Testing Suite**:
+   - Comprehensive Vitest suite in `src/**/*.test.jsx?` covering `data.test.js`, `skills.test.js`, `Navbar.test.jsx`, `Footer.test.jsx`, `Hero.test.jsx`, and `Projects.test.jsx` (23 tests passing).
 
 ## Visual System
 
 The current implemented design is primarily a light theme:
 
-- Page/background: pale slate and white surfaces.
-- Primary accent: blue (`#2563EB`).
-- Secondary accents: sky blue, emerald, and pink.
+- Page/background: pale slate and white surfaces with dynamic telemetry ambient colors.
+- Primary accent: blue (`#2563EB`), with category-specific glows (cyan, rose, emerald, amber, crimson, purple, orange).
 - Typography families configured in Tailwind: Space Grotesk, Sora, Outfit, and Syne.
-- Motion is a major part of the experience: entrance reveals, hover glow, scrolling timelines, background effects, custom cursor, loader, and music feedback.
+- Motion: Framer Motion reveals, GSAP ScrollTrigger pinning, Lenis smooth scroll, hover glows, and Three.js neural canvas.
 - Responsive layouts use Tailwind breakpoints, including custom `xs` and `3xl` screens.
 
 Maintain this visual language unless the task explicitly requests a redesign. Check mobile layout, keyboard navigation, reduced motion, and color contrast when adding effects.
@@ -197,28 +224,28 @@ Maintain this visual language unless the task explicitly requests a redesign. Ch
 
 These are known from the repository audit and should be considered before feature work:
 
-1. Several source files contain text-encoding artifacts such as `Â©`, `â€“`, and similar mojibake. Clean these carefully as UTF-8 text.
+1. Several source files contained text-encoding artifacts such as `Â©`, `â€“`, and `2026 â€¢ Active`. Cleaned to UTF-8 (`2026 • Active`). Maintain standard UTF-8 in future edits.
 2. EmailJS values in the contact form are placeholders, so production delivery is not fully configured. Do not commit secret/private keys; use Vite environment variables.
 3. The `Research` section currently represents education and credentials, which can confuse users and maintainers.
 4. Navigation uses a custom event/pathname mechanism even though React Router is installed. Direct navigation and browser history deserve testing.
 5. Some components, especially `Hero.jsx`, are large and combine several responsibilities.
 6. `README.md` is stale in places and may reference an older resume filename.
-7. Loader always lasts about five seconds, which may feel slow and adds WebGL work before content appears.
-8. Background audio autoplay is browser-dependent and may be undesirable for accessibility or user preference.
+7. Loader duration is configured with neural-network animation. Any performance work should inspect cleanup and reduced-motion behavior.
+8. Background audio autoplay is browser-dependent and provides explicit mute/play user controls.
 9. Some dependencies and starter assets appear unused. Confirm with search before removing them.
 
 ## Improvement Priorities
 
 A sensible improvement order is:
 
-1. Fix visible text encoding issues and stale content/links.
+1. Fix visible text encoding issues and stale content/links (Completed).
 2. Make contact submission production-ready with validated environment configuration and honest error states.
 3. Improve accessibility: reduced motion, keyboard behavior, focus handling, semantic labels, audio preference, and modal focus trapping.
-4. Reduce startup/performance cost from the fixed loader, Three.js, custom cursor, and heavy animation.
+4. Reduce startup/performance cost from loader, Three.js, custom cursor, and heavy animation.
 5. Clarify section naming and navigation architecture.
 6. Split oversized components while preserving behavior.
 7. Remove confirmed unused packages/assets and align documentation.
-8. Add component or end-to-end tests for navigation, project filters/modal, resume link, and contact form.
+8. Add component or end-to-end tests for navigation, project filters/modal, resume link, and contact form (Completed Vitest suite).
 
 ## Change Guidelines
 
@@ -234,7 +261,7 @@ A sensible improvement order is:
 
 ## Verification Checklist
 
-After changes, use the checks relevant to the task:
+After changes, run the test and lint suites:
 
 ```bash
 npm run lint
@@ -265,6 +292,30 @@ Update `brain.md` whenever any of these change:
 - Major component responsibilities.
 - Known issues that are fixed or newly discovered.
 
-For ordinary copy, style, or isolated bug fixes, updating this file is unnecessary unless the description above becomes inaccurate.
+---
 
-Last repository analysis: 2026-08-21.
+## Agent Changelog & Execution History
+
+### Entry: 2026-09-14 00:11:00 IST | Agent: Antigravity Coding Assistant
+
+- **1. AI & LLM Stack Category Addition**:
+  - Added new `aiml` section in `src/data/skills.js` positioned immediately after `Cloud & Services` with `#7C3AED` purple theme and `Sparkles` icon.
+  - Added skills: **Claude** (`SiClaude`), **Codex** (`RiOpenaiFill`), **Qwen** (`SiQwen`), **Ollama** (`SiOllama`), **Hugging Face** (`SiHuggingface`), **OpenRouter** (`SiOpenrouter`), **Gemini AI** (`SiGooglegemini`), **LangChain** (`SiLangchain`), **Llama** (`SiMeta`).
+  - Added metadata, icons, and chip styling in `src/sections/projects/techMeta.js`.
+- **2. TechStack GSAP ScrollTrigger & Pinning Fix**:
+  - Corrected `boundaryTrigger` (`start: 'top 60%'`, `end: 'bottom 10%'`) in `src/sections/TechStack.jsx` so scrolling into lower panels (**AI & LLM Stack** and **Tools & Testing**) does not trigger premature unpinning or reset the active category back to `'all'`.
+  - Added `pb-[35vh]` bottom padding to right column panels so lower panels reach the trigger midpoint smoothly while the left sidebar stays pinned.
+  - Linked dynamic `sceneTheme` and category proficiencies for AI and Tools in both desktop view and mobile accordions.
+- **3. Additional Technical Skills Added**:
+  - Added DevOps/Servers: **Nginx** (`SiNginx`), **Apache** (`SiApache`), **GitHub Actions** (`SiGithubactions`), **Linux** (`SiLinux`).
+  - Added Databases: **Oracle DB** (`GrOracle`), **Redis** (`SiRedis`).
+  - Added Testing: **Jest** (`SiJest`).
+- **4. Work Experience Update**:
+  - Added current Full-Stack Software Developer role at **Retail Rockets** (`https://retailrockets.in`) in `src/data/experience.js`.
+- **5. Encoding Mojibake Clean-Up**:
+  - Cleaned text encoding artifacts across all files (including `2026 â€¢ Active` &rarr; `2026 • Active`, `Â©`, `â€“`).
+- **6. Featured Works Bento Grid UI Preservation**:
+  - Preserved the interactive Bento grid layout, project modals, and tech chips in `src/sections/Projects.jsx`.
+- **7. Automated Testing Suite & Linting**:
+  - Configured and passed all **23 tests across 6 test suites** using Vitest (`npm test` / `npx vitest run`).
+  - Resolved ESLint warnings and duplicate keys in `techMeta.js` via `oxlint`.

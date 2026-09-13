@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, useCallback } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import * as THREE from 'three'
 
@@ -11,7 +11,6 @@ const BOOT_LINES = [
   'Bootstrapping Express API routes...',
   'Mounting component tree...',
   'Compiling Tailwind styles...',
-  'Resolving dependency graph...',
   'All systems operational.',
 ]
 
@@ -21,10 +20,10 @@ export default function Loader({ onComplete }) {
   const [bootLine, setBootLine] = useState(0)
   const canvasRef = useRef(null)
 
-  // 5-second calibrated progress + boot log cycling
+  // 2.5-second calibrated progress + boot log cycling
   useEffect(() => {
-    const totalDuration = 5000
-    const intervalTime = 50
+    const totalDuration = 2500
+    const intervalTime = 40
     const increment = 100 / (totalDuration / intervalTime)
     let current = 0
 
@@ -37,8 +36,8 @@ export default function Loader({ onComplete }) {
         setTimeout(() => setPhase('complete'), 300)
         setTimeout(() => {
           setPhase('exit')
-          setTimeout(onComplete, 700)
-        }, 1200)
+          setTimeout(onComplete, 600)
+        }, 900)
       } else {
         setProgress(Math.floor(current))
       }
@@ -47,7 +46,7 @@ export default function Loader({ onComplete }) {
     // Cycle boot log messages
     const lineInterval = setInterval(() => {
       setBootLine(prev => Math.min(prev + 1, BOOT_LINES.length - 1))
-    }, 580)
+    }, 320)
 
     return () => {
       clearInterval(interval)
@@ -55,9 +54,11 @@ export default function Loader({ onComplete }) {
     }
   }, [onComplete])
 
-  // Three.js Neural Network Graph
+  // Three.js Neural Network Graph — skipped if user prefers reduced motion
   useEffect(() => {
     if (!canvasRef.current) return
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+
     const container = canvasRef.current
     const W = 380
     const H = 320
@@ -71,13 +72,12 @@ export default function Loader({ onComplete }) {
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
     container.appendChild(renderer.domElement)
 
-    // --- Build Neural Network Nodes ---
-    const NODE_COUNT = 42
+    // --- Build Neural Network Nodes (reduced count for performance) ---
+    const NODE_COUNT = 24
     const positions = []
     const nodeGroup = new THREE.Group()
 
     for (let i = 0; i < NODE_COUNT; i++) {
-      // Distribute nodes in a sphere shell
       const theta = Math.random() * Math.PI * 2
       const phi = Math.acos(2 * Math.random() - 1)
       const r = 1.8 + Math.random() * 0.8
@@ -87,7 +87,6 @@ export default function Loader({ onComplete }) {
       const z = r * Math.cos(phi)
       positions.push(new THREE.Vector3(x, y, z))
 
-      // Node sphere
       const isHighlight = i % 6 === 0
       const geo = new THREE.SphereGeometry(isHighlight ? 0.065 : 0.038, 8, 8)
       const mat = new THREE.MeshBasicMaterial({
@@ -111,7 +110,6 @@ export default function Loader({ onComplete }) {
         const dist = positions[i].distanceTo(positions[j])
         if (dist < CONNECTION_DIST) {
           const opacity = (1 - dist / CONNECTION_DIST) * 0.3
-
           const lineGeo = new THREE.BufferGeometry().setFromPoints([positions[i], positions[j]])
           const lineMat = new THREE.LineBasicMaterial({
             color: 0x38BDF8,
@@ -124,11 +122,11 @@ export default function Loader({ onComplete }) {
     }
     scene.add(edgeGroup)
 
-    // --- Data packets traveling along edges (optional: small moving spheres) ---
+    // --- Data packets (reduced count) ---
     const packetGeo = new THREE.SphereGeometry(0.025, 6, 6)
     const packetMat = new THREE.MeshBasicMaterial({ color: 0xEC4899, transparent: true, opacity: 0.9 })
     const packets = []
-    const PACKET_COUNT = 6
+    const PACKET_COUNT = 4
 
     for (let k = 0; k < PACKET_COUNT; k++) {
       const i = Math.floor(Math.random() * NODE_COUNT)
@@ -137,7 +135,7 @@ export default function Loader({ onComplete }) {
 
       const mesh = new THREE.Mesh(packetGeo, packetMat)
       scene.add(mesh)
-      packets.push({ mesh, from: positions[i], to: positions[j], t: Math.random(), speed: 0.004 + Math.random() * 0.006 })
+      packets.push({ mesh, from: positions[i], to: positions[j], t: Math.random(), speed: 0.005 + Math.random() * 0.007 })
     }
 
     // Animation loop
@@ -147,24 +145,20 @@ export default function Loader({ onComplete }) {
     const animate = () => {
       const elapsed = clock.getElapsedTime()
 
-      // Slowly rotate the whole network
       nodeGroup.rotation.y = elapsed * 0.18
       nodeGroup.rotation.x = Math.sin(elapsed * 0.1) * 0.12
       edgeGroup.rotation.y = elapsed * 0.18
       edgeGroup.rotation.x = Math.sin(elapsed * 0.1) * 0.12
 
-      // Pulse each node
       nodeGroup.children.forEach(child => {
         const { pulse, speed } = child.userData
         child.scale.setScalar(1 + Math.sin(elapsed * speed + pulse) * 0.22)
       })
 
-      // Move data packets along edges
       packets.forEach(p => {
         p.t += p.speed
         if (p.t > 1) {
           p.t = 0
-          // reassign to new random edge
           const i = Math.floor(Math.random() * NODE_COUNT)
           let j = Math.floor(Math.random() * NODE_COUNT)
           while (j === i) j = Math.floor(Math.random() * NODE_COUNT)
@@ -172,7 +166,6 @@ export default function Loader({ onComplete }) {
           p.to = positions[j]
         }
         p.mesh.position.lerpVectors(p.from, p.to, p.t)
-        // Rotate packets with the group
         p.mesh.position.applyEuler(new THREE.Euler(
           Math.sin(elapsed * 0.1) * 0.12 - Math.sin((elapsed - 0.016) * 0.1) * 0.12,
           elapsed * 0.18 - (elapsed - 0.016) * 0.18,
@@ -199,9 +192,11 @@ export default function Loader({ onComplete }) {
       {phase !== 'exit' && (
         <motion.div
           key="loader"
+          role="status"
+          aria-label="Loading portfolio"
           initial={{ opacity: 1 }}
           exit={{ opacity: 0, scale: 1.02 }}
-          transition={{ duration: 0.65, ease: [0.76, 0, 0.24, 1] }}
+          transition={{ duration: 0.55, ease: [0.76, 0, 0.24, 1] }}
           className="fixed inset-0 z-[99999] flex flex-col items-center justify-center overflow-hidden"
           style={{ background: '#F8FAFC' }}
         >
@@ -213,11 +208,12 @@ export default function Loader({ onComplete }) {
               style={{ background: 'radial-gradient(circle, #EC4899 0%, transparent 70%)' }} />
           </div>
 
-          {/* Three.js canvas (neural network) */}
+          {/* Three.js canvas (neural network) — hidden when reduced-motion */}
           <motion.div
             initial={{ opacity: 0, scale: 0.85 }}
             animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 1.1, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+            aria-hidden="true"
           >
             <div ref={canvasRef} />
           </motion.div>
@@ -226,7 +222,7 @@ export default function Loader({ onComplete }) {
           <motion.p
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4, duration: 0.6 }}
+            transition={{ delay: 0.3, duration: 0.5 }}
             className="text-xs font-grotesk font-semibold tracking-[0.2em] uppercase text-[#2563EB] mb-6 -mt-2"
           >
             Neural Stack · Loading
@@ -236,7 +232,7 @@ export default function Loader({ onComplete }) {
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ delay: 0.5 }}
+            transition={{ delay: 0.4 }}
             className="w-72 sm:w-96 mb-6 font-mono text-xs text-slate-500 h-5 overflow-hidden text-center"
           >
             <AnimatePresence mode="wait">
@@ -245,7 +241,7 @@ export default function Loader({ onComplete }) {
                 initial={{ opacity: 0, y: 8 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -8 }}
-                transition={{ duration: 0.25 }}
+                transition={{ duration: 0.22 }}
                 className="block"
               >
                 <span className="text-[#2563EB] mr-1">▶</span>
@@ -265,7 +261,7 @@ export default function Loader({ onComplete }) {
                 }}
                 initial={{ width: '0%' }}
                 animate={{ width: `${progress}%` }}
-                transition={{ duration: 0.05, ease: 'linear' }}
+                transition={{ duration: 0.04, ease: 'linear' }}
               />
             </div>
             <div className="flex justify-between">

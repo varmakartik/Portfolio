@@ -60,7 +60,7 @@ export default function Footer() {
           <a href="#skills" onClick={(e) => handleLinkClick(e, '#skills')} className="hover:text-[#2563EB] transition-colors">Skills</a>
           <a href="#experience" onClick={(e) => handleLinkClick(e, '#experience')} className="hover:text-[#2563EB] transition-colors">Experience</a>
           <a href="#projects" onClick={(e) => handleLinkClick(e, '#projects')} className="hover:text-[#2563EB] transition-colors">Projects</a>
-          <a href="#research" onClick={(e) => handleLinkClick(e, '#research')} className="hover:text-[#2563EB] transition-colors">Research</a>
+          <a href="#education" onClick={(e) => handleLinkClick(e, '#education')} className="hover:text-[#2563EB] transition-colors">Education</a>
           <a href="#contact" onClick={(e) => handleLinkClick(e, '#contact')} className="hover:text-[#2563EB] transition-colors">Contact</a>
         </div>
 

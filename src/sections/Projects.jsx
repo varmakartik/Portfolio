@@ -1,46 +1,14 @@
-import { useState, useMemo, useEffect, useRef, useCallback } from 'react'
+import { useState, useMemo, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { projects } from '../data/projects'
-import { skillCategories } from '../data/skills'
 import GlowCard from '../components/ui/GlowCard'
-import { ExternalLink, X, Check, Server, Shield, LayoutGrid, Layers, ChevronDown, SlidersHorizontal } from 'lucide-react'
-import { FaGithub } from 'react-icons/fa'
-import { modalVariants, overlayVariants, staggerContainer, staggerItem } from '../animations/variants'
+import { ExternalLink, X, Layers, ChevronDown, SlidersHorizontal } from 'lucide-react'
+import { FaGithub, FaUserShield } from 'react-icons/fa'
 import {
-  SiReact, SiNextdotjs, SiTailwindcss, SiTypescript, SiJavascript,
-  SiNodedotjs, SiExpress, SiPostgresql, SiMongodb, SiSupabase,
-  SiMysql, SiSqlite, SiRedis, SiDocker,
+  SiReact, SiNodedotjs, SiMongodb,
 } from 'react-icons/si'
-import { FaUserShield, FaServer, FaEnvelope } from 'react-icons/fa'
-import { Cpu } from 'lucide-react'
-
-const techMeta = {
-  'React': { icon: SiReact, color: '#61DAFB' },
-  'Next.js': { icon: SiNextdotjs, color: '#0F172A' },
-  'TypeScript': { icon: SiTypescript, color: '#3178C6' },
-  'JavaScript': { icon: SiJavascript, color: '#F7DF1E' },
-  'Tailwind CSS': { icon: SiTailwindcss, color: '#06B6D4' },
-  'Node.js': { icon: SiNodedotjs, color: '#339933' },
-  'Express.js': { icon: SiExpress, color: '#475569' },
-  'MongoDB': { icon: SiMongodb, color: '#47A248' },
-  'PostgreSQL': { icon: SiPostgresql, color: '#336791' },
-  'MySQL': { icon: SiMysql, color: '#4479A1' },
-  'SQLite': { icon: SiSqlite, color: '#003B57' },
-  'Supabase': { icon: SiSupabase, color: '#3ECF8E' },
-  'Clerk API': { icon: FaUserShield, color: '#6C47FF' },
-  'Clerk Auth': { icon: FaUserShield, color: '#6C47FF' },
-  'Gemini SDK': { icon: Cpu, color: '#2563EB' },
-  'Gemini AI': { icon: Cpu, color: '#2563EB' },
-  'JWT': { icon: FaUserShield, color: '#D97706' },
-  'Recharts': { icon: Cpu, color: '#E11D48' },
-  'Realtime DB': { icon: SiSupabase, color: '#3ECF8E' },
-  'Realtime Sync': { icon: SiSupabase, color: '#3ECF8E' },
-  'Render': { icon: FaServer, color: '#46E3B7' },
-  'Redis': { icon: SiRedis, color: '#DC382D' },
-  'OAuth2 PKCE': { icon: FaUserShield, color: '#10B981' },
-  'Docker Compose': { icon: SiDocker, color: '#2496ED' },
-  'Nodemailer': { icon: FaEnvelope, color: '#3776AB' },
-}
+import { techMeta } from './projects/techMeta'
+import ProjectModal from './projects/ProjectModal'
 
 // Build filter groups from project techStacks
 const allProjectTechs = Array.from(new Set(projects.flatMap(p => p.techStack || p.tags)))
@@ -72,14 +40,14 @@ const filterGroups = [
     label: 'Database',
     icon: SiMongodb,
     color: '#47A248',
-    techs: ['MongoDB', 'PostgreSQL', 'MySQL', 'SQLite', 'Supabase', 'Redis'],
+    techs: ['MongoDB', 'PostgreSQL', 'MySQL', 'SQLite', 'Supabase', 'Oracle DB', 'Oracle', 'Redis'],
   },
   {
     id: 'services',
     label: 'Services',
     icon: FaUserShield,
     color: '#6C47FF',
-    techs: ['Clerk API', 'Clerk Auth', 'Gemini SDK', 'Gemini AI', 'Recharts', 'Realtime DB', 'Realtime Sync'],
+    techs: ['Clerk API', 'Clerk Auth', 'Gemini SDK', 'Gemini AI', 'Recharts', 'Realtime DB', 'Realtime Sync', 'Jest'],
   },
 ]
 
@@ -157,7 +125,7 @@ export default function Projects() {
   const groupTechs = useMemo(() => {
     if (!activeGroup || !activeGroup.techs) return availableTechs
     return activeGroup.techs.filter(t => availableTechs.some(a => a.toLowerCase() === t.toLowerCase()))
-  }, [activeGroupId])
+  }, [activeGroup])
 
   // Filtered projects
   const filteredProjects = useMemo(() => {
@@ -175,7 +143,7 @@ export default function Projects() {
     return projects.filter(p =>
       (p.techStack || p.tags).some(t => t.toLowerCase() === filterTech.toLowerCase())
     )
-  }, [activeGroupId, activeTech])
+  }, [activeGroupId, activeTech, activeGroup])
 
   const handleGroupClick = (groupId) => {
     setActiveGroupId(groupId)
@@ -229,7 +197,7 @@ export default function Projects() {
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.97 }}
               onClick={() => setDesktopFilterOpen(prev => !prev)}
-              className="flex items-center gap-2 px-5 py-2.5 rounded-xl border border-slate-200 bg-white font-grotesk font-bold text-xs text-[#0F172A] hover:bg-slate-50 transition-colors shadow-sm"
+              className="flex items-center gap-2 px-5 py-2.5 rounded-xl border border-slate-200 bg-white font-grotesk font-bold text-xs text-[#0F172A] hover:bg-slate-50 transition-colors shadow-sm cursor-pointer"
             >
               <SlidersHorizontal size={13} className="text-[#2563EB]" />
               {desktopFilterOpen ? 'Hide Filters' : 'Filter Projects'}
@@ -240,7 +208,7 @@ export default function Projects() {
             {isFiltered && (
               <button
                 onClick={clearFilter}
-                className="text-[11px] font-grotesk font-bold text-slate-400 hover:text-red-500 transition-colors"
+                className="text-[11px] font-grotesk font-bold text-slate-400 hover:text-red-500 transition-colors cursor-pointer"
               >
                 Clear filters
               </button>
@@ -260,14 +228,14 @@ export default function Projects() {
             >
               {/* ── Category Tab Row ── */}
               <div className="flex items-stretch border-b border-slate-100 overflow-x-auto scrollbar-none">
-                {filterGroups.map((group, idx) => {
+                {filterGroups.map((group) => {
                   const GroupIcon = group.icon
                   const isActive = activeGroupId === group.id
                   return (
                     <button
                       key={group.id}
                       onClick={() => handleGroupClick(group.id)}
-                      className="relative flex items-center gap-2 px-5 py-3.5 text-xs font-grotesk font-bold whitespace-nowrap transition-all duration-200 flex-shrink-0 group"
+                      className="relative flex items-center gap-2 px-5 py-3.5 text-xs font-grotesk font-bold whitespace-nowrap transition-all duration-200 flex-shrink-0 group cursor-pointer"
                       style={{
                         color: isActive ? group.color : '#64748B',
                         background: isActive ? `${group.color}08` : 'transparent',
@@ -304,7 +272,7 @@ export default function Projects() {
                       animate={{ opacity: 1, x: 0 }}
                       exit={{ opacity: 0, x: 10 }}
                       onClick={clearFilter}
-                      className="flex items-center gap-1.5 px-4 text-[11px] font-grotesk font-bold text-slate-400 hover:text-red-500 transition-colors border-l border-slate-100 flex-shrink-0"
+                      className="flex items-center gap-1.5 px-4 text-[11px] font-grotesk font-bold text-slate-400 hover:text-red-500 transition-colors border-l border-slate-100 flex-shrink-0 cursor-pointer"
                     >
                       <X size={12} /> Reset
                     </motion.button>
@@ -333,7 +301,7 @@ export default function Projects() {
                           onClick={() => handleTechClick(tech)}
                           whileHover={{ scale: 1.04, y: -1 }}
                           whileTap={{ scale: 0.96 }}
-                          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-[11px] font-grotesk font-semibold transition-all duration-200"
+                          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-[11px] font-grotesk font-semibold transition-all duration-200 cursor-pointer"
                           style={
                             isActive
                               ? {
@@ -408,7 +376,7 @@ export default function Projects() {
         <div className="md:hidden relative mb-8 z-30">
           <button
             onClick={() => setMobileDropdownOpen(!mobileDropdownOpen)}
-            className="w-full flex items-center justify-between p-4 rounded-xl border border-slate-200 bg-white shadow-sm font-grotesk text-xs font-bold text-slate-700 transition-colors hover:border-[#2563EB]/30"
+            className="w-full flex items-center justify-between p-4 rounded-xl border border-slate-200 bg-white shadow-sm font-grotesk text-xs font-bold text-slate-700 transition-colors hover:border-[#2563EB]/30 cursor-pointer"
           >
             <span className="flex items-center gap-2">
               <SlidersHorizontal size={13} className="text-[#2563EB]" />
@@ -452,7 +420,7 @@ export default function Projects() {
                       clearFilter()
                       setMobileDropdownOpen(false)
                     }}
-                    className="w-full flex items-center justify-between px-3.5 py-2.5 rounded-lg text-[11px] font-grotesk font-semibold text-slate-700 hover:bg-slate-50 transition-colors"
+                    className="w-full flex items-center justify-between px-3.5 py-2.5 rounded-lg text-[11px] font-grotesk font-semibold text-slate-700 hover:bg-slate-50 transition-colors cursor-pointer"
                   >
                     <span>All Stack Projects</span>
                     {activeGroupId === 'all' && !activeTech && (
@@ -474,7 +442,7 @@ export default function Projects() {
                           handleTechClick(tech)
                           setMobileDropdownOpen(false)
                         }}
-                        className="w-full flex items-center justify-between px-3.5 py-2.5 rounded-lg text-[11px] font-grotesk font-semibold hover:bg-slate-50 transition-colors"
+                        className="w-full flex items-center justify-between px-3.5 py-2.5 rounded-lg text-[11px] font-grotesk font-semibold hover:bg-slate-50 transition-colors cursor-pointer"
                         style={{ color: isSelected ? (meta?.color || '#2563EB') : '#475569' }}
                       >
                         <span className="flex items-center gap-2">
@@ -621,7 +589,6 @@ export default function Projects() {
                               }))
                             }}
                             className="px-2.5 py-1 rounded-lg border border-slate-200/50 bg-white/[0.02] hover:bg-slate-100 hover:border-slate-300 transition-colors duration-200 font-grotesk text-[10px] font-semibold text-slate-600 cursor-pointer"
-                            data-cursor-color="rgba(37, 99, 235, 0.4)"
                           >
                             {expandedProjects[project.id] ? 'Show less' : `+${project.tags.length - 4} more`}
                           </button>
@@ -671,7 +638,7 @@ export default function Projects() {
                 No projects use <span className="font-bold text-[#2563EB]">{activeTech}</span>.
               </p>
               <button onClick={clearFilter}
-                className="px-5 py-2 rounded-xl text-sm font-grotesk font-bold border border-[#2563EB]/30 text-[#2563EB] bg-[#2563EB]/5 hover:bg-[#2563EB]/10 transition-all">
+                className="px-5 py-2 rounded-xl text-sm font-grotesk font-bold border border-[#2563EB]/30 text-[#2563EB] bg-[#2563EB]/5 hover:bg-[#2563EB]/10 transition-all cursor-pointer">
                 Show all projects
               </button>
             </motion.div>
@@ -679,172 +646,13 @@ export default function Projects() {
         </AnimatePresence>
       </div>
 
-      {/* ── Premium Modal Detail Overlay ── */}
-      <AnimatePresence>
-        {selectedProject && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
-            onClick={() => setSelectedProject(null)}
-            className="fixed inset-0 z-[150] flex items-center justify-center p-4"
-            style={{ background: 'rgba(15, 23, 42, 0.25)', backdropFilter: 'blur(8px)' }}
-          >
-            <motion.div
-              ref={modalRef}
-              role="dialog"
-              aria-modal="true"
-              aria-labelledby="project-modal-title"
-              tabIndex={-1}
-              initial={{ opacity: 0, scale: 0.95, y: 16 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95, y: 12 }}
-              transition={{ type: 'spring', stiffness: 350, damping: 28 }}
-              onClick={(e) => e.stopPropagation()}
-              className="relative w-full max-w-2xl max-h-[90vh] flex flex-col rounded-2xl bg-white border border-slate-200/80 shadow-[0_24px_60px_-15px_rgba(30,41,59,0.18)] overflow-hidden"
-            >
-              {/* Accent top bar */}
-              <div className="h-1 w-full rounded-t-2xl"
-                style={{ background: `linear-gradient(90deg, ${selectedProject.accentColor || '#2563EB'}, #38BDF8)` }}
-              />
-
-              <div data-lenis-prevent className="overflow-y-auto flex-1 modal-scroll-container" style={{ maxHeight: 'calc(90vh - 4px)' }}>
-
-              {/* Header block */}
-              <div className="px-6 sm:px-7 pt-7 pb-5 relative"
-                style={{
-                  background: `radial-gradient(ellipse 80% 60% at 10% 0%, ${selectedProject.accentColor || '#2563EB'}0a 0%, transparent 70%)`,
-                }}
-              >
-                {/* Close button */}
-                <button
-                  ref={closeButtonRef}
-                  onClick={() => setSelectedProject(null)}
-                  aria-label="Close project details"
-                  className="absolute top-5 right-5 p-2 rounded-xl text-slate-400 hover:text-slate-700 hover:bg-slate-50 transition-all cursor-pointer"
-                >
-                  <X size={16} />
-                </button>
-
-                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[10px] font-grotesk font-bold tracking-widest uppercase mb-3"
-                  style={{ background: `${selectedProject.accentColor || '#2563EB'}12`, color: selectedProject.accentColor || '#2563EB', border: `1px solid ${selectedProject.accentColor || '#2563EB'}20` }}
-                >
-                  {selectedProject.year} &bull; {selectedProject.status}
-                </span>
-
-                <h2 id="project-modal-title" className="text-2xl sm:text-3xl font-black font-sora text-[#1E293B] leading-tight mb-1">
-                  {selectedProject.title}
-                </h2>
-                <p className="text-sm font-grotesk font-medium mb-5"
-                  style={{ color: selectedProject.accentColor || '#2563EB' }}
-                >
-                  {selectedProject.subtitle}
-                </p>
-
-                {/* Quick action links */}
-                <div className="flex gap-3">
-                  {selectedProject.github && (
-                    <a href={selectedProject.github} target="_blank" rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-grotesk font-bold text-[#1E293B] bg-slate-100 hover:bg-slate-200/80 border border-slate-200 transition-all cursor-pointer"
-                    >
-                      <FaGithub size={13} /> Repository
-                    </a>
-                  )}
-                  {selectedProject.live && (
-                    <a href={selectedProject.live} target="_blank" rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-grotesk font-bold text-white transition-all cursor-pointer"
-                      style={{ background: `linear-gradient(135deg, ${selectedProject.accentColor || '#2563EB'}, #38BDF8)` }}
-                    >
-                      <ExternalLink size={13} /> Live Demo
-                    </a>
-                  )}
-                </div>
-              </div>
-
-              {/* Divider */}
-              <div className="h-px mx-6 sm:mx-7 bg-slate-200/60" />
-
-              {/* Body sections */}
-              <div className="px-6 sm:px-7 py-6 space-y-6">
-
-                {/* Overview */}
-                <div>
-                  <p className="text-[10px] font-grotesk font-bold tracking-widest uppercase text-slate-400 mb-2">Overview</p>
-                  <p className="text-sm font-grotesk text-[#475569] leading-relaxed">
-                    {selectedProject.longDescription || selectedProject.description}
-                  </p>
-                </div>
-
-                {/* Features + Architecture */}
-                {(selectedProject.features || selectedProject.architecture) && (
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                    {selectedProject.features && (
-                      <div className="rounded-xl p-4 bg-slate-50/50 border border-slate-200/60">
-                        <p className="text-[10px] font-grotesk font-bold tracking-widest uppercase text-[#475569] mb-3 flex items-center gap-1.5">
-                          <Check size={11} className="text-[#2563EB]" /> Key Features
-                        </p>
-                        <ul className="space-y-2">
-                          {selectedProject.features.map((feat, fIdx) => (
-                            <li key={fIdx} className="flex items-start gap-2 text-[12px] font-grotesk text-[#475569]">
-                              <span className="w-1.5 h-1.5 rounded-full mt-1.5 shrink-0"
-                                style={{ background: selectedProject.accentColor || '#2563EB' }}
-                              />
-                              {feat}
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    )}
-                    {selectedProject.architecture && (
-                      <div className="rounded-xl p-4 bg-slate-50/50 border border-slate-200/60">
-                        <p className="text-[10px] font-grotesk font-bold tracking-widest uppercase text-[#475569] mb-3 flex items-center gap-1.5">
-                          <Server size={11} className="text-[#38BDF8]" /> System Architecture
-                        </p>
-                        <p className="text-[12px] font-grotesk text-[#475569] leading-relaxed">{selectedProject.architecture}</p>
-                      </div>
-                    )}
-                  </div>
-                )}
-
-                {/* Engineering Challenges */}
-                {selectedProject.challenges && (
-                  <div className="rounded-xl p-4 bg-red-50/30 border border-red-200/50">
-                    <p className="text-[10px] font-grotesk font-bold tracking-widest uppercase text-red-500 mb-2 flex items-center gap-1.5">
-                      <Shield size={11} /> Engineering Challenges
-                    </p>
-                    <p className="text-[12px] font-grotesk text-[#475569] leading-relaxed">{selectedProject.challenges}</p>
-                  </div>
-                )}
-
-                {/* Tech Stack */}
-                <div>
-                  <p className="text-[10px] font-grotesk font-bold tracking-widest uppercase text-slate-400 mb-3">Technologies Used</p>
-                  <div className="flex flex-wrap gap-2">
-                    {(selectedProject.techStack || selectedProject.tags).map((tech, tIdx) => {
-                      const meta = techMeta[tech]
-                      return (
-                        <span key={tIdx}
-                          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-grotesk text-[11px] font-semibold"
-                          style={{
-                            background: meta ? `${meta.color}0f` : 'rgba(30,41,59,0.04)',
-                            border: `1px solid ${meta ? `${meta.color}25` : 'rgba(30,41,59,0.08)'}`,
-                            color: meta ? meta.color : '#475569',
-                          }}
-                        >
-                          {meta && <meta.icon size={11} />}
-                          {tech}
-                        </span>
-                      )
-                    })}
-                  </div>
-                </div>
-              </div>
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {/* Project Detail Modal (extracted component) */}
+      <ProjectModal
+        selectedProject={selectedProject}
+        setSelectedProject={setSelectedProject}
+        modalRef={modalRef}
+        closeButtonRef={closeButtonRef}
+      />
     </section>
   )
 }

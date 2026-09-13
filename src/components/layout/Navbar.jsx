@@ -1,4 +1,4 @@
-﻿import { useState, useEffect, useCallback, useRef } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Menu, X, Download, ArrowUpRight } from 'lucide-react'
 import { personalInfo } from '../../data/personalInfo'
@@ -8,7 +8,7 @@ const navLinks = [
   { label: 'Skills',     href: '#skills' },
   { label: 'Experience', href: '#experience' },
   { label: 'Projects',   href: '#projects' },
-  { label: 'Research',   href: '#research' },
+  { label: 'Education',  href: '#education' },
   { label: 'Contact',    href: '#contact' },
 ]
 
@@ -224,7 +224,7 @@ export default function Navbar() {
               onClick={() => setMenuOpen(false)}
             />
 
-            {/* Drawer â€” frosted glass card */}
+            {/* Drawer — frosted glass card */}
             <motion.div
               key="drawer"
               initial={{ x: '100%', opacity: 0 }}

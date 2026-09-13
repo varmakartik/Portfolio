@@ -15,20 +15,33 @@ import {
   SiMysql,
   SiSqlite,
   SiSupabase,
+  SiRedis,
   SiPython,
   SiDocker,
   SiGit,
   SiGithub,
   SiPostman,
   SiVercel,
-  SiTensorflow,
-  SiPytorch,
-  SiScikitlearn,
   SiHoppscotch,
+  SiNginx,
+  SiApache,
+  SiGithubactions,
+  SiLinux,
+  SiJest,
+  SiClaude,
+  SiQwen,
+  SiOllama,
+  SiHuggingface,
+  SiOpenrouter,
+  SiGooglegemini,
+  SiLangchain,
+  SiMeta,
 } from "react-icons/si";
 
+import { RiOpenaiFill } from "react-icons/ri";
+import { GrOracle } from "react-icons/gr";
+
 import {
-  FaBrain,
   FaJava,
   FaServer,
   FaUserShield,
@@ -68,6 +81,8 @@ export const skillCategories = [
     title: "Database",
     color: "#10B981",
     skills: [
+      { name: "Oracle DB", icon: GrOracle, color: "#F80000" },
+      { name: "Redis", icon: SiRedis, color: "#DC382D" },
       { name: "MongoDB", icon: SiMongodb, color: "#47A248" },
       { name: "PostgreSQL", icon: SiPostgresql, color: "#336791" },
       { name: "MySQL", icon: SiMysql, color: "#4479A1" },
@@ -99,34 +114,43 @@ export const skillCategories = [
       { name: "Render", icon: FaServer, color: "#46E3B7" },
       { name: "Supabase", icon: SiSupabase, color: "#3ECF8E" },
       { name: "Clerk Auth", icon: FaUserShield, color: "#6C47FF" },
+      { name: "Nginx", icon: SiNginx, color: "#009639" },
+      { name: "Apache", icon: SiApache, color: "#D22128" },
+      { name: "GitHub Actions", icon: SiGithubactions, color: "#2088FF" },
+      { name: "Linux", icon: SiLinux, color: "#FCC624" },
+    ],
+  },
+
+  {
+    id: "aiml",
+    title: "AI & LLM Stack",
+    color: "#7C3AED",
+    skills: [
+      { name: "Claude", icon: SiClaude, color: "#D97706" },
+      { name: "Codex", icon: RiOpenaiFill, color: "#10A37F" },
+      { name: "Qwen", icon: SiQwen, color: "#615CED" },
+      { name: "Ollama", icon: SiOllama, color: "#0F172A" },
+      { name: "Hugging Face", icon: SiHuggingface, color: "#FFD21E" },
+      { name: "OpenRouter", icon: SiOpenrouter, color: "#6366F1" },
+      { name: "Gemini AI", icon: SiGooglegemini, color: "#2563EB" },
+      { name: "LangChain", icon: SiLangchain, color: "#1C3C3C" },
+      { name: "Llama", icon: SiMeta, color: "#0081FB" },
     ],
   },
 
   {
     id: "tools",
-    title: "Tools",
+    title: "Tools & Testing",
     color: "#7F1D1D",
     skills: [
       { name: "Git", icon: SiGit, color: "#F05032" },
       { name: "GitHub", icon: SiGithub, color: "#FFFFFF" },
+      { name: "Jest", icon: SiJest, color: "#C21325" },
       { name: "Postman", icon: SiPostman, color: "#FF6C37" },
       { name: "Thunder Client", icon: FaBolt, color: "#0077CC" },
       { name: "Hoppscotch", icon: SiHoppscotch, color: "#31C48D" },
     ],
   },
-
-  // AI / ML (Unchanged)
-  // {
-  //   id: "aiml",
-  //   title: "AI / ML",
-  //   color: "#2563EB",
-  //   skills: [
-  //     { name: "TensorFlow", icon: SiTensorflow, color: "#2563EB" },
-  //     { name: "PyTorch", icon: SiPytorch, color: "#E50914" },
-  //     { name: "Scikit-learn", icon: SiScikitlearn, color: "#10B981" },
-  //     { name: "OpenAI API", icon: FaBrain, color: "#FFFFFF" },
-  //   ],
-  // },
 ];
 
 // Flat skills for marquee

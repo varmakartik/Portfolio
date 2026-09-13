@@ -1,6 +1,27 @@
 export const experiences = [
   {
     id: 1,
+    company: 'Retail Rockets',
+    companyUrl: 'https://retailrockets.in',
+    role: 'Full-Stack Software Developer',
+    duration: 'April 2026 – Present',
+    startDate: '2026-04',
+    endDate: 'Present',
+    location: 'Mumbai, India',
+    type: 'Full-time',
+    description:
+      'Developing scalable full-stack web applications and robust enterprise solutions. Engineering high-performance microservices, REST APIs, and database architectures.',
+    highlights: [
+      'Architecting and building responsive, scalable full-stack web applications with modern frontend & backend frameworks',
+      'Designing and optimizing database architectures across SQL (PostgreSQL, Oracle DB) and NoSQL (MongoDB, Redis)',
+      'Implementing secure authentication, API microservices, and high-reliability production workflows',
+    ],
+    skills: ['React', 'Next.js', 'Node.js', 'Express.js', 'Oracle DB', 'Redis', 'PostgreSQL', 'MongoDB', 'Jest', 'REST APIs', 'Docker'],
+    logo: '🚀',
+    color: '#2563EB',
+  },
+  {
+    id: 2,
     company: 'Elevate Labs',
     companyUrl: 'https://elevatelabs.com',
     role: 'Web Developer (Internship)',
@@ -18,10 +39,10 @@ export const experiences = [
     ],
     skills: ['React', 'Node.js', 'Express.js', 'MongoDB', 'RESTful APIs', 'JWT'],
     logo: '⚡',
-    color: '#2563EB',
+    color: '#38BDF8',
   },
   {
-    id: 2,
+    id: 3,
     company: 'Saiket System',
     companyUrl: null,
     role: 'Frontend Developer (Internship)',
@@ -42,7 +63,7 @@ export const experiences = [
     color: '#E50914',
   },
   {
-    id: 3,
+    id: 4,
     company: 'CodeXIntern',
     companyUrl: null,
     role: 'Frontend Developer (Internship)',
@@ -60,6 +81,6 @@ export const experiences = [
     ],
     skills: ['React', 'JavaScript', 'HTML5', 'Tailwind CSS', 'Git', 'GitHub'],
     logo: '▲',
-    color: '#38BDF8',
+    color: '#10B981',
   },
 ]
