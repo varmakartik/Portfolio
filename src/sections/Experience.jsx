@@ -1,167 +1,80 @@
-import { useRef } from 'react'
-import { motion, useScroll, useTransform, useSpring } from 'framer-motion'
+﻿import { useRef, useState } from 'react'
+import { AnimatePresence, motion, useReducedMotion, useScroll, useSpring } from 'framer-motion'
+import { ArrowUpRight, ArrowDown, Briefcase, GraduationCap, Plus, Minus } from 'lucide-react'
 import { experiences } from '../data/experience'
-import GlowCard from '../components/ui/GlowCard'
-import { Briefcase, Calendar, MapPin } from 'lucide-react'
+import { educationList } from '../data/education'
+import { personalInfo } from '../data/personalInfo'
+
+const milestones = [
+  ...experiences.map(item => ({ ...item, key: `work-${item.id}`, category: 'Work', current: item.endDate === 'Present' })),
+  ...educationList.map(item => ({ key: `education-${item.id}`, category: 'Education', company: item.institution, role: item.degree, duration: item.duration, description: item.details, highlights: [item.university, `GPA: ${item.gpa}`], skills: ['Computer Science', 'Algorithms', 'Data Structures'], location: 'Mumbai, India', type: 'Bachelor’s degree' })),
+]
+
+function Milestone({ item, index, expanded, onToggle, reduced }) {
+  const Icon = item.category === 'Education' ? GraduationCap : Briefcase
+  return (
+    <motion.li layout={!reduced} className={`milestone ${expanded ? 'is-expanded' : ''} ${item.current ? 'is-current' : ''}`}
+      initial={{ opacity: 0, y: reduced ? 0 : 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.12 }}
+      transition={{ duration: reduced ? 0 : 0.5 }}>
+      <span className="milestone-node" aria-hidden="true" />
+      <div className="milestone-topline"><span>{item.duration}</span>{item.current ? <span className="current-badge"><span className="status-dot" /> CURRENT CHAPTER</span> : <span>{item.type}</span>}</div>
+      <button className="milestone-trigger" onClick={onToggle} aria-expanded={expanded} aria-controls={`details-${item.key}`}>
+        <span className="milestone-icon"><Icon size={21} /></span>
+        <span className="milestone-heading"><span className="milestone-company">{item.company}</span><span className="milestone-role">{item.role}</span><span className="milestone-location">{item.location}</span></span>
+        <span className="milestone-toggle">{expanded ? <Minus size={18} /> : <Plus size={18} />}</span>
+      </button>
+      <p className="milestone-description">{item.description}</p>
+      <AnimatePresence initial={false}>
+        {expanded && <motion.div key="details" id={`details-${item.key}`} className="milestone-details"
+          initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }}
+          transition={{ duration: reduced ? 0 : 0.35, ease: [0.22, 1, 0.36, 1] }}>
+          <div className="milestone-details-inner"><span className="milestone-label">WHAT I WORKED ON</span>
+            <ul>{item.highlights.map(highlight => <li key={highlight}><ArrowUpRight size={14} /><span>{highlight}</span></li>)}</ul>
+            {item.companyUrl && <a href={item.companyUrl} target="_blank" rel="noopener noreferrer">Visit {item.company} <ArrowUpRight size={14} /></a>}
+          </div>
+        </motion.div>}
+      </AnimatePresence>
+      <div className="milestone-footer"><div className="milestone-tags">{item.skills.map(skill => <span key={skill}>{skill}</span>)}</div><span className="chapter-index">{String(index + 1).padStart(2, '0')}</span></div>
+    </motion.li>
+  )
+}
 
 export default function Experience() {
-  const containerRef = useRef(null)
-
-  // Track scroll progress of the timeline section
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ['start end', 'end start'],
-  })
-
-  // Apply spring smoothing to the raw scroll progression
-  const smoothProgress = useSpring(scrollYProgress, {
-    stiffness: 80,
-    damping: 25,
-    restDelta: 0.001
-  })
-
-  // Map the smoothed spring progress to the visual line height
-  const lineHeight = useTransform(smoothProgress, [0.1, 0.9], ['0%', '100%'])
+  const ref = useRef(null)
+  const reduced = useReducedMotion()
+  const [filter, setFilter] = useState('All chapters')
+  const [expanded, setExpanded] = useState('work-1')
+  const { scrollYProgress } = useScroll({ target: ref, offset: ['start center', 'end center'] })
+  const progress = useSpring(scrollYProgress, { stiffness: 80, damping: 25 })
+  const visible = milestones.filter(item => filter === 'All chapters' || item.category === filter)
 
   return (
-    <section id="experience" ref={containerRef} className="relative section-padding overflow-hidden">
-      {/* Aurora glow */}
-      <div className="absolute top-[20%] right-[-10%] w-[500px] h-[500px] rounded-full opacity-[0.04] blur-[120px] pointer-events-none"
-        style={{ background: 'radial-gradient(circle, #2563EB 0%, transparent 70%)' }}
-      />
-
-      <div className="container-custom relative z-10">
-        {/* Title */}
-        <div className="flex flex-col items-center text-center mb-20">
-          <motion.h2
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="text-4xl sm:text-5xl font-extrabold font-sora tracking-tight text-[#1E293B] mb-4"
-          >
-            My <span className="gradient-text-purple">Journey</span>
-          </motion.h2>
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.1 }}
-            className="text-slate-600 font-grotesk text-base sm:text-lg max-w-xl"
-          >
-            A chronological timeline of my professional career, milestones, and technological growth.
-          </motion.p>
-        </div>
-
-        {/* Timeline Container */}
-        <div className="relative max-w-4xl mx-auto">
-          {/* Vertical Line */}
-          <div className="absolute left-[21px] md:left-1/2 top-0 bottom-0 w-[2px] bg-slate-200/50 -translate-x-1/2" />
-          <motion.div
-            style={{ height: lineHeight }}
-            className="absolute left-[21px] md:left-1/2 top-0 w-[2px] bg-gradient-to-b from-[#2563EB] via-[#38BDF8] to-[#10B981] shadow-[0_0_15px_#2563EB] -translate-x-1/2 origin-top"
-          />
-
-          {/* Timeline Nodes */}
-          <div className="flex flex-col gap-12">
-            {experiences.map((exp, index) => {
-              const isEven = index % 2 === 0
-              return (
-                <div key={exp.id} className={`flex flex-col md:flex-row items-stretch gap-8 relative ${isEven ? '' : 'md:flex-row-reverse'}`}>
-                  {/* Indicator Icon */}
-                  <div className="absolute left-0 md:left-1/2 w-11 h-11 rounded-full border-4 border-[#F8FAFC] bg-[#FFFFFF] flex items-center justify-center -translate-x-[2px] md:-translate-x-1/2 z-10"
-                    style={{ borderColor: exp.color || '#2563EB' }}
-                  >
-                    <div className="w-3.5 h-3.5 rounded-full"
-                      style={{ backgroundColor: exp.color || '#2563EB', boxShadow: `0 0 10px ${exp.color || '#2563EB'}` }}
-                    />
-                  </div>
-
-                  {/* Spacer (for desktop structure) */}
-                  <div className="w-full md:w-1/2 hidden md:block" />
-
-                  {/* Card Container */}
-                  <motion.div
-                    initial={{ opacity: 0, x: isEven ? 50 : -50 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ once: true, margin: '-50px' }}
-                    transition={{ duration: 0.6, type: 'spring', stiffness: 100 }}
-                    className="w-full md:w-1/2"
-                  >
-                    <GlowCard
-                      glowColor={exp.color}
-                      className="p-6 md:p-8 flex flex-col h-full border border-slate-200/50 bg-[#FFFFFF]/40 backdrop-blur-xl relative"
-                      tilt={true}
-                    >
-                      {/* Meta Info */}
-                      <div className="flex flex-wrap items-center justify-between gap-3 mb-4 text-xs font-grotesk text-slate-600">
-                        <span className="flex items-center gap-1.5 px-3 py-1 rounded-full border border-slate-200/50 bg-slate-100/70">
-                          <Calendar size={12} className="text-[#2563EB]" />
-                          {exp.duration}
-                        </span>
-                        <span className="flex items-center gap-1.5 px-3 py-1 rounded-full border border-slate-200/50 bg-slate-100/70">
-                          <MapPin size={12} className="text-[#38BDF8]" />
-                          {exp.location}
-                        </span>
-                      </div>
-
-                      {/* Header */}
-                      <div className="flex items-center gap-4 mb-5">
-                        <div
-                          className="w-12 h-12 rounded-xl flex items-center justify-center text-lg font-bold border border-slate-200"
-                          style={{
-                            color: exp.color || '#2563EB',
-                            backgroundColor: `${exp.color || '#2563EB'}08`
-                          }}
-                        >
-                          {exp.logo}
-                        </div>
-                        <div>
-                          <h3 className="text-xl font-bold font-sora text-slate-800">{exp.role}</h3>
-                          <a
-                            href={exp.companyUrl || '#'}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-sm font-grotesk font-semibold hover:text-[#2563EB] transition-colors"
-                            style={{ color: exp.companyUrl ? (exp.color || '#2563EB') : '#9CA3AF' }}
-                          >
-                            {exp.company}
-                          </a>
-                        </div>
-                      </div>
-
-                      {/* Body Description */}
-                      <p className="font-grotesk text-sm text-slate-600 mb-6 leading-relaxed">
-                        {exp.description}
-                      </p>
-
-                      {/* Highlights */}
-                      {exp.highlights && (
-                        <ul className="mb-6 space-y-2 text-xs font-grotesk text-slate-600 list-disc list-inside">
-                          {exp.highlights.map((item, key) => (
-                            <li key={key} className="leading-relaxed">
-                              {item}
-                            </li>
-                          ))}
-                        </ul>
-                      )}
-
-                      {/* Skills tags */}
-                      <div className="flex flex-wrap gap-2 mt-auto">
-                        {exp.skills.map((skill, sIdx) => (
-                          <span
-                            key={sIdx}
-                            className="px-2.5 py-1 rounded-lg border border-slate-200/50 bg-white/[0.02] font-grotesk text-[10px] font-medium text-slate-600"
-                          >
-                            {skill}
-                          </span>
-                        ))}
-                      </div>
-                    </GlowCard>
-                  </motion.div>
-                </div>
-              )
-            })}
+    <section id="experience" ref={ref} className="journey-section">
+      <div className="container-custom">
+        <div data-section-heading className="journey-topline"><span className="eyebrow">01 / THE PATH SO FAR</span><span>MOST RECENT FIRST · ALWAYS MOVING FORWARD</span></div>
+        <div className="journey-layout">
+          <div className="journey-intro">
+            <span className="journey-asterisk" aria-hidden="true">✳</span>
+            <h2>My journey<span>is just<br />getting started.</span></h2>
+            <p>From my first line of code to building real-world applications. Every chapter brings a new challenge, a new skill, and a little more perspective.</p>
+            <div className="journey-summary"><div><strong>{String(experiences.length).padStart(2, '0')}</strong><span>Professional chapters</span></div><div><strong>2023</strong><span>Where it all began</span></div></div>
+            <a href={personalInfo.resumeUrl} download="Kartik_Varma_Resume.pdf" className="journey-resume">The full story, on paper <ArrowUpRight size={17} /></a>
+            <div className="journey-progress-label"><span>KEEP EXPLORING</span><ArrowDown size={16} /></div>
+          </div>
+          <div className="journey-timeline">
+            <div className="journey-filters" role="group" aria-label="Filter journey">
+              {['All chapters', 'Work', 'Education'].map(label => <button key={label} aria-pressed={filter === label} onClick={() => { setFilter(label); setExpanded(label === 'Education' ? 'education-1' : 'work-1') }}>
+                {filter === label && <motion.span className="journey-filter-active" layoutId="journey-filter" transition={{ type: 'spring', stiffness: 350, damping: 32 }} />}
+                <span>{label}</span><small>{label === 'All chapters' ? milestones.length : milestones.filter(item => item.category === label).length}</small>
+              </button>)}
+            </div>
+            <div className="timeline-body">
+              <div className="journey-rail" aria-hidden="true"><motion.div style={{ scaleY: reduced ? 1 : progress }} /></div>
+              <ol aria-label={`${filter} timeline`}>
+                {visible.map((item, index) => <Milestone key={item.key} item={item} index={index} expanded={expanded === item.key} onToggle={() => setExpanded(expanded === item.key ? null : item.key)} reduced={reduced} />)}
+              </ol>
+            </div>
+            <div className="journey-next"><span className="status-dot" /><span>The next chapter? <a href="#contact">Let’s build it together <ArrowUpRight size={15} /></a></span></div>
           </div>
         </div>
       </div>

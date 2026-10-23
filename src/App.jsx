@@ -1,14 +1,13 @@
 import { useState, useEffect } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion, AnimatePresence, MotionConfig, useReducedMotion, useScroll } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
 import { useLenis } from './hooks/useLenis'
 import { personalInfo } from './data/personalInfo'
 
 // Components
-import BackgroundEffects from './components/ui/BackgroundEffects'
 import Navbar from './components/layout/Navbar'
 import Footer from './components/layout/Footer'
-import MusicPlayer from './components/ui/MusicPlayer'
+import PortfolioChat from './components/ui/PortfolioChat'
 
 // Sections
 import Hero from './sections/Hero'
@@ -17,13 +16,18 @@ import Experience from './sections/Experience'
 import Projects from './sections/Projects'
 import Research from './sections/Research'
 import Contact from './sections/Contact'
+import CreativeLab from './sections/CreativeLab'
+import GithubActivity from './sections/GithubActivity'
 
 // Custom high-performance Animated Counter (supports decimals & integers)
 function AnimatedCounter({ value, duration = 2 }) {
   const [count, setCount] = useState('0')
+  const reduced = useReducedMotion()
 
   useEffect(() => {
     let startTimestamp = null
+    let frame
+    if (reduced) { setCount(String(value)); return }
     const end = parseFloat(value)
     const hasDecimal = value.toString().includes('.')
     const decimals = hasDecimal ? value.toString().split('.')[1].length : 0
@@ -36,17 +40,17 @@ function AnimatedCounter({ value, duration = 2 }) {
       setCount(hasDecimal ? current.toFixed(decimals) : Math.floor(current).toString())
 
       if (progress < 1) {
-        window.requestAnimationFrame(step)
+        frame = window.requestAnimationFrame(step)
       }
     }
 
-    window.requestAnimationFrame(step)
-  }, [value, duration])
+    frame = window.requestAnimationFrame(step)
+    return () => window.cancelAnimationFrame(frame)
+  }, [value, duration, reduced])
 
   return <span>{count}</span>
 }
 
-import TechMessages from './sections/TechMessages'
 
 // Stats Counter Section component
 function StatsCounter() {
@@ -56,7 +60,7 @@ function StatsCounter() {
   })
 
   return (
-    <section ref={ref} className="relative py-8 sm:py-12 bg-transparent overflow-hidden z-10">
+    <section ref={ref} className="studio-stats relative bg-transparent overflow-hidden z-10" aria-label="At a glance">
       <div className="container-custom grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8">
         {personalInfo.stats.map((stat, index) => (
           <div key={index} className="flex flex-col items-center text-center px-1">
@@ -79,30 +83,33 @@ function StatsCounter() {
 }
 
 function PortfolioHome() {
+  const { scrollYProgress } = useScroll()
   return (
     <>
       {/* Sticky scroll indicator progress bar */}
-      <div className="scroll-bar" />
+      <motion.div className="reading-progress" style={{ scaleX: scrollYProgress }} />
 
       {/* Navigation Header */}
       <Navbar />
 
       {/* Main content elements */}
-      <main>
+      <main id="main-content">
         {/* Intro Hero Section */}
         <Hero />
 
         {/* Stats showcase metrics */}
         <StatsCounter />
 
-        {/* Technical skills grid */}
-        <TechStack />
-
         {/* Timeline Experience */}
         <Experience />
 
+        {/* Technical skills grid */}
+        <TechStack />
+
         {/* Projects Bento Grid */}
         <Projects />
+        <GithubActivity />
+        <CreativeLab />
 
         {/* Academic publication research */}
         <Research />
@@ -113,40 +120,33 @@ function PortfolioHome() {
 
       {/* Base Footer */}
       <Footer />
+      <PortfolioChat />
     </>
   )
 }
 
 export default function App() {
   const [view, setView] = useState(() => {
-    // If we visit any path other than '/', treat it as a 404 fallback to 'tech-messages'
-    return window.location.pathname === '/' ? 'portfolio' : 'tech-messages'
+    return window.location.pathname
   })
 
   // Initialize Lenis scroll engine
   useLenis()
 
   useEffect(() => {
-    const handleNavigation = (e) => {
-      if (e.detail) {
-        setView(e.detail)
-        // Dynamically update the browser URL to match the view state
-        if (e.detail === 'portfolio') {
-          window.history.pushState({}, '', '/')
-        } else if (e.detail === 'tech-messages') {
-          window.history.pushState({}, '', '/telemetry')
-        }
-        window.scrollTo({ top: 0, behavior: 'instant' })
-      }
-    }
-    window.addEventListener('navigate', handleNavigation)
-    return () => window.removeEventListener('navigate', handleNavigation)
+    document.title = view.replace(/\/$/, '') === '/ai-lab'
+      ? 'AI Creative Lab — Kartik Varma'
+      : view === '/' ? 'Kartik Varma — Full-Stack Developer' : 'Page not found — Kartik Varma'
+  }, [view])
+
+  useEffect(() => {
+    const syncPath = () => setView(window.location.pathname)
+    window.addEventListener('popstate', syncPath)
+    return () => window.removeEventListener('popstate', syncPath)
   }, [])
 
   return (
-    <>
-      {/* Floating background music player */}
-      <MusicPlayer />
+    <MotionConfig reducedMotion="user">
 
       <AnimatePresence mode="wait">
         <motion.div
@@ -157,16 +157,15 @@ export default function App() {
           transition={{ duration: 0.5, ease: 'easeOut' }}
           className="relative min-h-screen bg-transparent selection:bg-[#2563EB]/20 selection:text-[#2563EB]"
         >
-          {/* Background spotlight textures & particles */}
-          <BackgroundEffects />
-
-          {view === 'portfolio' ? (
+          {view === '/' ? (
             <PortfolioHome />
+          ) : view.replace(/\/$/, '') === '/ai-lab' ? (
+            <main><CreativeLab standalone /></main>
           ) : (
-            <TechMessages />
+            <main className="not-found container-custom"><span className="eyebrow">404 / A SMALL DETOUR</span><h1>This page isn’t here.</h1><a href="/">Back to the portfolio ↗</a></main>
           )}
         </motion.div>
       </AnimatePresence>
-    </>
+    </MotionConfig>
   )
 }

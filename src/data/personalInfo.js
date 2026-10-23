@@ -1,4 +1,8 @@
-// Kartik Ramesh Varma Personal Info
+import { experiences } from './experience'
+import { projects } from './projects'
+import { allSkills } from './skills'
+
+// Portfolio totals stay in sync with the published data.
 export const personalInfo = {
   name: 'Kartik Ramesh Varma',
   firstName: 'Kartik',
@@ -26,9 +30,9 @@ export const personalInfo = {
     instagram: 'https://instagram.com/ig_crosser',
   },
   stats: [
-    { label: 'Internship Experience', value: 3, suffix: ' Mos' },
-    { label: 'Key Projects Built', value: 5, suffix: '+' },
+    { label: 'Roles & Internships', value: experiences.length, suffix: '' },
+    { label: 'Selected Projects', value: projects.length, suffix: '' },
     { label: 'B.Sc. CS GPA', value: 8.35, suffix: '/10' },
-    { label: 'Tech Stack Skills', value: 22, suffix: '+' },
+    { label: 'Technologies', value: new Set(allSkills.map(skill => skill.name)).size, suffix: '' },
   ],
 }

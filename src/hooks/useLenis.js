@@ -1,41 +1,30 @@
-import { useEffect } from 'react'
+﻿import { useEffect } from 'react'
 import Lenis from 'lenis'
 import 'lenis/dist/lenis.css'
-import { gsap } from 'gsap'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
-
-gsap.registerPlugin(ScrollTrigger)
 
 let lenisInstance = null
-
-export function getLenis() {
-  return lenisInstance
-}
+export function getLenis() { return lenisInstance }
 
 export function useLenis() {
   useEffect(() => {
-    const lenis = new Lenis({
-      duration: 1.1,
-      smoothWheel: true,
-      anchors: { offset: -96 },
-      respectReducedMotion: true,
-    })
-    lenisInstance = lenis
-
-    const updateScrollTrigger = () => ScrollTrigger.update()
-    const updateLenis = (time) => lenis.raf(time * 1000)
-
-    lenis.on('scroll', updateScrollTrigger)
-    gsap.ticker.add(updateLenis)
-    gsap.ticker.lagSmoothing(0)
-    
+    const preference = window.matchMedia('(prefers-reduced-motion: reduce)')
+    let lenis
+    const syncMotion = () => {
+      lenis?.destroy()
+      lenis = null
+      lenisInstance = null
+      if (!preference.matches) {
+        lenis = new Lenis({ duration: 1.05, smoothWheel: true, anchors: false, autoRaf: true })
+        lenisInstance = lenis
+      }
+    }
+    syncMotion()
+    preference.addEventListener('change', syncMotion)
     return () => {
-      lenis.off('scroll', updateScrollTrigger)
-      gsap.ticker.remove(updateLenis)
-      lenis.destroy()
-      if (lenisInstance === lenis) lenisInstance = null
+      preference.removeEventListener('change', syncMotion)
+      lenis?.destroy()
+      lenisInstance = null
     }
   }, [])
-
   return lenisInstance
 }

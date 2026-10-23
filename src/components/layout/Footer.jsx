@@ -2,13 +2,11 @@ import { motion } from 'framer-motion'
 import { ArrowUp } from 'lucide-react'
 import { FaGithub, FaLinkedin, FaTwitter, FaDribbble, FaInstagram, FaYoutube } from 'react-icons/fa'
 import { personalInfo } from '../../data/personalInfo'
+import { scrollToSection } from '../../utils/sectionNavigation'
 
 export default function Footer() {
   const scrollToTop = () => {
-    window.scrollTo({
-      top: 0,
-      behavior: 'smooth',
-    })
+    if (!scrollToSection('hero')) window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
   const socialIcons = {
@@ -22,10 +20,7 @@ export default function Footer() {
 
   const handleLinkClick = (e, href) => {
     e.preventDefault()
-    const el = document.querySelector(href)
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth' })
-    }
+    scrollToSection(href.slice(1))
   }
 
   return (
@@ -60,6 +55,8 @@ export default function Footer() {
           <a href="#skills" onClick={(e) => handleLinkClick(e, '#skills')} className="hover:text-[#2563EB] transition-colors">Skills</a>
           <a href="#experience" onClick={(e) => handleLinkClick(e, '#experience')} className="hover:text-[#2563EB] transition-colors">Experience</a>
           <a href="#projects" onClick={(e) => handleLinkClick(e, '#projects')} className="hover:text-[#2563EB] transition-colors">Projects</a>
+          <a href="#github" onClick={(e) => handleLinkClick(e, '#github')} className="hover:text-[#2563EB] transition-colors">GitHub</a>
+          <a href="/ai-lab" className="hover:text-[#2563EB] transition-colors">AI Lab</a>
           <a href="#education" onClick={(e) => handleLinkClick(e, '#education')} className="hover:text-[#2563EB] transition-colors">Education</a>
           <a href="#contact" onClick={(e) => handleLinkClick(e, '#contact')} className="hover:text-[#2563EB] transition-colors">Contact</a>
         </div>
@@ -67,7 +64,7 @@ export default function Footer() {
         {/* Socials & Back To Top */}
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-3">
-            {Object.entries(personalInfo.socials).map(([platform, url]) => {
+            {Object.entries(personalInfo.socials).filter(([, url]) => url !== '/').map(([platform, url]) => {
               const Icon = socialIcons[platform] || FaGithub
               return (
                 <a

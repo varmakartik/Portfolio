@@ -1,11 +1,11 @@
 import { useState, useRef } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion } from 'framer-motion'
 import emailjs from '@emailjs/browser'
 import toast, { Toaster } from 'react-hot-toast'
 import { personalInfo } from '../data/personalInfo'
 import GlowCard from '../components/ui/GlowCard'
 import MagneticButton from '../components/ui/MagneticButton'
-import { Mail, Phone, MapPin, Copy, Check, Send, Sparkles } from 'lucide-react'
+import { Mail, MapPin, Copy, Check, Send, Sparkles } from 'lucide-react'
 
 export default function Contact() {
   const formRef = useRef(null)
@@ -95,10 +95,9 @@ export default function Contact() {
           })
           setFormData({ name: '', email: '', subject: '', message: '' })
         },
-        (error) => {
+        () => {
           setIsSending(false)
-          // Simulate successful submit as a fallback
-          toast.success('Simulation Mode: Message sent successfully!', {
+          toast.error('Message could not be sent. Please contact me directly by email.', {
             style: {
               background: '#FFFFFF',
               color: '#2563EB',
@@ -106,7 +105,6 @@ export default function Contact() {
               fontFamily: 'Space Grotesk',
             },
           })
-          setFormData({ name: '', email: '', subject: '', message: '' })
         }
       )
   }
@@ -122,7 +120,8 @@ export default function Contact() {
 
       <div className="container-custom relative z-10">
         {/* Title */}
-        <div className="flex flex-col items-center text-center mb-16">
+        <div data-section-heading className="contact-section-heading flex flex-col items-center text-center mb-16">
+          <span className="eyebrow mb-5 text-slate-500">07 / LET’S MAKE SOMETHING GREAT</span>
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -130,7 +129,7 @@ export default function Contact() {
             transition={{ duration: 0.6 }}
             className="text-4xl sm:text-5xl font-extrabold font-sora tracking-tight text-[#1E293B] mb-4"
           >
-            Get In <span className="gradient-text">Touch</span>
+            Good things start<br />with a <span className="gradient-text">conversation.</span>
           </motion.h2>
           <motion.p
             initial={{ opacity: 0, y: 20 }}

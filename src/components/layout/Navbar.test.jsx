@@ -7,7 +7,7 @@ describe('Navbar', () => {
   it('renders all navigation links', () => {
     render(<Navbar />)
     // Each label appears at least once (desktop + potentially mobile)
-    ;['Home', 'Skills', 'Experience', 'Projects', 'Education', 'Contact'].forEach((label) => {
+    ;['Home', 'Skills', 'My Journey', 'Projects', 'Education', 'Contact'].forEach((label) => {
       expect(screen.getAllByRole('link', { name: label }).length).toBeGreaterThan(0)
     })
   })

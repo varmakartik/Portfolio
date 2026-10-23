@@ -13,7 +13,8 @@ export default function Research() {
 
       <div className="container-custom relative z-10">
         {/* Title */}
-        <div className="flex flex-col items-center text-center mb-16">
+        <div data-section-heading className="education-section-heading flex flex-col items-center text-center mb-16">
+          <span className="eyebrow mb-5 text-slate-500">06 / THE FOUNDATION</span>
           <motion.h2 
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}

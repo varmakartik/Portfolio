@@ -1,17 +1,18 @@
 import { useEffect, useRef, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Volume2, VolumeX, Music } from 'lucide-react'
+import { VolumeX, Music } from 'lucide-react'
 import pSong from '../../assets/p-song.mp3'
 
 export default function MusicPlayer() {
   const [isPlaying, setIsPlaying] = useState(false)
   const [showTooltip, setShowTooltip] = useState(true)
   const audioRef = useRef(null)
-  const interactionListenersRef = useRef([])
 
   useEffect(() => {
     // Create audio instance
-    const audio = new Audio(pSong)
+    const audio = new Audio()
+    audio.preload = 'none'
+    audio.src = pSong
     audio.loop = true
     audio.volume = 0.35 // Pleasant background volume level
     audioRef.current = audio
@@ -21,54 +22,16 @@ export default function MusicPlayer() {
       setShowTooltip(false)
     }, 6000)
 
-    // Function to attempt playing the audio
-    const startAudio = () => {
-      audio.play()
-        .then(() => {
-          setIsPlaying(true)
-          cleanUpInteractionListeners()
-        })
-        .catch((error) => {
-          console.log('Autoplay blocked. Waiting for user interaction.', error)
-        })
-    }
-
-    // Attempt to autoplay on load (might fail due to browser autoplay policies)
-    startAudio()
-
-    // Setup interaction listeners to trigger playback on first user action
-    const handleUserInteraction = () => {
-      startAudio()
-    }
-
-    const events = ['click', 'touchstart', 'keydown', 'wheel']
-    events.forEach(event => {
-      window.addEventListener(event, handleUserInteraction, { once: true })
-    })
-
-    const cleanUpInteractionListeners = () => {
-      events.forEach(event => {
-        window.removeEventListener(event, handleUserInteraction)
-      })
-    }
-
-    interactionListenersRef.current = cleanUpInteractionListeners
-
     // Cleanup on unmount
     return () => {
       clearTimeout(tooltipTimeout)
-      cleanUpInteractionListeners()
+
       audio.pause()
       audio.src = ''
     }
   }, [])
 
   const togglePlayback = () => {
-    // User interaction has definitely occurred, so we can clean up any remaining event listeners
-    if (interactionListenersRef.current) {
-      interactionListenersRef.current()
-    }
-    
     if (audioRef.current) {
       if (isPlaying) {
         audioRef.current.pause()
@@ -112,7 +75,7 @@ export default function MusicPlayer() {
         .wave-bar-4 { animation: soundWave4 0.9s ease-in-out infinite; }
       `}} />
 
-      <div className="fixed bottom-6 right-6 z-[100] flex items-center gap-3">
+      <div className="music-dock fixed bottom-6 left-6 z-[100] flex flex-row-reverse items-center gap-3">
         {/* Informative Tooltip */}
         <AnimatePresence>
           {showTooltip && (
