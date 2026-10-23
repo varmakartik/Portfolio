@@ -59,7 +59,7 @@ export default function Experience() {
             <p>From my first line of code to building real-world applications. Every chapter brings a new challenge, a new skill, and a little more perspective.</p>
             <div className="journey-summary"><div><strong>{String(experiences.length).padStart(2, '0')}</strong><span>Professional chapters</span></div><div><strong>2023</strong><span>Where it all began</span></div></div>
             <a href={personalInfo.resumeUrl} download="Kartik_Varma_Resume.pdf" className="journey-resume">The full story, on paper <ArrowUpRight size={17} /></a>
-            <div className="journey-progress-label"><span>KEEP EXPLORING</span><ArrowDown size={16} /></div>
+            <div className="journey-reading-progress" aria-hidden="true"><div className="journey-progress-label"><span>THE STORY SO FAR</span><ArrowDown size={16} /></div><div className="journey-reading-track"><motion.div style={{ scaleX: reduced ? 1 : progress }} /></div><div className="journey-reading-endpoints"><span>Today</span><span>First steps</span></div></div>
           </div>
           <div className="journey-timeline">
             <div className="journey-filters" role="group" aria-label="Filter journey">
