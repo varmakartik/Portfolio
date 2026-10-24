@@ -27,7 +27,7 @@ export default function Navbar() {
         <a href={personalInfo.resumeUrl} download="Kartik_Varma_Resume.pdf" className="nav-resume">Resume <ArrowUpRight size={15} /></a>
         <button ref={toggleRef} className="nav-toggle" aria-label={open ? 'Close' : 'Toggle menu'} aria-expanded={open} aria-controls="mobile-navigation" onClick={() => setOpen(!open)}>{open ? <X size={22} /> : <Menu size={22} />}</button>
       </div>
-      <AnimatePresence>{open && <motion.nav id="mobile-navigation" aria-label="Mobile navigation" className="mobile-navigation" initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.25 }}>
+      <AnimatePresence>{open && <motion.nav id="mobile-navigation" aria-label="Mobile navigation" className="mobile-navigation" data-lenis-prevent initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.25 }}>
         {links.map(([label, id], index) => <a key={id} href={`#${id}`} onClick={() => navigate(id)} aria-current={active === id ? 'location' : undefined}><span>0{index + 1}</span>{label}<ArrowUpRight size={18} /></a>)}
       </motion.nav>}</AnimatePresence>
     </header>

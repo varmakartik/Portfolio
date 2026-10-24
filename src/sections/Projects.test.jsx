@@ -14,7 +14,7 @@ describe('Project case studies', () => {
     expect(screen.getByRole('button', { name: 'Close project details' })).toHaveFocus()
     expect(document.body).toHaveStyle({ overflow: 'hidden' })
     await user.keyboard('{Shift>}{Tab}{/Shift}')
-    expect(screen.getByRole('link', { name: /Source code/ })).toHaveFocus()
+    expect(screen.getByRole('button', { name: /Continue exploring.*Careerly/i })).toHaveFocus()
     await user.keyboard('{Tab}')
     expect(screen.getByRole('button', { name: 'Close project details' })).toHaveFocus()
     await user.keyboard('{Escape}')
