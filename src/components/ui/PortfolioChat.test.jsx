@@ -42,4 +42,13 @@ describe('Portfolio chat', () => {
     await user.click(screen.getByRole('link', { name: 'See the projects' }))
     await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument())
   })
+
+  it('distinguishes the current full-time job from completed internships', async () => {
+    const user = userEvent.setup()
+    render(<PortfolioChat />)
+    await user.click(screen.getByRole('button', { name: 'Open portfolio chat' }))
+    await user.click(screen.getByRole('button', { name: 'Your journey' }))
+    expect(screen.getByText(/works full-time as a Full-Stack Developer at Retail Rockets/)).toHaveTextContent('completed 3 internships')
+    expect(screen.getByText('Automated portfolio guide')).toBeInTheDocument()
+  })
 })

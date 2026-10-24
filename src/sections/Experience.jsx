@@ -17,7 +17,7 @@ function Milestone({ item, index, expanded, onToggle, reduced }) {
       initial={{ opacity: 0, y: reduced ? 0 : 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.12 }}
       transition={{ duration: reduced ? 0 : 0.5 }}>
       <span className="milestone-node" aria-hidden="true" />
-      <div className="milestone-topline"><span>{item.duration}</span>{item.current ? <span className="current-badge"><span className="status-dot" /> CURRENT CHAPTER</span> : <span>{item.type}</span>}</div>
+      <div className="milestone-topline"><span>{item.duration}</span>{item.current ? <span className="current-badge"><span className="status-dot" /> {item.type.toUpperCase()} · CURRENT</span> : <span>{item.type}</span>}</div>
       <button className="milestone-trigger" onClick={onToggle} aria-expanded={expanded} aria-controls={`details-${item.key}`}>
         <span className="milestone-icon"><Icon size={21} /></span>
         <span className="milestone-heading"><span className="milestone-company">{item.company}</span><span className="milestone-role">{item.role}</span><span className="milestone-location">{item.location}</span></span>
@@ -56,8 +56,8 @@ export default function Experience() {
           <div className="journey-intro">
             <span className="journey-asterisk" aria-hidden="true">✳</span>
             <h2>My journey<span>is just<br />getting started.</span></h2>
-            <p>From my first line of code to building real-world applications. Every chapter brings a new challenge, a new skill, and a little more perspective.</p>
-            <div className="journey-summary"><div><strong>{String(experiences.length).padStart(2, '0')}</strong><span>Professional chapters</span></div><div><strong>2023</strong><span>Where it all began</span></div></div>
+            <p>Three internships built my foundation. Today, I work full-time as a Full-Stack Developer at Retail Rockets, building applications from interface to database.</p>
+            <div className="journey-summary"><div><strong>{String(experiences.filter(item => item.type === 'Internship' && item.endDate !== 'Present').length).padStart(2, '0')}</strong><span>Completed internships</span></div><div><strong>{String(experiences.filter(item => item.type === 'Full-time' && item.endDate === 'Present').length).padStart(2, '0')}</strong><span>Current full-time role</span></div></div>
             <a href={personalInfo.resumeUrl} download="Kartik_Varma_Resume.pdf" className="journey-resume">The full story, on paper <ArrowUpRight size={17} /></a>
             <div className="journey-reading-progress" aria-hidden="true"><div className="journey-progress-label"><span>THE STORY SO FAR</span><ArrowDown size={16} /></div><div className="journey-reading-track"><motion.div style={{ scaleX: reduced ? 1 : progress }} /></div><div className="journey-reading-endpoints"><span>Today</span><span>First steps</span></div></div>
           </div>

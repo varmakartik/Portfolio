@@ -30,7 +30,7 @@ export const personalInfo = {
     instagram: 'https://instagram.com/ig_crosser',
   },
   stats: [
-    { label: 'Roles & Internships', value: experiences.length, suffix: '' },
+    { label: 'Completed Internships', value: experiences.filter(item => item.type === 'Internship' && item.endDate !== 'Present').length, suffix: '' },
     { label: 'Selected Projects', value: projects.length, suffix: '' },
     { label: 'B.Sc. CS GPA', value: 8.35, suffix: '/10' },
     { label: 'Technologies', value: new Set(allSkills.map(skill => skill.name)).size, suffix: '' },

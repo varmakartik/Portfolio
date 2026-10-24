@@ -1,9 +1,10 @@
 ﻿import { useEffect, useRef, useState } from 'react'
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
-import { ArrowUpRight, MessageCircle, Send, Sparkles, X } from 'lucide-react'
+import { ArrowUp, ArrowUpRight, MessageCircle, X } from 'lucide-react'
 import { getPortfolioReply, welcomeMessage } from '../../data/portfolioChat'
+import { personalInfo } from '../../data/personalInfo'
 
-const suggestions = ['Show me projects', 'What are your skills?', 'Your journey', 'How can I contact you?']
+const suggestions = [['Projects', 'Show me projects'], ['Skills', 'What are your skills?'], ['Experience', 'Your journey'], ['Contact', 'How can I contact you?']]
 
 export default function PortfolioChat() {
   const [open, setOpen] = useState(false)
@@ -23,7 +24,9 @@ export default function PortfolioChat() {
   }, [])
   useEffect(() => {
     if (!open) return
-    inputRef.current?.focus({ preventScroll: true })
+    // Opening the panel on a phone should not immediately summon the keyboard.
+    if (window.matchMedia('(pointer: coarse)').matches) panelRef.current?.focus({ preventScroll: true })
+    else inputRef.current?.focus({ preventScroll: true })
     const onKeyDown = event => {
       if (event.key === 'Escape') { event.preventDefault(); setOpen(false); launcherRef.current?.focus({ preventScroll: true }) }
     }
@@ -34,38 +37,37 @@ export default function PortfolioChat() {
     if (open && logRef.current) logRef.current.scrollTop = logRef.current.scrollHeight
   }, [messages, open])
 
-  const send = (value) => {
+  const send = (value, focusInput = true) => {
     const text = value.trim()
     if (!text) return
     setMessages(previous => [...previous, { role: 'user', text }, { role: 'assistant', ...getPortfolioReply(text) }])
     setInput('')
-    inputRef.current?.focus({ preventScroll: true })
+    if (focusInput) inputRef.current?.focus({ preventScroll: true })
   }
 
   return (
     <div className="portfolio-chat">
-      <AnimatePresence>{open && <motion.section ref={panelRef} id="portfolio-chat-panel" role="dialog" aria-modal="false" aria-labelledby="portfolio-chat-title" className="chat-panel" data-lenis-prevent
+      <AnimatePresence>{open && <motion.section ref={panelRef} tabIndex={-1} id="portfolio-chat-panel" role="dialog" aria-modal="false" aria-labelledby="portfolio-chat-title" className="chat-panel" data-lenis-prevent
         initial={{ opacity: 0, y: reduced ? 0 : 18, scale: reduced ? 1 : 0.96 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: reduced ? 0 : 12, scale: reduced ? 1 : 0.98 }} transition={{ duration: reduced ? 0 : 0.25 }}>
         <header className="chat-header">
-          <span className="chat-avatar"><Sparkles size={23} /></span>
-          <div><h2 id="portfolio-chat-title">Ask about Kartik<span>✳</span></h2><p><span className="status-dot" /> Projects, experience & creative work</p></div>
+          <img className="chat-avatar" src={personalInfo.avatar} alt="" width="36" height="36" />
+          <div><h2 id="portfolio-chat-title">Kartik’s portfolio</h2><p>Projects, experience & a little more</p></div>
           <button className="chat-close" onClick={close} aria-label="Close portfolio chat"><X size={19} /></button>
         </header>
-          <div className="chat-intro-label"><span>A CLOSER LOOK AT MY WORK</span><span>↘</span></div>
           <div ref={logRef} className="chat-log" role="log" aria-label="Portfolio conversation" aria-live="polite" aria-relevant="additions">
-            {messages.map((message, index) => <div key={index} className={`chat-message ${message.role}`}><span className="chat-speaker">{message.role === 'assistant' ? 'PORTFOLIO GUIDE' : 'YOU'}</span><p>{message.text}</p>
+            {messages.map((message, index) => <div key={index} className={`chat-message ${message.role}`}><span className="chat-speaker">{message.role === 'assistant' ? 'Portfolio assistant' : 'You'}</span><p>{message.text}</p>
               {message.link && <a href={message.link} download={message.download ? 'Kartik_Varma_Resume.pdf' : undefined} onClick={() => { if (message.link.startsWith('#')) close() }}>{message.label}<ArrowUpRight size={14} /></a>}
             </div>)}
           </div>
-          <div className="chat-suggestions" aria-label="Suggested questions">{suggestions.map(text => <button key={text} onClick={() => send(text)}>{text}<ArrowUpRight size={12} /></button>)}</div>
+          <div className="chat-suggestions" aria-label="Suggested questions">{suggestions.map(([label, question]) => <button key={label} aria-label={question} onClick={() => send(question, false)}>{label}</button>)}</div>
           <form className="chat-form" onSubmit={event => { event.preventDefault(); send(input) }}>
             <input ref={inputRef} value={input} onChange={event => setInput(event.target.value)} aria-label="Ask about Kartik" placeholder="Ask about my work…" maxLength={500} autoComplete="off" />
-            <button type="submit" disabled={!input.trim()} aria-label="Send message"><Send size={17} /></button>
+            <button type="submit" disabled={!input.trim()} aria-label="Send message"><ArrowUp size={18} /></button>
           </form>
-        <footer className="chat-footer"><span>Answers from this portfolio</span><a href="#contact" onClick={close}>Contact Kartik <ArrowUpRight size={12} /></a></footer>
+        <footer className="chat-footer"><span>Automated portfolio guide</span><a href="#contact" onClick={close}>Email Kartik <ArrowUpRight size={12} /></a></footer>
       </motion.section>}</AnimatePresence>
       <button ref={launcherRef} className={`chat-launcher ${open ? 'is-open' : ''}`} aria-label={open ? 'Minimize portfolio chat' : 'Open portfolio chat'} aria-expanded={open} aria-controls="portfolio-chat-panel" onClick={() => open ? close() : setOpen(true)}>
-        {open ? <X size={20} /> : <MessageCircle size={21} />}<span>{open ? 'Close chat' : 'Ask about me'}</span>{!open && <span className="chat-launcher-dot" />}
+        {open ? <X size={18} /> : <MessageCircle size={19} />}<span>{open ? 'Close' : 'Portfolio Q&A'}</span>
       </button>
     </div>
   )

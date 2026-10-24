@@ -45,6 +45,14 @@ describe('experience data', () => {
     expect(current.role).toContain('Full-Stack')
     expect(current.companyUrl).toBe('https://retailrockets.in')
     expect(current.endDate).toBe('Present')
+    expect(current.type).toBe('Full-time')
+  })
+
+  it('counts only the three completed internships in the internship statistic', () => {
+    const internships = experiences.filter(item => item.type === 'Internship')
+    expect(internships).toHaveLength(3)
+    expect(internships.every(item => item.endDate !== 'Present')).toBe(true)
+    expect(personalInfo.stats.find(item => item.label === 'Completed Internships').value).toBe(3)
   })
 
   it('every experience has required fields', () => {

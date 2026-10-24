@@ -3,7 +3,7 @@ export const experiences = [
     id: 1,
     company: 'Retail Rockets',
     companyUrl: 'https://retailrockets.in',
-    role: 'Full-Stack Software Developer',
+    role: 'Full-Stack Developer',
     duration: 'April 2026 – Present',
     startDate: '2026-04',
     endDate: 'Present',
