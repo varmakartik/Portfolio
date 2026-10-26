@@ -6,11 +6,11 @@
 
 export const creativeImages = [
   { src: '/ai-lab/stone-arch.jpg', alt: 'A pale stone arch reflected in a desert lake at sunrise' },
-  { src: '/ai-lab/glass-bloom.jpg', alt: 'A translucent glass flower growing from dark moss' },
-  { src: '/ai-lab/silver-tide.jpg', alt: 'Silver fabric floating above a black sand shore at dusk' },
+  { src: '/ai-lab/glass-bloom.jpg', alt: 'A translucent glass flower growing from dark moss', orientation: 'portrait' },
+  { src: '/ai-lab/silver-tide.jpg', alt: 'Silver fabric floating above a black sand shore at dusk', orientation: 'portrait' },
   { src: '/ai-lab/sunlit-courtyard.jpg', alt: 'A warm stone courtyard with a circular opening and reflecting pool' },
   { src: '/ai-lab/levitating-sphere.jpg', alt: 'An ivory sphere hovering over a lavender salt flat at dawn' },
-  { src: '/ai-lab/glass-jellyfish.jpg', alt: 'A luminous glass jellyfish sculpture suspended in dark water' },
-  { src: '/ai-lab/moss-staircase.jpg', alt: 'A moss-covered spiral staircase beside a waterfall' },
+  { src: '/ai-lab/glass-jellyfish.jpg', alt: 'A luminous glass jellyfish sculpture suspended in dark water', orientation: 'portrait' },
+  { src: '/ai-lab/moss-staircase.jpg', alt: 'A moss-covered spiral staircase beside a waterfall', orientation: 'portrait' },
   { src: '/ai-lab/copper-tree.jpg', alt: 'A copper tree glowing beside a still lake at twilight' },
 ]
