@@ -197,9 +197,13 @@
 .lab-grid { grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); }
 .lab-card-open { position: absolute; inset: 0; z-index: 5; width: 100%; border: 0; background: transparent; cursor: pointer; }
 .lab-card-open:focus-visible { outline: 2px solid #d0d5af; outline-offset: -5px; border-radius: 9px; }
-.lab-image-gallery { columns: 2 300px; column-gap: 18px; padding-top: 10px; }
-.lab-image-tile { position: relative; display: block; width: 100%; margin-bottom: 18px; break-inside: avoid; overflow: hidden; border: 1px solid #d0d5af30; border-radius: 8px; background: #363b35; }
-.lab-image-tile img { display: block; width: 100%; height: auto; max-height: clamp(420px, 37vw, 560px); object-fit: cover; object-position: center; }
+.lab-image-gallery { display: grid; gap: 18px; padding-top: 10px; }
+.lab-image-row { display: grid; grid-template-columns: minmax(0, 9fr) minmax(0, 4fr); gap: 18px; aspect-ratio: 2.2; min-height: 0; }
+.lab-image-row-reverse { grid-template-columns: minmax(0, 4fr) minmax(0, 9fr); }
+.lab-image-row:not(:first-child) { grid-template-columns: minmax(0, 11fr) minmax(0, 4fr); aspect-ratio: 2.45; }
+.lab-image-row-reverse:not(:first-child) { grid-template-columns: minmax(0, 4fr) minmax(0, 11fr); }
+.lab-image-tile { position: relative; display: block; width: 100%; min-width: 0; min-height: 0; overflow: hidden; border: 1px solid #d0d5af30; border-radius: 8px; background: #363b35; }
+.lab-image-tile img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: center; }
 .lab-image-tile:hover { border-color: #d0d5af80; }
 .lab-image-expand { position: absolute; inset: 0; display: flex; justify-content: flex-end; align-items: flex-start; padding: 12px; width: 100%; background: transparent; color: #fff; cursor: zoom-in; }
 .lab-image-expand > span { display: grid; place-items: center; width: 36px; height: 36px; border: 1px solid #ffffff60; border-radius: 8px; background: #101713a8; backdrop-filter: blur(8px); transition: background .2s, transform .2s; }
@@ -221,8 +225,7 @@
 .lab-coming-soon h3 { margin-top: 13px; font-family: 'Space Grotesk', sans-serif; font-size: clamp(26px, 3vw, 40px); font-weight: 400; letter-spacing: -.9px; }
 .lab-coming-soon p { max-width: 470px; margin-top: 16px; color: #aeb79e; font-size: 14px; line-height: 1.8; }
 @media (max-width: 767px) {
-  .lab-image-gallery { columns: 2 240px; column-gap: 12px; }
-  .lab-image-tile { margin-bottom: 12px; }
+  .lab-image-gallery, .lab-image-row { gap: 12px; }
   .lab-coming-soon { min-height: 280px; }
   .lab-standalone .lab-navigation { margin-bottom: 28px; }
   .lab-standalone .lab-heading { margin-bottom: 24px; gap: 18px; }
@@ -236,19 +239,18 @@
   .lab-standalone .lab-filters button[aria-pressed='true'] { border-color: #d0d5af; }
   .lab-standalone .lab-bottom p { font-size: 11px; }
 }
+@media (max-width: 680px) {
+  .lab-image-row, .lab-image-row:not(:first-child) { display: flex; flex-direction: column; aspect-ratio: auto; }
+  .lab-image-row-reverse, .lab-image-row-reverse:not(:first-child) { flex-direction: column-reverse; }
+  .lab-image-tile img { height: auto; max-height: 480px; }
+  .lab-image-tile-2, .lab-image-tile-3, .lab-image-tile-6, .lab-image-tile-7 { width: 86%; }
+  .lab-image-tile-2, .lab-image-tile-6 { margin-left: auto; }
+}
 @media (max-width: 540px) {
   .lab-standalone .container-custom { padding-inline: 16px; }
   .lab-standalone .lab-navigation { padding-block: 14px; margin-bottom: 22px; }
   .lab-standalone .lab-toolbar { margin-inline: -16px; padding: 10px 16px 12px; }
-  .lab-standalone .lab-image-gallery { columns: 1; }
-  .lab-standalone .lab-image-gallery .lab-image-tile { width: 100%; margin-bottom: 14px; }
-  .lab-standalone .lab-image-gallery .lab-image-tile-2,
-  .lab-standalone .lab-image-gallery .lab-image-tile-3,
-  .lab-standalone .lab-image-gallery .lab-image-tile-6,
-  .lab-standalone .lab-image-gallery .lab-image-tile-7 { width: 86%; }
-  .lab-standalone .lab-image-gallery .lab-image-tile-2,
-  .lab-standalone .lab-image-gallery .lab-image-tile-6 { margin-left: auto; }
-  .lab-standalone .lab-image-gallery .lab-image-tile img { max-height: 480px; }
+  .lab-standalone .lab-image-gallery, .lab-standalone .lab-image-row { gap: 14px; }
   .lab-standalone .lab-coming-soon { min-height: 260px; margin-top: 4px; padding: 28px 24px; }
   .lab-image-expand { padding: 10px; }
   .lab-image-minimize { padding: 10px; }

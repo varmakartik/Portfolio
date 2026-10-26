@@ -18,6 +18,7 @@ describe('Creative lab', () => {
     render(<CreativeLab standalone />)
     await user.click(screen.getByRole('button', { name: 'Images' }))
     expect(screen.getByLabelText('AI generated image gallery').querySelectorAll('figure')).toHaveLength(8)
+    expect(screen.getByLabelText('AI generated image gallery').querySelectorAll('.lab-image-row')).toHaveLength(4)
     expect(screen.queryByRole('heading', { name: 'Imagined worlds.' })).not.toBeInTheDocument()
     await user.click(screen.getByRole('button', { name: 'Videos' }))
     expect(screen.getByRole('heading', { name: 'AI videos are coming soon.' })).toBeInTheDocument()
@@ -30,7 +31,7 @@ describe('Creative lab', () => {
     expect(screen.getByRole('heading', { name: 'Experiments are coming soon.' })).toBeInTheDocument()
   })
 
-  it('opens an uncropped image viewer and restores focus when minimized', async () => {
+  it('switches between fill and fit and restores focus when minimized', async () => {
     const user = userEvent.setup()
     render(<CreativeLab standalone />)
     await user.click(screen.getByRole('button', { name: 'Images' }))
@@ -38,6 +39,9 @@ describe('Creative lab', () => {
     await user.click(expand)
     const viewer = screen.getByRole('dialog', { name: 'Full-screen AI image' })
     expect(viewer.querySelector('img')).toHaveAttribute('src', '/ai-lab/stone-arch.jpg')
+    expect(screen.getByRole('button', { name: 'Fill' })).toHaveAttribute('aria-pressed', 'true')
+    await user.click(screen.getByRole('button', { name: 'Fit' }))
+    expect(screen.getByRole('button', { name: 'Fit' })).toHaveAttribute('aria-pressed', 'true')
     expect(document.body).toHaveStyle({ overflow: 'hidden' })
     await user.click(screen.getByRole('button', { name: 'Minimize image' }))
     expect(screen.queryByRole('dialog', { name: 'Full-screen AI image' })).not.toBeInTheDocument()

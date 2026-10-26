@@ -5,6 +5,7 @@ import { ArrowUpRight, ArrowLeft, Aperture, Film, Sparkles, ArrowRight, Maximize
 import { creativeCollections, creativeImages } from '../data/creativeLab'
 
 const icons = { Images: Aperture, Videos: Film, Experiments: Sparkles }
+const imageRows = Array.from({ length: Math.ceil(creativeImages.length / 2) }, (_, index) => creativeImages.slice(index * 2, index * 2 + 2))
 
 export default function CreativeLab({ standalone = false }) {
   const [category, setCategory] = useState(() => {
@@ -56,7 +57,12 @@ export default function CreativeLab({ standalone = false }) {
       <div data-section-heading className="lab-heading"><div><span className="eyebrow">05 / THE CREATIVE SIDE</span><h2>Engineering meets<br /><em>imagination.</em><span className="lab-star" aria-hidden="true">✳</span></h2></div><div className="lab-heading-aside"><span className="lab-status"><span /> IN PROGRESS</span><p>A space for what happens when curiosity meets AI. Images, films, and experiments beyond the code.</p></div></div>
       <div className="lab-toolbar"><span>THE AI CREATIVE LAB</span>{standalone ? <div ref={filtersRef} className="lab-filters" role="group" aria-label="Creative medium">{['All explorations', 'Images', 'Videos', 'Experiments'].map(label => <button key={label} aria-pressed={category === label} onClick={() => setCategory(label)}>{label}</button>)}</div> : <a href="/ai-lab">Enter the lab <ArrowUpRight size={16} /></a>}</div>
       {category === 'Images' ? <div className="lab-image-gallery" aria-label="AI generated image gallery">
-        {creativeImages.map((image, index) => <motion.figure key={image.src} className={`lab-image-tile lab-image-tile-${index + 1}`} initial={{ opacity: 0, y: reduced ? 0 : 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: reduced ? 0 : 0.5, delay: reduced ? 0 : index * 0.06 }}><img src={image.src} alt={image.alt} loading={index === 0 ? 'eager' : 'lazy'} /><button type="button" className="lab-image-expand" aria-label={`View image ${index + 1} full screen`} onClick={event => { viewerTriggerRef.current = event.currentTarget; setViewMode(image.orientation === 'portrait' ? 'fit' : 'fill'); setSelectedImage(image) }}><span><Maximize2 size={17} aria-hidden="true" /></span></button></motion.figure>)}
+        {imageRows.map((row, rowIndex) => <div key={row[0].src} className={`lab-image-row ${rowIndex % 2 ? 'lab-image-row-reverse' : ''}`}>
+          {row.map((image, imageIndex) => {
+            const index = rowIndex * 2 + imageIndex
+            return <motion.figure key={image.src} className={`lab-image-tile lab-image-tile-${index + 1}`} initial={{ opacity: 0, y: reduced ? 0 : 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: reduced ? 0 : 0.5, delay: reduced ? 0 : index * 0.06 }}><img src={image.src} alt={image.alt} loading={index === 0 ? 'eager' : 'lazy'} /><button type="button" className="lab-image-expand" aria-label={`View image ${index + 1} full screen`} onClick={event => { viewerTriggerRef.current = event.currentTarget; setViewMode(image.orientation === 'portrait' ? 'fit' : 'fill'); setSelectedImage(image) }}><span><Maximize2 size={17} aria-hidden="true" /></span></button></motion.figure>
+          })}
+        </div>)}
       </div> : category === 'Videos' || category === 'Experiments' ? <div className="lab-coming-soon" role="status">
         {category === 'Videos' ? <Film size={32} strokeWidth={1.4} aria-hidden="true" /> : <Sparkles size={32} strokeWidth={1.4} aria-hidden="true" />}
         <span>IN PROGRESS</span><h3>{category === 'Videos' ? 'AI videos are coming soon.' : 'Experiments are coming soon.'}</h3>
