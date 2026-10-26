@@ -36,7 +36,7 @@ export default function CreativeLab({ standalone = false }) {
           </motion.article>
         })}
       </div>}
-      <div className="lab-bottom"><p><span className="status-dot" /> {category === 'Images' ? 'Four AI generated explorations. More are on the way.' : 'New work will appear here as each collection takes shape.'}</p>{standalone ? <a href="/#contact">Have a creative idea? <ArrowRight size={15} /></a> : <a href="/ai-lab">A little more curiosity <ArrowRight size={15} /></a>}</div>
+      <div className="lab-bottom"><p><span className="status-dot" /> {category === 'Images' ? `${creativeImages.length} AI-generated explorations. More are on the way.` : 'New work will appear here as each collection takes shape.'}</p>{standalone ? <a href="/#contact">Have a creative idea? <ArrowRight size={15} /></a> : <a href="/ai-lab">A little more curiosity <ArrowRight size={15} /></a>}</div>
     </div>
   </section>
 }
