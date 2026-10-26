@@ -1,6 +1,7 @@
-﻿import { useState } from 'react'
+﻿import { useEffect, useRef, useState } from 'react'
 import { motion, useReducedMotion } from 'framer-motion'
-import { ArrowUpRight, ArrowLeft, Aperture, Film, Sparkles, ArrowRight } from 'lucide-react'
+import { createPortal } from 'react-dom'
+import { ArrowUpRight, ArrowLeft, Aperture, Film, Sparkles, ArrowRight, Maximize2, Minimize2 } from 'lucide-react'
 import { creativeCollections, creativeImages } from '../data/creativeLab'
 
 const icons = { Images: Aperture, Videos: Film, Experiments: Sparkles }
@@ -12,13 +13,43 @@ export default function CreativeLab({ standalone = false }) {
     return creativeCollections.find(item => item.category.toLowerCase() === view)?.category || 'All explorations'
   })
   const reduced = useReducedMotion()
+  const filtersRef = useRef(null)
+  const viewerCloseRef = useRef(null)
+  const viewerTriggerRef = useRef(null)
+  const [selectedImage, setSelectedImage] = useState(null)
+  useEffect(() => {
+    const filters = filtersRef.current
+    if (!standalone || !filters || filters.scrollWidth <= filters.clientWidth) return
+    const selected = filters.querySelector('[aria-pressed="true"]')
+    if (!selected) return
+    const bounds = filters.getBoundingClientRect()
+    const selectedBounds = selected.getBoundingClientRect()
+    if (selectedBounds.left < bounds.left) filters.scrollLeft += selectedBounds.left - bounds.left
+    else if (selectedBounds.right > bounds.right) filters.scrollLeft += selectedBounds.right - bounds.right
+  }, [category, standalone])
+  useEffect(() => {
+    if (!selectedImage) return
+    const previousOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    viewerCloseRef.current?.focus()
+    const onKeyDown = event => {
+      if (event.key === 'Escape') { event.preventDefault(); setSelectedImage(null) }
+      if (event.key === 'Tab') { event.preventDefault(); viewerCloseRef.current?.focus() }
+    }
+    document.addEventListener('keydown', onKeyDown)
+    return () => {
+      document.removeEventListener('keydown', onKeyDown)
+      document.body.style.overflow = previousOverflow
+      if (viewerTriggerRef.current?.isConnected) viewerTriggerRef.current.focus({ preventScroll: true })
+    }
+  }, [selectedImage])
   return <section id="ai-lab" className={`creative-lab ${standalone ? 'lab-standalone' : ''}`}>
     <div className="container-custom">
       {standalone && <nav className="lab-navigation" aria-label="Creative lab navigation"><a className="lab-wordmark" href="/">kv<span>✳</span></a><a href="/#ai-lab"><ArrowLeft size={15} /> Back to portfolio</a></nav>}
       <div data-section-heading className="lab-heading"><div><span className="eyebrow">05 / THE CREATIVE SIDE</span><h2>Engineering meets<br /><em>imagination.</em><span className="lab-star" aria-hidden="true">✳</span></h2></div><div className="lab-heading-aside"><span className="lab-status"><span /> IN PROGRESS</span><p>A space for what happens when curiosity meets AI. Images, films, and experiments beyond the code.</p></div></div>
-      <div className="lab-toolbar"><span>THE AI CREATIVE LAB</span>{standalone ? <div className="lab-filters" role="group" aria-label="Creative medium">{['All explorations', 'Images', 'Videos', 'Experiments'].map(label => <button key={label} aria-pressed={category === label} onClick={() => setCategory(label)}>{label}</button>)}</div> : <a href="/ai-lab">Enter the lab <ArrowUpRight size={16} /></a>}</div>
+      <div className="lab-toolbar"><span>THE AI CREATIVE LAB</span>{standalone ? <div ref={filtersRef} className="lab-filters" role="group" aria-label="Creative medium">{['All explorations', 'Images', 'Videos', 'Experiments'].map(label => <button key={label} aria-pressed={category === label} onClick={() => setCategory(label)}>{label}</button>)}</div> : <a href="/ai-lab">Enter the lab <ArrowUpRight size={16} /></a>}</div>
       {category === 'Images' ? <div className="lab-image-gallery" aria-label="AI generated image gallery">
-        {creativeImages.map((image, index) => <motion.figure key={image.src} className={`lab-image-tile lab-image-tile-${index + 1}`} initial={{ opacity: 0, y: reduced ? 0 : 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: reduced ? 0 : 0.5, delay: reduced ? 0 : index * 0.06 }}><img src={image.src} alt={image.alt} loading={index === 0 ? 'eager' : 'lazy'} /></motion.figure>)}
+        {creativeImages.map((image, index) => <motion.figure key={image.src} className={`lab-image-tile lab-image-tile-${index + 1}`} initial={{ opacity: 0, y: reduced ? 0 : 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: reduced ? 0 : 0.5, delay: reduced ? 0 : index * 0.06 }}><img src={image.src} alt={image.alt} loading={index === 0 ? 'eager' : 'lazy'} /><button type="button" className="lab-image-expand" aria-label={`View image ${index + 1} full screen`} onClick={event => { viewerTriggerRef.current = event.currentTarget; setSelectedImage(image) }}><span><Maximize2 size={19} aria-hidden="true" /></span></button></motion.figure>)}
       </div> : category === 'Videos' || category === 'Experiments' ? <div className="lab-coming-soon" role="status">
         {category === 'Videos' ? <Film size={32} strokeWidth={1.4} aria-hidden="true" /> : <Sparkles size={32} strokeWidth={1.4} aria-hidden="true" />}
         <span>IN PROGRESS</span><h3>{category === 'Videos' ? 'AI videos are coming soon.' : 'Experiments are coming soon.'}</h3>
@@ -38,5 +69,9 @@ export default function CreativeLab({ standalone = false }) {
       </div>}
       <div className="lab-bottom"><p><span className="status-dot" /> {category === 'Images' ? `${creativeImages.length} AI-generated explorations. More are on the way.` : 'New work will appear here as each collection takes shape.'}</p>{standalone ? <a href="/#contact">Have a creative idea? <ArrowRight size={15} /></a> : <a href="/ai-lab">A little more curiosity <ArrowRight size={15} /></a>}</div>
     </div>
+    {selectedImage && createPortal(<motion.div className="lab-image-viewer" role="dialog" aria-modal="true" aria-label="Full-screen AI image" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: reduced ? 0 : 0.2 }}>
+      <img src={selectedImage.src} alt={selectedImage.alt} />
+      <button ref={viewerCloseRef} type="button" className="lab-image-minimize" aria-label="Minimize image" onClick={() => setSelectedImage(null)}><Minimize2 size={20} aria-hidden="true" /><span>Minimize</span></button>
+    </motion.div>, document.body)}
   </section>
 }

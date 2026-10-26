@@ -201,6 +201,15 @@
 .lab-image-tile { position: relative; min-width: 0; min-height: 0; overflow: hidden; border: 1px solid #d0d5af30; border-radius: 8px; background: #363b35; }
 .lab-image-tile img { display: block; width: 100%; height: 100%; object-fit: cover; transition: transform .7s ease; }
 .lab-image-tile:hover img { transform: scale(1.035); }
+.lab-image-expand { position: absolute; inset: 0; display: flex; justify-content: flex-end; align-items: flex-start; padding: 12px; width: 100%; background: transparent; color: #fff; cursor: zoom-in; }
+.lab-image-expand > span { display: grid; place-items: center; width: 42px; height: 42px; border: 1px solid #ffffff60; border-radius: 8px; background: #101713a8; backdrop-filter: blur(8px); transition: background .2s, transform .2s; }
+.lab-image-expand:hover > span { background: #101713db; transform: scale(1.05); }
+.lab-image-expand:focus-visible { outline: 3px solid #d0d5af; outline-offset: -5px; }
+.lab-image-viewer { position: fixed; inset: 0; z-index: 1000; display: grid; place-items: center; background: #0b0d0c; }
+.lab-image-viewer > img { display: block; width: 100%; height: 100%; object-fit: contain; user-select: none; }
+.lab-image-minimize { position: absolute; top: max(16px, env(safe-area-inset-top)); right: max(16px, env(safe-area-inset-right)); z-index: 1; display: inline-flex; align-items: center; justify-content: center; gap: 9px; min-width: 44px; min-height: 44px; padding: 10px 14px; border: 1px solid #ffffff80; border-radius: 8px; background: #101713d9; color: #fff; font-size: 13px; backdrop-filter: blur(10px); }
+.lab-image-minimize:hover { background: #273529; }
+.lab-image-minimize:focus-visible { outline: 3px solid #d0d5af; outline-offset: 3px; }
 .lab-image-tile-1 { grid-column: 1 / 8; grid-row: 1; }
 .lab-image-tile-2 { grid-column: 8 / 13; grid-row: 1; height: 88%; align-self: end; }
 .lab-image-tile-3 { grid-column: 1 / 6; grid-row: 2; height: 92%; }
@@ -220,6 +229,34 @@
   .lab-image-tile-1, .lab-image-tile-4, .lab-image-tile-5, .lab-image-tile-8 { grid-column: 1 / -1; grid-row: span 2; }
   .lab-image-tile-2, .lab-image-tile-3, .lab-image-tile-6, .lab-image-tile-7 { grid-column: span 1; grid-row: span 2; }
   .lab-coming-soon { min-height: 280px; }
+  .lab-standalone .lab-navigation { margin-bottom: 28px; }
+  .lab-standalone .lab-heading { margin-bottom: 24px; gap: 18px; }
+  .lab-standalone .lab-heading .eyebrow { margin-bottom: 14px; }
+  .lab-standalone .lab-status { margin-bottom: 10px; }
+  .lab-standalone .lab-toolbar { position: sticky; top: 0; z-index: 20; display: block; margin-bottom: 14px; background: #22231ff2; backdrop-filter: blur(12px); border-bottom: 1px solid #d0d5af20; }
+  .lab-standalone .lab-toolbar > span { display: none; }
+  .lab-standalone .lab-filters { width: 100%; flex-wrap: nowrap; overflow-x: auto; overscroll-behavior-x: contain; scrollbar-width: none; scroll-snap-type: x proximity; }
+  .lab-standalone .lab-filters::-webkit-scrollbar { display: none; }
+  .lab-standalone .lab-filters button { flex: 0 0 auto; min-height: 44px; padding-inline: 15px; white-space: nowrap; font-size: 11px; scroll-snap-align: start; border: 1px solid #d0d5af24; }
+  .lab-standalone .lab-filters button[aria-pressed='true'] { border-color: #d0d5af; }
+  .lab-standalone .lab-bottom p { font-size: 11px; }
+}
+@media (max-width: 540px) {
+  .lab-standalone .container-custom { padding-inline: 16px; }
+  .lab-standalone .lab-navigation { padding-block: 14px; margin-bottom: 22px; }
+  .lab-standalone .lab-toolbar { margin-inline: -16px; padding: 10px 16px 12px; }
+  .lab-standalone .lab-image-gallery { display: flex; flex-direction: column; gap: 14px; }
+  .lab-standalone .lab-image-gallery .lab-image-tile { width: 100%; height: auto; aspect-ratio: 16 / 11; align-self: auto; }
+  .lab-standalone .lab-image-gallery .lab-image-tile-2,
+  .lab-standalone .lab-image-gallery .lab-image-tile-3,
+  .lab-standalone .lab-image-gallery .lab-image-tile-6,
+  .lab-standalone .lab-image-gallery .lab-image-tile-7 { width: 86%; aspect-ratio: 4 / 5; }
+  .lab-standalone .lab-image-gallery .lab-image-tile-2,
+  .lab-standalone .lab-image-gallery .lab-image-tile-6 { align-self: flex-end; }
+  .lab-standalone .lab-coming-soon { min-height: 260px; margin-top: 4px; padding: 28px 24px; }
+  .lab-image-expand { padding: 10px; }
+  .lab-image-minimize { padding: 10px; }
+  .lab-image-minimize > span { display: none; }
 }
 .case-lead, .case-architecture-note p, .case-challenge-note p { font-size: 15px; line-height: 1.85; }
 .case-feature-grid li p { font-size: 14px; }

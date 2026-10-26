@@ -1,4 +1,4 @@
-﻿import { render, screen } from '@testing-library/react'
+﻿import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
 import CreativeLab from './CreativeLab'
@@ -28,5 +28,23 @@ describe('Creative lab', () => {
     expect(screen.getAllByRole('article')).toHaveLength(3)
     await user.click(screen.getByRole('button', { name: 'Open Experiments' }))
     expect(screen.getByRole('heading', { name: 'Experiments are coming soon.' })).toBeInTheDocument()
+  })
+
+  it('opens an uncropped image viewer and restores focus when minimized', async () => {
+    const user = userEvent.setup()
+    render(<CreativeLab standalone />)
+    await user.click(screen.getByRole('button', { name: 'Images' }))
+    const expand = screen.getByRole('button', { name: 'View image 1 full screen' })
+    await user.click(expand)
+    const viewer = screen.getByRole('dialog', { name: 'Full-screen AI image' })
+    expect(viewer.querySelector('img')).toHaveAttribute('src', '/ai-lab/stone-arch.jpg')
+    expect(document.body).toHaveStyle({ overflow: 'hidden' })
+    await user.click(screen.getByRole('button', { name: 'Minimize image' }))
+    expect(screen.queryByRole('dialog', { name: 'Full-screen AI image' })).not.toBeInTheDocument()
+    await waitFor(() => expect(expand).toHaveFocus())
+    await user.click(expand)
+    await user.keyboard('{Escape}')
+    expect(screen.queryByRole('dialog', { name: 'Full-screen AI image' })).not.toBeInTheDocument()
+    expect(document.body).not.toHaveStyle({ overflow: 'hidden' })
   })
 })
