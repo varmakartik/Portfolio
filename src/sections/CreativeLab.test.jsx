@@ -13,12 +13,12 @@ describe('Creative lab', () => {
     expect(screen.getAllByText(/COMING SOON/)).toHaveLength(2)
     expect(screen.queryByRole('button', { name: /play/i })).not.toBeInTheDocument()
   })
-  it('shows an eight-image collage and a clear video progress state', async () => {
+  it('shows all twelve images and a clear video progress state', async () => {
     const user = userEvent.setup()
     render(<CreativeLab standalone />)
     await user.click(screen.getByRole('button', { name: 'Images' }))
-    expect(screen.getByLabelText('AI generated image gallery').querySelectorAll('figure')).toHaveLength(8)
-    expect(screen.getByLabelText('AI generated image gallery').querySelectorAll('.lab-image-row')).toHaveLength(4)
+    expect(screen.getByLabelText('AI generated image gallery').querySelectorAll('figure')).toHaveLength(12)
+    expect(screen.getByLabelText('AI generated image gallery').querySelectorAll('.lab-image-row')).toHaveLength(6)
     expect(screen.queryByRole('heading', { name: 'Imagined worlds.' })).not.toBeInTheDocument()
     await user.click(screen.getByRole('button', { name: 'Videos' }))
     expect(screen.getByRole('heading', { name: 'AI videos are coming soon.' })).toBeInTheDocument()

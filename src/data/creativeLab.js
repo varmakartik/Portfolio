@@ -13,4 +13,8 @@ export const creativeImages = [
   { src: '/ai-lab/glass-jellyfish.jpg', alt: 'A luminous glass jellyfish sculpture suspended in dark water', orientation: 'portrait' },
   { src: '/ai-lab/moss-staircase.jpg', alt: 'A moss-covered spiral staircase beside a waterfall', orientation: 'portrait' },
   { src: '/ai-lab/copper-tree.jpg', alt: 'A copper tree glowing beside a still lake at twilight' },
+  { src: '/ai-lab/limestone-tide.jpg', alt: 'Pale limestone terraces descending into a turquoise sea at dawn' },
+  { src: '/ai-lab/fern-monolith.jpg', alt: 'A rain-soaked sandstone monolith with a miniature fern forest inside', orientation: 'portrait' },
+  { src: '/ai-lab/copper-bird.jpg', alt: 'A copper and pearl paper bird poised above a still pool at sunset', orientation: 'portrait' },
+  { src: '/ai-lab/raincloud-hourglass.jpg', alt: 'A glass hourglass containing a tiny raincloud and silver lake', orientation: 'portrait' },
 ]

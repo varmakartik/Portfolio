@@ -202,6 +202,7 @@
 .lab-image-row-reverse { grid-template-columns: minmax(0, 4fr) minmax(0, 9fr); }
 .lab-image-row:not(:first-child) { grid-template-columns: minmax(0, 11fr) minmax(0, 4fr); aspect-ratio: 2.45; }
 .lab-image-row-reverse:not(:first-child) { grid-template-columns: minmax(0, 4fr) minmax(0, 11fr); }
+.lab-image-row-portraits:not(:first-child) { grid-template-columns: repeat(2, minmax(0, 1fr)); aspect-ratio: 1.5; }
 .lab-image-tile { position: relative; display: block; width: 100%; min-width: 0; min-height: 0; overflow: hidden; border: 1px solid #d0d5af30; border-radius: 8px; background: #363b35; }
 .lab-image-tile img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: center; }
 .lab-image-tile:hover { border-color: #d0d5af80; }
@@ -243,8 +244,9 @@
   .lab-image-row, .lab-image-row:not(:first-child) { display: flex; flex-direction: column; aspect-ratio: auto; }
   .lab-image-row-reverse, .lab-image-row-reverse:not(:first-child) { flex-direction: column-reverse; }
   .lab-image-tile img { height: auto; max-height: 480px; }
-  .lab-image-tile-2, .lab-image-tile-3, .lab-image-tile-6, .lab-image-tile-7 { width: 86%; }
-  .lab-image-tile-2, .lab-image-tile-6 { margin-left: auto; }
+  .lab-image-tile-2, .lab-image-tile-3, .lab-image-tile-6, .lab-image-tile-7,
+  .lab-image-tile-10, .lab-image-tile-11, .lab-image-tile-12 { width: 86%; }
+  .lab-image-tile-2, .lab-image-tile-6, .lab-image-tile-10, .lab-image-tile-11 { margin-left: auto; }
 }
 @media (max-width: 540px) {
   .lab-standalone .container-custom { padding-inline: 16px; }

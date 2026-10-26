@@ -1,6 +1,6 @@
 # AI Lab image prompts
 
-These are the prompts used to generate the eight images in `public/ai-lab/`. They are kept here for reuse and are not displayed in the gallery. The images were generated with the built-in image generation tool, then exported as optimized JPEG files for the website.
+These are the prompts used to generate the twelve images in `public/ai-lab/`. They are kept here for reuse and are not displayed in the gallery. The images were generated with the built-in image generation tool, then exported as optimized JPEG files for the website.
 
 ## 1. Stone arch — `stone-arch.jpg`
 
@@ -33,3 +33,19 @@ These are the prompts used to generate the eight images in `public/ai-lab/`. The
 ## 8. Copper tree — `copper-tree.jpg`
 
 > Use case: illustration-story. Asset type: eighth artwork for an AI creative portfolio gallery. A lone tree made of delicate glowing copper threads standing on a dark mirror lake at twilight, its branching light reflected across still water under a deep indigo sky. Dreamlike fine-art landscape photography, subtle luminous detail, spacious cinematic composition, copper, midnight blue and muted violet palette. Wide landscape composition. Standalone artwork, no people, no text, no logos, no borders, no watermark.
+
+## 9. Limestone tide — `limestone-tide.jpg` (landscape)
+
+> Use case: stylized-concept. Asset type: standalone AI fine-art image for a curated portfolio gallery. Create a quiet, surreal coastal landscape: a series of broad, pale limestone terraces steps down into a glass-still turquoise sea, with a single vast crescent-shaped stone opening on the far shore and low cloud drifting through it. Architectural fine-art photography with tactile weathered mineral texture, realistic water reflections, soft dawn haze, muted sea-glass teal, chalk and warm sand palette. Wide 3:2 landscape framing, generous horizontal depth and strong geometry. One coherent scene, high visual detail. No people, no text, no logos, no frames, no watermark.
+
+## 10. Fern monolith — `fern-monolith.jpg` (portrait)
+
+> Use case: stylized-concept. Asset type: standalone AI fine-art image for a curated portfolio gallery. Create a vertical portrait composition of a single tall, weathered sandstone monolith split open to reveal a tiny lush fern forest within its hollow center. Fine rain and soft mist drift through a dark, quiet courtyard; small warm light catches the leaves and rough stone edge. Surreal yet photographic, tactile mineral grain, restrained charcoal, moss green and pale gold palette. Full monolith visible with breathing room above and below, 2:3 portrait framing. One coherent scene, high visual detail. No people, no text, no logos, no frames, no watermark.
+
+## 11. Copper bird — `copper-bird.jpg` (portrait)
+
+> Use case: stylized-concept. Asset type: standalone AI fine-art image for a curated portfolio gallery. Create a vertical portrait fine-art still life of a large origami-like bird made from thin brushed copper and translucent pearl paper, poised on a narrow dark rock above a mirror-still pool. Its wings open upward elegantly, delicate folds and realistic material highlights, dusky mauve sky and soft amber backlight, calm atmospheric depth. Sophisticated surreal editorial photography, 2:3 portrait framing, complete bird visible with negative space around wings. No people, no text, no logos, no frames, no watermark.
+
+## 12. Raincloud hourglass — `raincloud-hourglass.jpg` (portrait)
+
+> Use case: stylized-concept. Asset type: standalone AI fine-art image for a curated portfolio gallery. Create a vertical portrait close-up of a tall, clear hourglass standing on a rough black basalt plinth in a shadowy botanical conservatory. Inside the upper bulb floats a tiny luminous raincloud; fine threads of glowing water fall into a miniature silver lake in the lower bulb. Dark olive plants and faint mist behind, delicate glass reflections, realistic tactile textures, warm ivory and cool blue highlights, cinematic still-life photography. Full hourglass visible, 2:3 portrait framing. No people, no text, no logos, no frames, no watermark.
