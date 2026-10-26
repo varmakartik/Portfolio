@@ -9,8 +9,22 @@ export const welcomeMessage = {
   text: 'Looking for something? Ask about Kartik’s projects, experience, skills, or how to get in touch.',
 }
 
-export function getPortfolioReply(input) {
+export function getPortfolioReply(input, pageContext) {
   const question = input.toLowerCase().trim()
+  if (/\b(this section|this page|these experiences|these projects|what am i looking at|about this|here)\b/.test(question)) {
+    const sectionQuestions = {
+      hero: 'about Kartik',
+      experience: 'experience',
+      skills: 'skills',
+      projects: 'projects',
+      github: 'github',
+      'ai-lab': 'creative lab',
+      education: 'education',
+      contact: 'contact',
+    }
+    const sectionQuestion = sectionQuestions[pageContext?.section_id]
+    if (sectionQuestion) return getPortfolioReply(sectionQuestion)
+  }
   if (/\b(art|creative|lab|images|videos|films)\b/.test(question)) return { text: 'The AI Creative Lab is in progress. It will bring together AI imagery, short films, and creative experiments. The gallery is ready for its first collection.', link: '/ai-lab', label: 'Visit the creative lab' }
   if (/\b(github|contributions|commits)\b/.test(question)) return { text: 'Explore Kartik’s GitHub contribution calendar and public repositories in the activity section.', link: '#github', label: 'See GitHub activity' }
   const project = projects.find(item => question.includes(item.title.toLowerCase()))

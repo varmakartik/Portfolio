@@ -35,3 +35,14 @@ Section destinations are defined in `src/utils/sectionNavigation.js`. Heading wr
 Project dialogs open directly, trap keyboard focus, close with Escape, and restore focus. Animations respect reduced-motion preferences. The contribution calendar supports arrow keys, Home, and End.
 
 Run `npm test`, `npm run lint`, and `npm run build` before publishing.
+
+# Portfolio chat and KAI
+
+The existing chat panel in `src/components/ui/PortfolioChat.jsx` keeps its current layout and styling. Set `VITE_KAI_API_URL` to the public base URL of the KAI FastAPI service to enable AI replies. The frontend checks `/health`, posts to `/chat`, and uses the existing local `getPortfolioReply` response when KAI is missing, unhealthy, or fails during a request. It retries KAI on the next message.
+
+The panel subtitle reports `KAI online`, `Checking KAI…`, or `KAI unavailable · Portfolio guide active`. Each answer is labelled `KAI` or `Portfolio guide (KAI unavailable)` so visitors can tell which mode answered it.
+
+New messages enter with a subtle fade and lift, disabled under reduced-motion preferences. On every question, the chat reads the current section from the page's existing navigation anchors and sends its section ID plus a short text excerpt to KAI. This lets KAI resolve "this section" and similar questions without changing the chat layout. The local fallback guide uses the same section ID for those questions.
+
+For local testing, run the KAI backend on `http://127.0.0.1:8000`; the development portfolio uses that URL by default. Set `VITE_KAI_API_URL` if KAI runs elsewhere. For a deployed portfolio, configure the variable in the hosting environment with a publicly reachable HTTPS backend URL. Keep `GROQ_API_KEY` only on the backend; never add it as a Vite variable.
+
