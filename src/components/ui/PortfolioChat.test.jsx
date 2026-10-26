@@ -63,17 +63,22 @@ describe('Portfolio chat', () => {
 
   it('uses KAI when the API is available and keeps the same chat panel', async () => {
     vi.stubEnv('VITE_KAI_API_URL', 'http://127.0.0.1:8000')
+    let finishReply
+    const delayedReply = new Promise(resolve => { finishReply = resolve })
     const fetcher = vi.fn()
       .mockResolvedValueOnce({ ok: true, json: async () => ({ status: 'ok', api_key_set: true }) })
       .mockResolvedValueOnce({ ok: true, json: async () => ({ status: 'ok', api_key_set: true }) })
-      .mockResolvedValueOnce({ ok: true, json: async () => ({ reply: 'KAI says **hello**. See [Connect](https://crosser.vercel.app).', visual: null }) })
+      .mockReturnValueOnce(delayedReply)
     vi.stubGlobal('fetch', fetcher)
     const user = userEvent.setup()
     render(<PortfolioChat />)
     await user.click(screen.getByRole('button', { name: 'Open portfolio chat' }))
     await waitFor(() => expect(screen.getByText('KAI online')).toBeInTheDocument())
     await user.type(screen.getByRole('textbox', { name: 'Ask about Kartik' }), 'Tell me about Connect{Enter}')
+    expect(screen.getByRole('status', { name: 'KAI is thinking' })).toBeInTheDocument()
+    finishReply({ ok: true, json: async () => ({ reply: 'KAI says **hello**. See [Connect](https://crosser.vercel.app).', visual: null }) })
     await waitFor(() => expect(screen.getByText(/KAI says hello/)).toBeInTheDocument())
+    expect(screen.queryByRole('status', { name: 'KAI is thinking' })).not.toBeInTheDocument()
     expect(screen.getByText('KAI')).toBeInTheDocument()
     expect(screen.getByRole('link', { name: /Connect/ })).toHaveAttribute('href', 'https://crosser.vercel.app/')
     expect(screen.getByRole('dialog', { name: /Kartik/ })).toBeInTheDocument()

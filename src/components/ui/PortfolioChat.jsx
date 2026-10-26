@@ -58,7 +58,7 @@ export default function PortfolioChat() {
   }, [open])
   useEffect(() => {
     if (open && logRef.current) logRef.current.scrollTop = logRef.current.scrollHeight
-  }, [messages, open])
+  }, [messages, open, pending])
 
   const appendMessage = message => {
     messagesRef.current = [...messagesRef.current, message]
@@ -109,6 +109,7 @@ export default function PortfolioChat() {
             {messages.map((message, index) => <motion.div key={index} className={`chat-message ${message.role}`} initial={{ opacity: 0, y: reduced ? 0 : 8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: reduced ? 0 : 0.24, ease: 'easeOut' }}><span className="chat-speaker">{message.role === 'assistant' ? message.source === 'kai' ? 'KAI' : message.source === 'fallback' ? 'Portfolio guide (KAI unavailable)' : 'Portfolio assistant' : 'You'}</span><p>{message.text}</p>
               {message.link && <a href={message.link} download={message.download ? 'Kartik_Varma_Resume.pdf' : undefined} onClick={() => { if (message.link.startsWith('#')) close() }}>{message.label}<ArrowUpRight size={14} /></a>}
             </motion.div>)}
+            {pending && <div className="chat-message assistant chat-typing" role="status" aria-label="KAI is thinking"><span className="chat-speaker">KAI</span><span className="chat-typing-dots" aria-hidden="true"><span /><span /><span /></span></div>}
           </div>
           <div className="chat-suggestions" aria-label="Suggested questions">{suggestions.map(([label, question]) => <button key={label} aria-label={question} onClick={() => send(question, false)}>{label}</button>)}</div>
           <form className="chat-form" onSubmit={event => { event.preventDefault(); send(input) }}>
