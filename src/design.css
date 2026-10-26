@@ -9,7 +9,7 @@ button { cursor: pointer; }
 .studio-nav { position: fixed; z-index: 100; top: 0; width: 100%; background: #f6f5f1ed; backdrop-filter: blur(18px); border-bottom: 1px solid #22221e14; }
 .nav-inner { height: 84px; display: flex; align-items: center; justify-content: space-between; gap: 22px; }
 .studio-brand { display: flex; align-items: center; font-family: 'Syne', sans-serif; font-size: 34px; font-weight: 800; letter-spacing: -3px; }
-.studio-brand span { color: var(--studio-blue); font-size: 29px; margin-left: 5px; }
+.studio-brand span { display: inline-block; color: var(--studio-blue); font-size: 29px; margin-left: 5px; transform-origin: center; animation: studio-spin 18s linear infinite; }
 .desktop-navigation { display: flex; gap: 29px; }
 .desktop-navigation a { position: relative; font-size: 12px; color: #666763; padding: 12px 0; }
 .desktop-navigation a:hover, .desktop-navigation a[aria-current] { color: var(--studio-ink); }
