@@ -7,7 +7,7 @@ import { personalInfo } from '../../data/personalInfo'
 import { getCurrentPageContext } from '../../utils/pageContext'
 
 const suggestions = [['Projects', 'Show me projects'], ['Skills', 'What are your skills?'], ['Experience', 'Your journey'], ['Contact', 'How can I contact you?']]
-const getKaiApiUrl = () => import.meta.env.VITE_KAI_API_URL || (import.meta.env.MODE === 'development' ? 'http://127.0.0.1:8000' : '')
+const getKaiApiUrl = () => import.meta.env.PROD ? '/api/kai' : (import.meta.env.VITE_KAI_API_URL || (import.meta.env.MODE === 'development' ? 'http://127.0.0.1:8000' : ''))
 
 export default function PortfolioChat() {
   const [open, setOpen] = useState(false)

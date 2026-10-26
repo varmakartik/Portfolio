@@ -1,5 +1,6 @@
 {
   "rewrites": [
+    { "source": "/api/kai/:path*", "destination": "https://portfolio-bot-36kr.onrender.com/:path*" },
     { "source": "/(.*)", "destination": "/index.html" }
   ]
 }

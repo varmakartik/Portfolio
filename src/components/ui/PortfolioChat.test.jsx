@@ -4,7 +4,10 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import PortfolioChat from './PortfolioChat'
 
 describe('Portfolio chat', () => {
-  beforeEach(() => vi.stubEnv('VITE_KAI_API_URL', ''))
+  beforeEach(() => {
+    vi.stubEnv('PROD', false)
+    vi.stubEnv('VITE_KAI_API_URL', '')
+  })
   afterEach(() => {
     vi.unstubAllEnvs()
     vi.unstubAllGlobals()
@@ -76,6 +79,18 @@ describe('Portfolio chat', () => {
     expect(screen.getByRole('dialog', { name: /Kartik/ })).toBeInTheDocument()
     expect(JSON.parse(fetcher.mock.calls[2][1].body)).toMatchObject({ message: 'Tell me about Connect', history: [] })
     expect(JSON.parse(fetcher.mock.calls[2][1].body).page_context.section_id).toBe('hero')
+  })
+
+  it('uses the same-origin KAI route in production even with a legacy API URL configured', async () => {
+    vi.stubEnv('PROD', true)
+    vi.stubEnv('VITE_KAI_API_URL', 'https://portfolio-bot-36kr.onrender.com')
+    const fetcher = vi.fn().mockResolvedValue({ ok: true, json: async () => ({ status: 'ok', api_key_set: true }) })
+    vi.stubGlobal('fetch', fetcher)
+    const user = userEvent.setup()
+    render(<PortfolioChat />)
+    await user.click(screen.getByRole('button', { name: 'Open portfolio chat' }))
+    await waitFor(() => expect(screen.getByText('KAI online')).toBeInTheDocument())
+    expect(fetcher).toHaveBeenCalledWith('/api/kai/health', expect.any(Object))
   })
 
   it('uses the old chat reply when KAI is unavailable', async () => {
