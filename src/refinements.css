@@ -195,6 +195,28 @@
 .toolkit-panel-heading { flex-wrap: wrap; }
 .toolkit-footnote { font-size: 11px; line-height: 1.6; }
 .lab-grid { grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); }
+.lab-card-open { position: absolute; inset: 0; z-index: 5; width: 100%; border: 0; background: transparent; cursor: pointer; }
+.lab-card-open:focus-visible { outline: 2px solid #d0d5af; outline-offset: -5px; border-radius: 9px; }
+.lab-image-gallery { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); grid-template-rows: repeat(2, minmax(0, clamp(310px, 31vw, 430px))); gap: 18px; padding-top: 10px; }
+.lab-image-tile { position: relative; min-width: 0; min-height: 0; overflow: hidden; border: 1px solid #d0d5af30; border-radius: 8px; background: #363b35; }
+.lab-image-tile img { display: block; width: 100%; height: 100%; object-fit: cover; transition: transform .7s ease; }
+.lab-image-tile:hover img { transform: scale(1.035); }
+.lab-image-tile-1 { grid-column: 1 / 8; grid-row: 1; }
+.lab-image-tile-2 { grid-column: 8 / 13; grid-row: 1; height: 88%; align-self: end; }
+.lab-image-tile-3 { grid-column: 1 / 6; grid-row: 2; height: 92%; }
+.lab-image-tile-4 { grid-column: 6 / 13; grid-row: 2; height: 83%; align-self: end; }
+.lab-coming-soon { width: min(100%, 760px); min-height: 340px; margin: 20px auto 0; padding: clamp(32px, 5vw, 64px); display: flex; flex-direction: column; align-items: flex-start; justify-content: center; border: 1px solid #d0d5af30; border-radius: 9px; background: radial-gradient(circle at 84% 20%, #c7d4ae1a, transparent 44%), #292c26; }
+.lab-coming-soon > svg { color: #d0d5af; margin-bottom: 25px; }
+.lab-coming-soon > span { color: #aebd98; font-size: 9px; letter-spacing: 2px; }
+.lab-coming-soon h3 { margin-top: 13px; font-family: 'Space Grotesk', sans-serif; font-size: clamp(26px, 3vw, 40px); font-weight: 400; letter-spacing: -.9px; }
+.lab-coming-soon p { max-width: 470px; margin-top: 16px; color: #aeb79e; font-size: 14px; line-height: 1.8; }
+@media (max-width: 767px) {
+  .lab-image-gallery { grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-rows: none; grid-auto-rows: clamp(130px, 40vw, 210px); gap: 12px; }
+  .lab-image-tile { height: 100%; align-self: stretch; }
+  .lab-image-tile-1, .lab-image-tile-4 { grid-column: 1 / -1; grid-row: span 2; }
+  .lab-image-tile-2, .lab-image-tile-3 { grid-column: span 1; grid-row: span 2; }
+  .lab-coming-soon { min-height: 280px; }
+}
 .case-lead, .case-architecture-note p, .case-challenge-note p { font-size: 15px; line-height: 1.85; }
 .case-feature-grid li p { font-size: 14px; }
 .case-facts dd { flex-wrap: wrap; overflow-wrap: anywhere; font-size: 13px; }

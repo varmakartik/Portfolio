@@ -406,7 +406,7 @@ footer { background: #f6f5f1 !important; }
 .lab-toolbar > span { color: #a5ad93; font-size: 9px; letter-spacing: 1.3px; }
 .lab-toolbar > a { display: inline-flex; align-items: center; gap: 15px; font-size: 12px; color: #d0d5af; }
 .lab-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 22px; }
-.lab-card { overflow: hidden; border: 1px solid #d0d5af20; border-radius: 9px; background: #ffffff03; transition: border-color .3s; }
+.lab-card { position: relative; overflow: hidden; border: 1px solid #d0d5af20; border-radius: 9px; background: #ffffff03; transition: border-color .3s; }
 .lab-card:hover { border-color: #d0d5af60; }
 .lab-art { height: 320px; position: relative; overflow: hidden; isolation: isolate; }
 .lab-art-top { position: absolute; top: 21px; left: 22px; right: 22px; display: flex; align-items: center; justify-content: space-between; color: #f3f1debb; z-index: 4; }
