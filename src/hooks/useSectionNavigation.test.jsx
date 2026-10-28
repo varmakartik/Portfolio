@@ -32,7 +32,7 @@ describe('Section navigation', () => {
     fixture()
     const user = userEvent.setup()
     await user.click(screen.getByRole('link', { name: 'Skills' }))
-    expect(lenis.scrollTo).toHaveBeenLastCalledWith(1092, expect.objectContaining({ duration: 1 }))
+    expect(lenis.scrollTo).toHaveBeenLastCalledWith(1092, expect.objectContaining({ immediate: true }))
     expect(screen.getByRole('link', { name: 'Skills' })).toHaveAttribute('aria-current', 'location')
     await user.click(screen.getByRole('link', { name: 'Projects' }))
     expect(lenis.scrollTo).toHaveBeenLastCalledWith(2092, expect.any(Object))

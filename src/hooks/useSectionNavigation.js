@@ -28,7 +28,8 @@ export function useSectionNavigation() {
       setActive(id === 'main-content' ? 'hero' : id)
       clearTimeout(releaseTimer)
       scrollToSection(id, { ...options, onComplete: release })
-      releaseTimer = setTimeout(release, 1200)
+      if (options.immediate) release()
+      else releaseTimer = setTimeout(release, 1200)
     }
     const onClick = (event) => {
       if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return
@@ -40,7 +41,7 @@ export function useSectionNavigation() {
       try { id = decodeURIComponent(url.hash.slice(1)) } catch { return }
       if (!getSectionAnchor(id)) return
       event.preventDefault()
-      navigate(id)
+      navigate(id, { immediate: true })
       if (id === 'main-content') {
         const main = document.getElementById(id)
         main.setAttribute('tabindex', '-1')

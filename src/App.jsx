@@ -17,6 +17,8 @@ import Projects from './sections/Projects'
 import Research from './sections/Research'
 import Contact from './sections/Contact'
 import CreativeLab from './sections/CreativeLab'
+import ImageDetail from './sections/ImageDetail'
+import { getCreativeImage } from './data/creativeImageMetadata'
 import GithubActivity from './sections/GithubActivity'
 
 // Custom high-performance Animated Counter (supports decimals & integers)
@@ -129,15 +131,17 @@ export default function App() {
   const [view, setView] = useState(() => {
     return window.location.pathname
   })
+  const imageSlug = view.match(/^\/ai-lab\/images\/([^/]+)\/?$/)?.[1]
+  const detailImage = imageSlug ? getCreativeImage(imageSlug) : null
 
   // Initialize Lenis scroll engine
   useLenis()
 
   useEffect(() => {
-    document.title = view.replace(/\/$/, '') === '/ai-lab'
+    document.title = detailImage ? `${detailImage.slug.split('-').map(word => word[0].toUpperCase() + word.slice(1)).join(' ')} — AI Lab | Kartik Varma` : view.replace(/\/$/, '') === '/ai-lab'
       ? 'AI Creative Lab — Kartik Varma'
       : view === '/' ? 'Kartik Varma — Full-Stack Developer' : 'Page not found — Kartik Varma'
-  }, [view])
+  }, [view, detailImage])
 
   useEffect(() => {
     const syncPath = () => setView(window.location.pathname)
@@ -161,6 +165,8 @@ export default function App() {
             <PortfolioHome />
           ) : view.replace(/\/$/, '') === '/ai-lab' ? (
             <main><CreativeLab standalone /></main>
+          ) : detailImage ? (
+            <ImageDetail image={detailImage} />
           ) : (
             <main className="not-found container-custom"><span className="eyebrow">404 / A SMALL DETOUR</span><h1>This page isn’t here.</h1><a href="/">Back to the portfolio ↗</a></main>
           )}
