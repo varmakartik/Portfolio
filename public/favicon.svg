@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Kartik Varma">
+  <rect x="1" y="1" width="62" height="62" rx="14" fill="#f7f6f2" stroke="#d9ded1" stroke-width="2"/>
+  <path d="M14 17v31M15 36l15-17M17 36l15 12M36 29l9 19 9-19" fill="none" stroke="#20231d" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M51 8v14M44 15h14M46 10l10 10M56 10 46 20" fill="none" stroke="#2855f5" stroke-width="3" stroke-linecap="round"/>
+</svg>
